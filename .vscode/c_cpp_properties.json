@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/opt/ros/kinetic/include/**",
+                "/home/pedrohrpbs/catkin_ws/src/kuri_mbzirc_offboard_control/include/**",
+                "/home/pedrohrpbs/catkin_ws/src/mocap_optitrack/include/**",
+                "/home/pedrohrpbs/catkin_ws_NAVIO/src/positioning_system/include/**",
+                "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
