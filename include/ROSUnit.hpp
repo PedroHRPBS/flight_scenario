@@ -18,6 +18,7 @@ class ROSUnit : public msg_emitter, public msg_receiver{
         virtual void receive_msg_data(DataMessage* t_msg) = 0;
     
         ROSUnit(ros::NodeHandle&);
+        ROSUnit() {};
         ~ROSUnit();        
         
         
