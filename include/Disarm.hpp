@@ -13,6 +13,7 @@ public:
     void perform();
     void receive_msg_data(DataMessage* t_msg);
     
-    Disarm(ros::NodeHandle&);
+    //Disarm(ros::NodeHandle&);
+    Disarm();
     ~Disarm();
 };

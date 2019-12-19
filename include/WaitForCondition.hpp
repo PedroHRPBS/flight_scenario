@@ -6,7 +6,7 @@ class WaitForCondition : public FlightElement{
 private:
 	
 public:
-	//Condition _wait_condition;
+	Condition* Wait_condition;
     void perform();
     void receive_msg_data(DataMessage* t_msg);
 };

@@ -2,7 +2,6 @@
 #include "FlightElement.hpp"
 #include "MessageToBlock.hpp"
 #include "SwitchToBlockMessage.hpp"
-
 class SwitchToBlock : public FlightElement{
 private:
 	
@@ -12,6 +11,6 @@ public:
 
     void receive_msg_data(DataMessage* t_msg);
     
-    SwitchToBlock(ros::NodeHandle&);
+    SwitchToBlock();
     ~SwitchToBlock();
 };

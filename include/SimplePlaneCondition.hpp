@@ -2,7 +2,6 @@
 #include "Condition.hpp"
 #include "common_types.hpp"
 #include "PositionMsg.hpp"
-
 class SimplePlaneCondition :public Condition {
 private:
 	bool _isConditionMet=false;

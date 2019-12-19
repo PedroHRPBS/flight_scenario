@@ -1,8 +1,6 @@
 #pragma once
 #include "FlightElement.hpp"
 #include "MessageToBlock.hpp"
-#include "PID_values.hpp"
-
 #include "PIDDataMessage.hpp"
 
 class UpdatePIDcontroller : public FlightElement{
@@ -12,8 +10,9 @@ public:
 	PID_parameters PIDdata;
 	block_id target_block;
     void perform();
+	
     void receive_msg_data(DataMessage* t_msg);
     
-    UpdatePIDcontroller(ros::NodeHandle&);
+    UpdatePIDcontroller();
     ~UpdatePIDcontroller();
 };
