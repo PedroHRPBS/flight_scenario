@@ -2,7 +2,6 @@
 #include "ros/ros.h"
 #include <iostream>
 #include <string>
-#include "std_msgs/String.h"
 #include "MsgReceiver.hpp"
 #include "MsgEmitter.hpp"
 #include "common_types.hpp"

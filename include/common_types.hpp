@@ -9,12 +9,13 @@ const struct tPacketProp{
 	uint8_t pad_EOH = 0xFF;
 	uint8_t pad_EOP = 0xFF;
 }PacketProp;
-
-enum class msg_type {TESTMSG, SERIALDATA ,reference, THREEAXISSENSORMSG, VELOCITY, ACCELERATION, THERMALIMAGE, optitrack, FLIGHTSCENARIO, POSITION, ATTITUDE, HEADING, NOZZLEMSG,control_system, user, controller, float_msg, switcher, VECTOR3D, external_reference, ack,internal_msg_start,internal_ros };
+//TODO move msg_type to DataMessage.hpp
+enum class msg_type {arm_update,RestControllerMessage,SwitchToBlock,MessageToBlock,TESTMSG, SERIALDATA ,reference, THREEAXISSENSORMSG, VELOCITY, ACCELERATION, THERMALIMAGE, optitrack, FLIGHTSCENARIO, POSITION, ATTITUDE, HEADING, NOZZLEMSG,control_system, user, controller, float_msg, switcher, VECTOR3D, external_reference, ack,internal_msg_start,internal_ros,pid_data_update };
 enum class msg_type_optitrack {position, attitude};
 enum class msg_type_flight_scenario {USER, SET_PID};
 enum class control_system {roll, pitch, yaw, x, y, z, null_type};
 enum class block_type {controller, provider, reference};
+enum class block_id {roll};
 enum class switcher_type {controller, provider, reference, null_type};
 enum class controller_type {pid, mrft};
 enum class reference_type {process_variable_ref, restricted_process_variable_ref};
@@ -23,4 +24,5 @@ enum class controller_msg_type {data, change_settings, command};
 enum class control_system_msg_type {switch_in_out, add_block, change_PID_settings, to_system, provider_data};
 enum class ack_msg_type { raw_packet, payload, nozzle, obstacle, mission,ack,internal_msg_start,internal_ros };
 enum class ros_msg_type {ros_obstacle_distance,ros_aircraft_attitude};
-enum class block_frequency {hz100 = 100, hz1000 = 1000, hhz1000 = 1001};
+enum class block_frequency {hz100 = 100, hz1000 = 1000, hhz1000 = 1001}; //TODO: Why 1001?
+enum Dimension3D {X,Y,Z};

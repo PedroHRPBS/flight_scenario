@@ -1,5 +1,6 @@
 #include <iostream>
-#include "../include/ROSUnit.hpp"
+#include "FlightPipeline.hpp"
+#include "FlightElement.hpp"
 
 int main(int argc, char** argv) {
 
@@ -9,6 +10,9 @@ int main(int argc, char** argv) {
     ros::Rate rate(300);
 
     std::cout << "Hello Easy C++ project!" << std::endl;
+
+    FlightPipeline* myFirstFlight = new FlightPipeline();
+
 
     while(ros::ok){
         ros::spinOnce();
