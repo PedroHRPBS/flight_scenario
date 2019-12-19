@@ -11,9 +11,10 @@ void UpdatePIDcontroller::receive_msg_data(DataMessage* t_msg){
 
 }
 
-UpdatePIDcontroller::UpdatePIDcontroller(){
+UpdatePIDcontroller::UpdatePIDcontroller(ros::NodeHandle& t_main_handler) : FlightElement(t_main_handler){
 
 }
+
 UpdatePIDcontroller::~UpdatePIDcontroller(){
 
 }

@@ -1,6 +1,9 @@
 #include <iostream>
 #include "FlightPipeline.hpp"
 #include "Arm.hpp"
+#include "UpdatePIDcontroller.hpp"
+#include "UpdateReference.hpp"
+#include "ResetController.hpp"
 
 int main(int argc, char** argv) {
 
@@ -13,7 +16,16 @@ int main(int argc, char** argv) {
 
     FlightPipeline* myFirstFlight = new FlightPipeline();
 
-    FlightElement* myUpdateController = new Arm();
+    FlightElement* arm = new Arm(nh);
+    FlightElement* updatecontroller = new UpdatePIDcontroller(nh);
+    FlightElement* resetcontroller = new ResetController(nh);
+    FlightElement* updatereference = new UpdateReference(nh);
+
+    myFirstFlight->addElement(updatecontroller);
+    myFirstFlight->addElement(updatereference);
+    myFirstFlight->addElement(arm);
+
+    myFirstFlight->execute();
 
     while(ros::ok){
         ros::spinOnce();

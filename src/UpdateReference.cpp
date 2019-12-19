@@ -11,6 +11,6 @@ void UpdateReference::perform(){
 
 void UpdateReference::receive_msg_data(DataMessage* t_msg){}
 
-UpdateReference::UpdateReference(){}
+UpdateReference::UpdateReference(ros::NodeHandle& t_main_handler) : FlightElement(t_main_handler){}
 UpdateReference::~UpdateReference(){}
 

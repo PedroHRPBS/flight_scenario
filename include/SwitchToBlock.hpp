@@ -12,6 +12,6 @@ public:
 
     void receive_msg_data(DataMessage* t_msg);
     
-    SwitchToBlock();
+    SwitchToBlock(ros::NodeHandle&);
     ~SwitchToBlock();
 };

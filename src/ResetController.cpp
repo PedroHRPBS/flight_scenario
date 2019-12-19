@@ -11,7 +11,7 @@ void ResetController::receive_msg_data(DataMessage* t_msg){
 
 }
 
-ResetController::ResetController(){
+ResetController::ResetController(ros::NodeHandle& t_main_handler) : FlightElement(t_main_handler){
 
 }
 ResetController::~ResetController(){

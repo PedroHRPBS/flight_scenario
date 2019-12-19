@@ -12,7 +12,7 @@ void Unarm::receive_msg_data(DataMessage* t_msg){
 
 }
 
-Unarm::Unarm(){
+Unarm::Unarm(ros::NodeHandle& t_main_handler) : FlightElement(t_main_handler){
 
 }
 Unarm::~Unarm(){

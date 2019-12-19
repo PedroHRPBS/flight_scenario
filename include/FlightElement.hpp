@@ -10,7 +10,6 @@ public:
     virtual void perform() = 0;
     virtual void receive_msg_data(DataMessage* t_msg) = 0;
 
-    FlightElement();
     FlightElement(ros::NodeHandle&);
     ~FlightElement();
 };

@@ -12,6 +12,6 @@ public:
     void perform();
     void receive_msg_data(DataMessage* t_msg);
     
-    UpdateReference();
+    UpdateReference(ros::NodeHandle&);
     ~UpdateReference();
 };

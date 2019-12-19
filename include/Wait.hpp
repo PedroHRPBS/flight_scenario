@@ -11,6 +11,6 @@ public:
 
     void receive_msg_data(DataMessage* t_msg);
     
-    Wait();
+    Wait(ros::NodeHandle&);
     ~Wait();
 };

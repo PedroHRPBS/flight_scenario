@@ -11,7 +11,7 @@ void SwitchToBlock::receive_msg_data(DataMessage* t_msg){
 
 }
 
-SwitchToBlock::SwitchToBlock(){
+SwitchToBlock::SwitchToBlock(ros::NodeHandle& t_main_handler) : FlightElement(t_main_handler){
 
 }
 SwitchToBlock::~SwitchToBlock(){
