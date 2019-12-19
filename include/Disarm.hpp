@@ -3,16 +3,16 @@
 #include "ArmDataMessage.hpp"
 #include "positioning_system/Arm.h"
 
-class Arm : public FlightElement{
+class Disarm : public FlightElement{
 
 private:
-    ros::ServiceClient _arm_client;
+    ros::ServiceClient _disarm_client;
 
 public:
 
     void perform();
     void receive_msg_data(DataMessage* t_msg);
     
-    Arm(ros::NodeHandle&);
-    ~Arm();
+    Disarm(ros::NodeHandle&);
+    ~Disarm();
 };

@@ -36,7 +36,7 @@ public:
 };
 
 
-class Unarm : public FlightElement{
+class Disarm : public FlightElement{
 
 public:
 
