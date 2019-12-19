@@ -10,5 +10,5 @@ void Wait::perform(){
 
 void Wait::receive_msg_data(DataMessage* t_msg){}
 
-Wait::Wait(ros::NodeHandle& t_main_handler) : FlightElement(t_main_handler){}
+Wait::Wait(){}
 Wait::~Wait(){}
