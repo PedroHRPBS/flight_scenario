@@ -1,6 +1,6 @@
 #pragma once
 #include "FlightElement.hpp"
-
+#include "ArmDataMessage.hpp"
 
 class Unarm : public FlightElement{
 

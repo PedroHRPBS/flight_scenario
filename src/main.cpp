@@ -1,6 +1,6 @@
 #include <iostream>
 #include "FlightPipeline.hpp"
-#include "FlightElement.hpp"
+#include "Arm.hpp"
 
 int main(int argc, char** argv) {
 
@@ -13,6 +13,7 @@ int main(int argc, char** argv) {
 
     FlightPipeline* myFirstFlight = new FlightPipeline();
 
+    FlightElement* myUpdateController = new Arm();
 
     while(ros::ok){
         ros::spinOnce();

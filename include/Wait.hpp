@@ -1,5 +1,6 @@
 #pragma once
 #include "Timer.hpp"
+#include "FlightElement.hpp"
 
 class Wait : public FlightElement{
 private:
@@ -10,6 +11,6 @@ public:
 
     void receive_msg_data(DataMessage* t_msg);
     
-    ResetController();
-    ~ResetController();
+    Wait();
+    ~Wait();
 };

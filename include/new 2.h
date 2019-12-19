@@ -233,7 +233,7 @@ class WaitForCondition : public FlightElement{
 private:
 	
 public:
-	Condtion _wait_condition;
+	Condition _wait_condition;
     void perform(){
 
 		while (!_wait_condition.isConditionMet())
@@ -243,7 +243,7 @@ public:
     void receive_msg_data(DataMessage* t_msg);
 };
 
-class Condtion :public msg_receiver {
+class Condition :public msg_receiver {
 private:
 	
 public:
@@ -254,7 +254,7 @@ public:
 };
 
 
-class SimplePlaneCondition :public Condtion {
+class SimplePlaneCondition :public Condition {
 private:
 	bool _isConditionMet=false;
 public:

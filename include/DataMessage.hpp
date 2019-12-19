@@ -11,4 +11,7 @@ public:
     
     virtual msg_type getType() = 0;
     virtual const int getSize() = 0;
+
+    DataMessage();
+    ~DataMessage();
 };

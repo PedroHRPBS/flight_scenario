@@ -1,6 +1,7 @@
 #pragma once
 #include "FlightElement.hpp"
 #include "MessageToBlock.hpp"
+#include "SwitchToBlockMessage.hpp"
 
 class SwitchToBlock : public FlightElement{
 private:

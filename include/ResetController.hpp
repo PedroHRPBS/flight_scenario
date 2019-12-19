@@ -1,6 +1,8 @@
 #pragma once
 #include "FlightElement.hpp"
 #include "MessageToBlock.hpp"
+#include "ResetControllerMessage.hpp"
+
 class ResetController : public FlightElement{
 private:
 	

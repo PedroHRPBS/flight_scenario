@@ -3,7 +3,7 @@
 
 void SwitchToBlock::perform(){
     SwitchToBlockMessage _switch_controller_msg;
-    ((SwitchToBlockMessage*)_switch_controller_msg)->target_block=this->target_block;
+    (&_switch_controller_msg)->target_block=this->target_block;
     this->emit_message((DataMessage*)&_switch_controller_msg);
 }
 

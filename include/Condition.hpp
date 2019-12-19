@@ -1,7 +1,7 @@
 #pragma once
 #include "MsgReceiver.hpp"
 
-class Condtion :public msg_receiver {
+class Condition :public msg_receiver {
 private:
 	
 public:

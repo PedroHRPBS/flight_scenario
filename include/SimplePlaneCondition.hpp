@@ -1,12 +1,13 @@
 #pragma once
-#include "Condtion.hpp"
-#include "comm_types.hpp"
+#include "Condition.hpp"
+#include "common_types.hpp"
+#include "PositionMsg.hpp"
 
-class SimplePlaneCondition :public Condtion {
+class SimplePlaneCondition :public Condition {
 private:
 	bool _isConditionMet=false;
 public:
-`	Dimension3D selected_dim=Dimension3D::Z;
+	Dimension3D selected_dim=Dimension3D::Z;
 	double condition_value=1;
 	bool condition_met_for_larger=1;
 	

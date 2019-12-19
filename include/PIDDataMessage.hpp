@@ -1,7 +1,8 @@
 #pragma once
 #include "common_types.hpp"
 #include "DataMessage.hpp"
-#include "PID_parameters.hpp"
+#include "PID_values.hpp"
+
 class PIDDataMessage: public DataMessage {
 
 public:
