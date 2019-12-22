@@ -11,7 +11,9 @@
 #include "SimplePlaneCondition.hpp"
 #include "Disarm.hpp"
 #include "FlightScenario.hpp"
+#include "UpdatePIDcontroller.hpp"
 #include "ROSUnit_Arm.hpp"
+#include "ROSUnit_UpdateController.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -22,10 +24,22 @@ int main(int argc, char** argv) {
 
     FlightElement* arm_motors = new Arm();
     FlightElement* disarm_motors = new Disarm();
+    FlightElement* update_controller = new UpdatePIDcontroller();
     ROSUnit* ros_arm_srv = new ROSUnit_Arm(nh);
+    ROSUnit* ros_updt_ctr = new ROSUnit_UpdateController(nh);
 
     arm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
     disarm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
+    update_controller->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
+
+    ((UpdatePIDcontroller*)update_controller)->PIDdata.kp = 0.5;
+    ((UpdatePIDcontroller*)update_controller)->PIDdata.ki = 1;
+    ((UpdatePIDcontroller*)update_controller)->PIDdata.kd = 2;
+    ((UpdatePIDcontroller*)update_controller)->PIDdata.kdd = 0;
+    ((UpdatePIDcontroller*)update_controller)->PIDdata.anti_windup = 0;
+    ((UpdatePIDcontroller*)update_controller)->PIDdata.en_pv_derivation = 0;
+    ((UpdatePIDcontroller*)update_controller)->PIDdata.id = block_id::PID_ROLL;
+
     //**********************************************
 
     //First Pipeline
@@ -34,8 +48,10 @@ int main(int argc, char** argv) {
     FlightPipeline default_pipeline;
     default_pipeline.addElement((FlightElement*)&wait_1s);
     default_pipeline.addElement((FlightElement*)arm_motors);
+    default_pipeline.addElement((FlightElement*)update_controller);
 
     SimplePlaneCondition z_cross;
+    z_cross.selected_dim=Dimension3D::Z;
     z_cross.condition_value=1;
     z_cross.condition_met_for_larger=true;
     WaitForCondition z_cross_check;
@@ -49,7 +65,7 @@ int main(int argc, char** argv) {
     main_scenario.AddFlightPipeline(&safety_pipeline);
     main_scenario.StartScenario();
     Logger::getAssignedLogger()->log("Main Done",LoggerLevel::Info);
-    while(1){
-
+    while(ros::ok){
+        ros::spinOnce();
     }
 }
