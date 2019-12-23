@@ -13,9 +13,12 @@
 #include "FlightScenario.hpp"
 #include "UpdatePIDcontroller.hpp"
 #include "UpdatePoseReference.hpp"
+#include "ResetController.hpp"
 #include "ROSUnit_Arm.hpp"
 #include "ROSUnit_UpdateController.hpp"
 #include "ROSUnit_UpdatePoseReference.hpp"
+#include "ROSUnit_PositionSubscriber.hpp"
+#include "ROSUnit_ResetController.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -29,16 +32,22 @@ int main(int argc, char** argv) {
     FlightElement* update_controller = new UpdatePIDcontroller();
     FlightElement* takeoff = new UpdatePoseReference();
     FlightElement* land = new UpdatePoseReference();
+    ResetController* reset_z = new ResetController();
+    reset_z->target_block = block_id::PID_Z;
 
     ROSUnit* ros_arm_srv = new ROSUnit_Arm(nh);
     ROSUnit* ros_updt_ctr = new ROSUnit_UpdateController(nh);
     ROSUnit* ros_updt_pose_ref = new ROSUnit_UpdatePoseReference(nh);
+    ROSUnit* ros_pos_sub = new ROSUnit_PositionSubscriber(nh);
+    ROSUnit* ros_rst_ctr = new ROSUnit_ResetController(nh);
+
 
     arm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
     disarm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
     update_controller->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     takeoff->add_callback_msg_receiver((msg_receiver*) ros_updt_pose_ref);
     land->add_callback_msg_receiver((msg_receiver*) ros_updt_pose_ref);
+    reset_z->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
 
     // ((UpdatePIDcontroller*)update_controller)->PIDdata.kp = 0.5;
     // ((UpdatePIDcontroller*)update_controller)->PIDdata.ki = 1;
@@ -49,8 +58,8 @@ int main(int argc, char** argv) {
     // ((UpdatePIDcontroller*)update_controller)->PIDdata.id = block_id::PID_ROLL;
 
     // UPDATE BEFORE FLIGHT
-    ((UpdatePoseReference*)takeoff)->pose_reference.setPoseMessage(0.0, 0.0, 1.0, 0.0);
-    ((UpdatePoseReference*)land)->pose_reference.setPoseMessage(0.0, 0.0, 0.4, 0.0);
+    ((UpdatePoseReference*)takeoff)->pose_reference.setPoseMessage(0.0, 0.0, 1.0, 1.57);
+    ((UpdatePoseReference*)land)->pose_reference.setPoseMessage(0.0, 0.0, 0.4, 1.57);
 
     //**********************************************
 
@@ -58,21 +67,37 @@ int main(int argc, char** argv) {
     Wait wait_1s;
     wait_1s.wait_time_ms=1000;
     FlightPipeline default_pipeline;
+    default_pipeline.addElement((FlightElement*)reset_z);
     default_pipeline.addElement((FlightElement*)takeoff);
     default_pipeline.addElement((FlightElement*)&wait_1s);
     default_pipeline.addElement((FlightElement*)arm_motors);
     
 
-    SimplePlaneCondition z_cross;
-    z_cross.selected_dim=Dimension3D::Z;
-    z_cross.condition_value=1;
-    z_cross.condition_met_for_larger=true;
-    WaitForCondition z_cross_check;
-    z_cross_check.Wait_condition=(Condition*)&z_cross;
+    SimplePlaneCondition z_cross_takeoff;
+    z_cross_takeoff.selected_dim=Dimension3D::Z;
+    z_cross_takeoff.condition_value = 1.0;
+    z_cross_takeoff.condition_met_for_larger=true;
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_takeoff);
+
+    WaitForCondition z_cross_takeoff_check;
+    z_cross_takeoff_check.Wait_condition=(Condition*)&z_cross_takeoff;
+
+    SimplePlaneCondition z_cross_land;
+    z_cross_land.selected_dim=Dimension3D::Z;
+    z_cross_land.condition_value=0.4;
+    z_cross_land.condition_met_for_larger=false;
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_land);
+
+    WaitForCondition z_cross_land_check;
+    z_cross_land_check.Wait_condition=(Condition*)&z_cross_land;
+
+
     FlightPipeline safety_pipeline;
-    safety_pipeline.addElement((FlightElement*)&z_cross_check);
-    default_pipeline.addElement((FlightElement*)land);
-    default_pipeline.addElement((FlightElement*)&wait_1s);
+    safety_pipeline.addElement((FlightElement*)&z_cross_takeoff_check);
+    safety_pipeline.addElement((FlightElement*)&wait_1s);
+    safety_pipeline.addElement((FlightElement*)land);
+    safety_pipeline.addElement((FlightElement*)&z_cross_land_check);
+    safety_pipeline.addElement((FlightElement*)&wait_1s);
     safety_pipeline.addElement((FlightElement*)disarm_motors);
     Logger::getAssignedLogger()->log("FlightScenario main_scenario",LoggerLevel::Info);
     FlightScenario main_scenario;
