@@ -15,6 +15,7 @@ void ROSUnit_Arm::receive_msg_data(DataMessage* t_msg){
     if(t_msg->getType() == msg_type::arm_update){
 
         ArmDataMessage* _arm_msg = (ArmDataMessage*)t_msg;
+        
         positioning_system::Arm srv;
         srv.request.armed = _arm_msg->isArmed;
         bool success = _arm_client.call(srv);

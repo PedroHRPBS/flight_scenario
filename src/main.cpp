@@ -58,14 +58,17 @@ int main(int argc, char** argv) {
     // ((UpdatePIDcontroller*)update_controller)->PIDdata.id = block_id::PID_ROLL;
 
     // UPDATE BEFORE FLIGHT
-    ((UpdatePoseReference*)takeoff)->pose_reference.setPoseMessage(0.0, 0.0, 1.0, 1.57);
-    ((UpdatePoseReference*)land)->pose_reference.setPoseMessage(0.0, 0.0, 0.4, 1.57);
+    ((UpdatePoseReference*)takeoff)->pose_reference.setPoseMessage(0.0, 0.0, 1.5, 1.54);
+    ((UpdatePoseReference*)land)->pose_reference.setPoseMessage(0.0, 0.0, 0.4, 1.54);
 
     //**********************************************
 
     //First Pipeline
     Wait wait_1s;
     wait_1s.wait_time_ms=1000;
+    Wait wait_10s;
+    wait_10s.wait_time_ms=10000;
+
     FlightPipeline default_pipeline;
     default_pipeline.addElement((FlightElement*)reset_z);
     default_pipeline.addElement((FlightElement*)takeoff);
@@ -75,7 +78,7 @@ int main(int argc, char** argv) {
 
     SimplePlaneCondition z_cross_takeoff;
     z_cross_takeoff.selected_dim=Dimension3D::Z;
-    z_cross_takeoff.condition_value = 1.0;
+    z_cross_takeoff.condition_value = 1.3;
     z_cross_takeoff.condition_met_for_larger=true;
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_takeoff);
 
@@ -94,7 +97,7 @@ int main(int argc, char** argv) {
 
     FlightPipeline safety_pipeline;
     safety_pipeline.addElement((FlightElement*)&z_cross_takeoff_check);
-    safety_pipeline.addElement((FlightElement*)&wait_1s);
+    safety_pipeline.addElement((FlightElement*)&wait_10s);
     safety_pipeline.addElement((FlightElement*)land);
     safety_pipeline.addElement((FlightElement*)&z_cross_land_check);
     safety_pipeline.addElement((FlightElement*)&wait_1s);
@@ -105,6 +108,7 @@ int main(int argc, char** argv) {
     main_scenario.AddFlightPipeline(&safety_pipeline);
     main_scenario.StartScenario();
     Logger::getAssignedLogger()->log("Main Done",LoggerLevel::Info);
+    
     while(ros::ok){
         ros::spinOnce();
     }
