@@ -10,7 +10,7 @@ const struct tPacketProp{
 	uint8_t pad_EOP = 0xFF;
 }PacketProp;
 //TODO move msg_type to DataMessage.hpp
-enum class msg_type {UPDATECONTROLLER, arm_update,RestControllerMessage,SwitchToBlock,MessageToBlock,TESTMSG, SERIALDATA ,reference, THREEAXISSENSORMSG, VELOCITY, ACCELERATION, THERMALIMAGE, optitrack, FLIGHTSCENARIO, POSITION, ATTITUDE, HEADING, NOZZLEMSG,control_system, UPDATEPOSEREFERENCE, controller, float_msg, switcher, VECTOR3D, external_reference, ack,internal_msg_start,internal_ros,pid_data_update };
+enum class msg_type {SWITCHBLOCK, UPDATECONTROLLER, arm_update, RestControllerMessage, SwitchToBlock,MessageToBlock,TESTMSG, SERIALDATA ,reference, THREEAXISSENSORMSG, VELOCITY, ACCELERATION, THERMALIMAGE, optitrack, FLIGHTSCENARIO, POSITION, ATTITUDE, HEADING, NOZZLEMSG,control_system, UPDATEPOSEREFERENCE, controller, float_msg, switcher, VECTOR3D, external_reference, ack,internal_msg_start,internal_ros,pid_data_update };
 enum class msg_type_optitrack {position, attitude};
 enum class msg_type_flight_scenario {USER, SET_PID};
 enum class control_system {roll, pitch, yaw, x, y, z, null_type};

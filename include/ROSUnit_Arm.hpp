@@ -10,7 +10,6 @@ private:
 
 public:
     void receive_msg_data(DataMessage* t_msg);
-    
 
     ROSUnit_Arm(ros::NodeHandle&);
     ~ROSUnit_Arm();
