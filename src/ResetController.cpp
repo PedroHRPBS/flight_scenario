@@ -1,9 +1,6 @@
 
 #include "ResetController.hpp"
 
-// ResetController::ResetController(ros::NodeHandle& t_main_handler) : FlightElement(t_main_handler){
-
-// }
 ResetController::ResetController(){
 
 }

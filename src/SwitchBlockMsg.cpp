@@ -16,7 +16,7 @@ const int SwitchBlockMsg::getSize(){
     return sizeof(this);
 }
 
-void SwitchBlockMsg::setSwitchBlockMsg(int t_block_in, int t_block_out){
+void SwitchBlockMsg::setSwitchBlockMsg(block_id t_block_out, block_id t_block_in){
 
     _type = msg_type::SWITCHBLOCK;
     _block_in = t_block_in;
@@ -24,10 +24,10 @@ void SwitchBlockMsg::setSwitchBlockMsg(int t_block_in, int t_block_out){
 
 }
 
-int SwitchBlockMsg::getBlockToSwitchIn(){
+block_id SwitchBlockMsg::getBlockToSwitchIn(){
     return _block_in;
 }
 
-int SwitchBlockMsg::getBlockToSwitchOut(){
+block_id SwitchBlockMsg::getBlockToSwitchOut(){
     return _block_out;
 }

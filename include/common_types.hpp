@@ -10,12 +10,16 @@ const struct tPacketProp{
 	uint8_t pad_EOP = 0xFF;
 }PacketProp;
 //TODO move msg_type to DataMessage.hpp
-enum class msg_type {SWITCHBLOCK, UPDATECONTROLLER, arm_update, RestControllerMessage, SwitchToBlock,MessageToBlock,TESTMSG, SERIALDATA ,reference, THREEAXISSENSORMSG, VELOCITY, ACCELERATION, THERMALIMAGE, optitrack, FLIGHTSCENARIO, POSITION, ATTITUDE, HEADING, NOZZLEMSG,control_system, UPDATEPOSEREFERENCE, controller, float_msg, switcher, VECTOR3D, external_reference, ack,internal_msg_start,internal_ros,pid_data_update };
+enum class msg_type {SWITCHBLOCK, UPDATECONTROLLER, arm_update, RestControllerMessage, SwitchBlock,MessageToBlock,TESTMSG, SERIALDATA ,reference, THREEAXISSENSORMSG, VELOCITY, ACCELERATION, THERMALIMAGE, optitrack, FLIGHTSCENARIO, POSITION, ATTITUDE, HEADING, NOZZLEMSG,control_system, UPDATEPOSEREFERENCE, controller, float_msg, switcher, VECTOR3D, external_reference, ack,internal_msg_start,internal_ros,pid_data_update };
 enum class msg_type_optitrack {position, attitude};
 enum class msg_type_flight_scenario {USER, SET_PID};
 enum class control_system {roll, pitch, yaw, x, y, z, null_type};
 enum class block_type {controller, provider, reference};
-enum class block_id {PID_X=0, PID_Y=1, PID_Z=2, PID_ROLL=3, PID_PITCH=4, PID_YAW=5, REF_X=6, REF_Y=7, REF_Z=8, REF_ROLL=9, REF_PITCH=10, REF_YAW=11};
+enum class block_id {PID_X=0, PID_Y=1, PID_Z=2, PID_ROLL=3, PID_PITCH=4, 
+					PID_YAW=5, REF_X=6, REF_Y=7, REF_Z=8, REF_ROLL=9, REF_PITCH=10, 
+					REF_YAW=11, PID_PITCH_RATE = 12, PID_YAW_RATE = 13,
+					MRFT_X=14, MRFT_Y=15, MRFT_Z=16, MRFT_ROLL=17, MRFT_PITCH=18, 
+					MRFT_YAW=19};
 enum class switcher_type {controller, provider, reference, null_type};
 enum class controller_type {pid, mrft};
 enum class reference_type {process_variable_ref, restricted_process_variable_ref};

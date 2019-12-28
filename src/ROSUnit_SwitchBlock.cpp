@@ -15,8 +15,8 @@ void ROSUnit_SwitchBlock::receive_msg_data(DataMessage* t_msg){
         SwitchBlockMsg* _switch_msg = (SwitchBlockMsg*)t_msg;
         
         positioning_system::SwitchBlock srv;
-        srv.request.block_in = _switch_msg->getBlockToSwitchIn();
-        srv.request.block_out = _switch_msg->getBlockToSwitchOut();
+        srv.request.block_in = (int)(_switch_msg->getBlockToSwitchIn());
+        srv.request.block_out = (int)(_switch_msg->getBlockToSwitchOut());
 
         bool success = _switch_client.call(srv);
 

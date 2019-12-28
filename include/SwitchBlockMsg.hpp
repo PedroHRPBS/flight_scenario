@@ -5,15 +5,15 @@ class SwitchBlockMsg : public DataMessage {
 
 private:
     msg_type _type;
-    int _block_in, _block_out;
+    block_id _block_in, _block_out;
 
 public:
 
     msg_type getType();
     const int getSize();
-    void setSwitchBlockMsg(int, int);
-    int getBlockToSwitchIn();
-    int getBlockToSwitchOut();
+    void setSwitchBlockMsg(block_id t_block_out, block_id t_block_in);
+    block_id getBlockToSwitchIn();
+    block_id getBlockToSwitchOut();
     SwitchBlockMsg();
     ~SwitchBlockMsg();
 };
