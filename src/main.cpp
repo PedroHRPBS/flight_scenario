@@ -12,7 +12,7 @@
 #include "Disarm.hpp"
 #include "FlightScenario.hpp"
 #include "UpdateController.hpp"
-#include "UpdatePoseReference.hpp"
+#include "SetInitialPose.hpp"
 #include "ResetController.hpp"
 #include "SwitchBlock.hpp"
 #include "ROSUnit_Arm.hpp"
@@ -22,6 +22,10 @@
 #include "ROSUnit_ResetController.hpp"
 #include "ROSUnit_SwitchBlock.hpp"
 #include "ROSUnit_OrientationSubscriber.hpp"
+#include "ROSUnit_UpdateReferenceX.hpp"
+#include "ROSUnit_UpdateReferenceY.hpp"
+#include "ROSUnit_UpdateReferenceZ.hpp"
+#include "ROSUnit_UpdateReferenceYaw.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -32,11 +36,14 @@ int main(int argc, char** argv) {
 
     ROSUnit* ros_arm_srv = new ROSUnit_Arm(nh);
     ROSUnit* ros_updt_ctr = new ROSUnit_UpdateController(nh);
-    ROSUnit* ros_updt_pose_ref = new ROSUnit_UpdatePoseReference(nh);
     ROSUnit* ros_pos_sub = new ROSUnit_PositionSubscriber(nh);
     ROSUnit* ros_ori_sub = new ROSUnit_OrientationSubscriber(nh);
     ROSUnit* ros_rst_ctr = new ROSUnit_ResetController(nh);
     ROSUnit* ros_switch_block = new ROSUnit_SwitchBlock(nh);
+    ROSUnit* ros_updt_x_ref = new ROSUnit_UpdateReferenceX(nh);
+    ROSUnit* ros_updt_y_ref = new ROSUnit_UpdateReferenceY(nh);
+    ROSUnit* ros_updt_z_ref = new ROSUnit_UpdateReferenceZ(nh);
+    ROSUnit* ros_updt_yaw_ref = new ROSUnit_UpdateReferenceYaw(nh);
     
     //*****************Flight Elements*************
 
@@ -54,8 +61,7 @@ int main(int argc, char** argv) {
     FlightElement* update_controller_mrft_pitch = new UpdateController();
     FlightElement* update_controller_mrft_yaw = new UpdateController();
 
-    FlightElement* takeoff_waypoint = new UpdatePoseReference();
-    FlightElement* land_waypoint = new UpdatePoseReference();
+    FlightElement* set_initial_pose = new SetInitialPose();
 
     FlightElement* switch_block = new SwitchBlock();
     
@@ -81,8 +87,13 @@ int main(int argc, char** argv) {
     update_controller_mrft_pitch->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_mrft_yaw->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
 
-    takeoff_waypoint->add_callback_msg_receiver((msg_receiver*) ros_updt_pose_ref);
-    land_waypoint->add_callback_msg_receiver((msg_receiver*) ros_updt_pose_ref);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) set_initial_pose);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) set_initial_pose);
+
+    set_initial_pose->add_callback_msg_receiver((msg_receiver*) ros_updt_x_ref);
+    set_initial_pose->add_callback_msg_receiver((msg_receiver*) ros_updt_y_ref);
+    set_initial_pose->add_callback_msg_receiver((msg_receiver*) ros_updt_z_ref);
+    set_initial_pose->add_callback_msg_receiver((msg_receiver*) ros_updt_yaw_ref);
 
     switch_block->add_callback_msg_receiver((msg_receiver*) ros_switch_block);
     //TODO Should I implement a reset controller for MRFT??
@@ -91,9 +102,8 @@ int main(int argc, char** argv) {
     arm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
     disarm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
 
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) takeoff_waypoint);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) takeoff_waypoint);
     
+
     //*************Setting Flight Elements*************
 
     ((UpdateController*)update_controller_pid_x)->pid_data.kp = 0.8;
@@ -175,8 +185,8 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.id = block_id::MRFT_YAW;
 
 
-    // ((UpdatePoseReference*)takeoff_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.5, 0.0);
-    // ((UpdatePoseReference*)land_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.4, 1.54);
+    // ((SetInitialPose*)takeoff_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.5, 0.0);
+    // ((SetInitialPose*)land_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.4, 1.54);
 
     ((SwitchBlock*)switch_block)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::MRFT_Z);
 
@@ -206,8 +216,9 @@ int main(int argc, char** argv) {
     default_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
 
     default_pipeline.addElement((FlightElement*)reset_z);
-    default_pipeline.addElement((FlightElement*)takeoff_waypoint);
+    
     default_pipeline.addElement((FlightElement*)&wait_1s);
+    default_pipeline.addElement((FlightElement*)set_initial_pose);
     default_pipeline.addElement((FlightElement*)arm_motors);
     default_pipeline.addElement((FlightElement*)&wait_10s);
     default_pipeline.addElement((FlightElement*)switch_block);
@@ -235,7 +246,7 @@ int main(int argc, char** argv) {
     FlightPipeline safety_pipeline;
     safety_pipeline.addElement((FlightElement*)&z_cross_takeoff_waypoint_check);
     safety_pipeline.addElement((FlightElement*)&wait_10s);
-    safety_pipeline.addElement((FlightElement*)land_waypoint);
+    //safety_pipeline.addElement((FlightElement*)land_waypoint);
     safety_pipeline.addElement((FlightElement*)&z_cross_land_waypoint_check);
     safety_pipeline.addElement((FlightElement*)&wait_1s);
     safety_pipeline.addElement((FlightElement*)disarm_motors);

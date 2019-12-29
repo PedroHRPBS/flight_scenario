@@ -5,8 +5,8 @@ class UpdatePoseMessage_FS : public DataMessage{
 
 private:
     float _x, _y, _z, _yaw;
-    int _mask;
     msg_type _type;
+    msg_type_reference _ref_type;
 
 public:
 
@@ -14,10 +14,10 @@ public:
     float getY();
     float getZ();
     float getYaw();
-    int getMask();
     msg_type getType();
+    msg_type_reference getRefType();
     const int getSize();
-    void setPoseMessage(float, float, float, float, int);
+    void setPoseMessage(float, float, float, float);
     void setPoseX(float);
     void setPoseY(float);
     void setPoseZ(float);

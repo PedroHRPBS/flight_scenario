@@ -6,7 +6,7 @@
 #include "PositionMsg.hpp"
 #include "Vector3DMessage.hpp"
 
-class UpdatePoseReference : public FlightElement{
+class SetInitialPose : public FlightElement{
 
 private:
 	float _current_x, _current_y, _current_z, _current_yaw;
@@ -19,6 +19,6 @@ public:
 
     void receive_msg_data(DataMessage* t_msg);
     
-    UpdatePoseReference();
-    ~UpdatePoseReference();
+    SetInitialPose();
+    ~SetInitialPose();
 };

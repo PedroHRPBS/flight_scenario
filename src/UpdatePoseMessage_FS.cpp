@@ -1,13 +1,5 @@
 #include "UpdatePoseMessage_FS.hpp"
 
-// UpdatePoseMessage_FS::UpdatePoseMessage_FS(float t_x, float t_y, float t_z, float t_yaw) {
-//     _type = msg_type::USERREFERENCE;
-//     _x = t_x;
-//     _y = t_y;
-//     _z = t_z;
-//     _yaw = t_yaw;
-// }
-
 UpdatePoseMessage_FS::UpdatePoseMessage_FS() {
     _type = msg_type::USERREFERENCE;
 }
@@ -28,31 +20,34 @@ float UpdatePoseMessage_FS::getZ(){
 float UpdatePoseMessage_FS::getYaw(){
     return _yaw;
 }
-int UpdatePoseMessage_FS::getMask(){
-    return _mask;
-}
 msg_type UpdatePoseMessage_FS::getType(){
     return _type;
 }
-void UpdatePoseMessage_FS::setPoseMessage(float t_x, float t_y, float t_z, float t_yaw, int t_mask){
+msg_type_reference UpdatePoseMessage_FS::getRefType(){
+    return _ref_type;
+}
+void UpdatePoseMessage_FS::setPoseMessage(float t_x, float t_y, float t_z, float t_yaw){
     _type = msg_type::USERREFERENCE;
     _x = t_x;
     _y = t_y;
     _z = t_z;
     _yaw = t_yaw;
-    _mask = t_mask;
 }
 
 void UpdatePoseMessage_FS::setPoseX(float t_x){
+    _ref_type = msg_type_reference::X;
     _x = t_x;
 }
 void UpdatePoseMessage_FS::setPoseY(float t_y){
+    _ref_type = msg_type_reference::Y;
     _y = t_y;
 }
 void UpdatePoseMessage_FS::setPoseZ(float t_z){
+    _ref_type = msg_type_reference::Z;
     _z = t_z;
 }
 void UpdatePoseMessage_FS::setPoseYaw(float t_yaw){
+    _ref_type = msg_type_reference::YAW;
     _yaw = t_yaw;
 }
 

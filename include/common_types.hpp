@@ -30,3 +30,4 @@ enum class ack_msg_type { raw_packet, payload, nozzle, obstacle, mission,ack,int
 enum class ros_msg_type {ros_obstacle_distance,ros_aircraft_attitude};
 enum class block_frequency {hz100 = 100, hz1000 = 1000, hhz1000 = 1001}; //TODO: Why 1001?
 enum Dimension3D {X,Y,Z};
+enum class msg_type_reference {X, Y, Z, YAW, NULL_TYPE};

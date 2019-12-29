@@ -14,21 +14,21 @@ void ROSUnit_UpdateReferenceX::receive_msg_data(DataMessage* t_msg){
     if(t_msg->getType() == msg_type::USERREFERENCE){
 
         UpdatePoseMessage_FS* ref_msg = (UpdatePoseMessage_FS*)t_msg;
+        if(ref_msg->getRefType() == msg_type_reference::X){
+            positioning_system::Update_X_Reference srv;
+            srv.request.setpoint_x = ref_msg->getX();
+            ROS_INFO("NEW X REFERENCE PUBLISHED: %f", ref_msg->getX());
+            bool success = _setpoint_position_client.call(srv);
 
-        positioning_system::Update_X_Reference srv;
-        srv.request.setpoint_x = ref_msg->getX();
-    
-        bool success = _setpoint_position_client.call(srv);
-
-        if (success)
-        {
-            ROS_INFO("NEW X REFERENCE PUBLISHED: %f", srv.request.setpoint_x);
+            if (success)
+            {
+                ROS_INFO("NEW X REFERENCE PUBLISHED: %f", srv.request.setpoint_x);
+            }
+            else 
+            {
+                ROS_ERROR("Failed to call service /update_reference/x");
+            }
         }
-        else 
-        {
-            ROS_ERROR("Failed to call service /update_reference/x");
-        }
-
     }
     
 
