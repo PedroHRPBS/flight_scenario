@@ -1,15 +1,15 @@
-#include "ROSUnit_UpdateReferenceYaw.hpp"
+#include "ROSUnit_UpdateReferenceYaw_FS.hpp"
 
-ROSUnit_UpdateReferenceYaw::ROSUnit_UpdateReferenceYaw(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler){
+ROSUnit_UpdateReferenceYaw_FS::ROSUnit_UpdateReferenceYaw_FS(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler){
 
-    _setpoint_position_client = t_main_handler.serviceClient<positioning_system::Update_Yaw_Reference>("update_referece/yaw");
+    _setpoint_position_client = t_main_handler.serviceClient<positioning_system::Update_Yaw_Reference>("update_reference/yaw");
 }
 
-ROSUnit_UpdateReferenceYaw::~ROSUnit_UpdateReferenceYaw() {
+ROSUnit_UpdateReferenceYaw_FS::~ROSUnit_UpdateReferenceYaw_FS() {
 
 }
 
-void ROSUnit_UpdateReferenceYaw::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_UpdateReferenceYaw_FS::receive_msg_data(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::USERREFERENCE){
 

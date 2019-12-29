@@ -22,10 +22,10 @@
 #include "ROSUnit_ResetController.hpp"
 #include "ROSUnit_SwitchBlock.hpp"
 #include "ROSUnit_OrientationSubscriber.hpp"
-#include "ROSUnit_UpdateReferenceX.hpp"
-#include "ROSUnit_UpdateReferenceY.hpp"
-#include "ROSUnit_UpdateReferenceZ.hpp"
-#include "ROSUnit_UpdateReferenceYaw.hpp"
+#include "ROSUnit_UpdateReferenceX_FS.hpp"
+#include "ROSUnit_UpdateReferenceY_FS.hpp"
+#include "ROSUnit_UpdateReferenceZ_FS.hpp"
+#include "ROSUnit_UpdateReferenceYaw_FS.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -40,10 +40,10 @@ int main(int argc, char** argv) {
     ROSUnit* ros_ori_sub = new ROSUnit_OrientationSubscriber(nh);
     ROSUnit* ros_rst_ctr = new ROSUnit_ResetController(nh);
     ROSUnit* ros_switch_block = new ROSUnit_SwitchBlock(nh);
-    ROSUnit* ros_updt_x_ref = new ROSUnit_UpdateReferenceX(nh);
-    ROSUnit* ros_updt_y_ref = new ROSUnit_UpdateReferenceY(nh);
-    ROSUnit* ros_updt_z_ref = new ROSUnit_UpdateReferenceZ(nh);
-    ROSUnit* ros_updt_yaw_ref = new ROSUnit_UpdateReferenceYaw(nh);
+    ROSUnit* ros_updt_x_ref = new ROSUnit_UpdateReferenceX_FS(nh);
+    ROSUnit* ros_updt_y_ref = new ROSUnit_UpdateReferenceY_FS(nh);
+    ROSUnit* ros_updt_z_ref = new ROSUnit_UpdateReferenceZ_FS(nh);
+    ROSUnit* ros_updt_yaw_ref = new ROSUnit_UpdateReferenceYaw_FS(nh);
     
     //*****************Flight Elements*************
 

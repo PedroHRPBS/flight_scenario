@@ -1,15 +1,15 @@
-#include "ROSUnit_UpdateReferenceZ.hpp"
+#include "ROSUnit_UpdateReferenceZ_FS.hpp"
 
-ROSUnit_UpdateReferenceZ::ROSUnit_UpdateReferenceZ(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler){
+ROSUnit_UpdateReferenceZ_FS::ROSUnit_UpdateReferenceZ_FS(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler){
 
-    _setpoint_position_client = t_main_handler.serviceClient<positioning_system::Update_Z_Reference>("update_referece/z");
+    _setpoint_position_client = t_main_handler.serviceClient<positioning_system::Update_Z_Reference>("update_reference/z");
 }
 
-ROSUnit_UpdateReferenceZ::~ROSUnit_UpdateReferenceZ() {
+ROSUnit_UpdateReferenceZ_FS::~ROSUnit_UpdateReferenceZ_FS() {
 
 }
 
-void ROSUnit_UpdateReferenceZ::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_UpdateReferenceZ_FS::receive_msg_data(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::USERREFERENCE){
 

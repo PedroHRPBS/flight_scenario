@@ -1,15 +1,15 @@
-#include "ROSUnit_UpdateReferenceX.hpp"
+#include "ROSUnit_UpdateReferenceX_FS.hpp"
 
-ROSUnit_UpdateReferenceX::ROSUnit_UpdateReferenceX(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler){
+ROSUnit_UpdateReferenceX_FS::ROSUnit_UpdateReferenceX_FS(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler){
 
-    _setpoint_position_client = t_main_handler.serviceClient<positioning_system::Update_X_Reference>("update_referece/x");
+    _setpoint_position_client = t_main_handler.serviceClient<positioning_system::Update_X_Reference>("update_reference/x");
 }
 
-ROSUnit_UpdateReferenceX::~ROSUnit_UpdateReferenceX() {
+ROSUnit_UpdateReferenceX_FS::~ROSUnit_UpdateReferenceX_FS() {
 
 }
 
-void ROSUnit_UpdateReferenceX::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_UpdateReferenceX_FS::receive_msg_data(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::USERREFERENCE){
 
@@ -17,9 +17,9 @@ void ROSUnit_UpdateReferenceX::receive_msg_data(DataMessage* t_msg){
         if(ref_msg->getRefType() == msg_type_reference::X){
             positioning_system::Update_X_Reference srv;
             srv.request.setpoint_x = ref_msg->getX();
-            ROS_INFO("NEW X REFERENCE PUBLISHED: %f", ref_msg->getX());
-            bool success = _setpoint_position_client.call(srv);
 
+            bool success = _setpoint_position_client.call(srv);
+            ROS_INFO("BEFORE SUCCES NEW X REFERENCE PUBLISHED: %f", srv.request.setpoint_x);
             if (success)
             {
                 ROS_INFO("NEW X REFERENCE PUBLISHED: %f", srv.request.setpoint_x);

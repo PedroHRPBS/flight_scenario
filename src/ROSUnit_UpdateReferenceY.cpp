@@ -1,15 +1,15 @@
-#include "ROSUnit_UpdateReferenceY.hpp"
+#include "ROSUnit_UpdateReferenceY_FS.hpp"
 
-ROSUnit_UpdateReferenceY::ROSUnit_UpdateReferenceY(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler){
+ROSUnit_UpdateReferenceY_FS::ROSUnit_UpdateReferenceY_FS(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler){
 
-    _setpoint_position_client = t_main_handler.serviceClient<positioning_system::Update_Y_Reference>("update_referece/y");
+    _setpoint_position_client = t_main_handler.serviceClient<positioning_system::Update_Y_Reference>("update_reference/y");
 }
 
-ROSUnit_UpdateReferenceY::~ROSUnit_UpdateReferenceY() {
+ROSUnit_UpdateReferenceY_FS::~ROSUnit_UpdateReferenceY_FS() {
 
 }
 
-void ROSUnit_UpdateReferenceY::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_UpdateReferenceY_FS::receive_msg_data(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::USERREFERENCE){
 
