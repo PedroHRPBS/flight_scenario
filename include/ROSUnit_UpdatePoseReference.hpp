@@ -2,7 +2,7 @@
 #include "ROSUnit.hpp"
 #include "positioning_system/Waypoint.h"
 #include <positioning_system/Update_Pose_Reference.h>
-#include "UpdatePoseMessage.hpp"
+#include "UpdatePoseMessage_FS.hpp"
 #include "MessageToBlock.hpp"
 
 class ROSUnit_UpdatePoseReference : public ROSUnit{

@@ -1,10 +1,11 @@
 #pragma once
 #include "DataMessage.hpp"
 
-class UpdatePoseMessage : public DataMessage{
+class UpdatePoseMessage_FS : public DataMessage{
 
 private:
     float _x, _y, _z, _yaw;
+    int _mask;
     msg_type _type;
 
 public:
@@ -13,11 +14,11 @@ public:
     float getY();
     float getZ();
     float getYaw();
+    int getMask();
     msg_type getType();
     const int getSize();
-    void setPoseMessage(float, float, float, float);
+    void setPoseMessage(float, float, float, float, int);
     
-    UpdatePoseMessage(float,float,float,float);
-    UpdatePoseMessage();
-    ~UpdatePoseMessage();
+    UpdatePoseMessage_FS();
+    ~UpdatePoseMessage_FS();
 };

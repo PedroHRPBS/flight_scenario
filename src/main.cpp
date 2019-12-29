@@ -170,8 +170,8 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.id = block_id::MRFT_YAW;
 
 
-    ((UpdatePoseReference*)takeoff_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.5, 0.0);
-    ((UpdatePoseReference*)land_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.4, 1.54);
+    // ((UpdatePoseReference*)takeoff_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.5, 0.0);
+    // ((UpdatePoseReference*)land_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.4, 1.54);
 
     ((SwitchBlock*)switch_block)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::MRFT_Z);
 

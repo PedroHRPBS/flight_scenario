@@ -1,14 +1,14 @@
 #pragma once
 #include "FlightElement.hpp"
 #include "MessageToBlock.hpp"
-#include "UpdatePoseMessage.hpp"
+#include "UpdatePoseMessage_FS.hpp"
 #include "MessageToBlock.hpp"
 class UpdatePoseReference : public FlightElement{
 private:
 	
 public:
 	block_id target_block;
-    UpdatePoseMessage pose_reference;
+    UpdatePoseMessage_FS pose_reference;
 
     void perform();
 

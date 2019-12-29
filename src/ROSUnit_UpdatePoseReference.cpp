@@ -13,7 +13,7 @@ void ROSUnit_UpdatePoseReference::receive_msg_data(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::UPDATEPOSEREFERENCE){
 
-        UpdatePoseMessage* ref_msg = (UpdatePoseMessage*)t_msg;
+        UpdatePoseMessage_FS* ref_msg = (UpdatePoseMessage_FS*)t_msg;
 
         positioning_system::Update_Pose_Reference srv;
         srv.request.setpoint_pose.x = ref_msg->getX();
