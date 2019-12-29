@@ -11,7 +11,7 @@
 #include "SimplePlaneCondition.hpp"
 #include "Disarm.hpp"
 #include "FlightScenario.hpp"
-#include "UpdatePIDcontroller.hpp"
+#include "UpdateController.hpp"
 #include "UpdatePoseReference.hpp"
 #include "ResetController.hpp"
 #include "SwitchBlock.hpp"
@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
 
     FlightElement* arm_motors = new Arm();
     FlightElement* disarm_motors = new Disarm();
-    FlightElement* update_controller = new UpdatePIDcontroller();
+    FlightElement* update_controller = new UpdateController();
     FlightElement* takeoff_waypoint = new UpdatePoseReference();
     FlightElement* land_waypoint = new UpdatePoseReference();
     SwitchBlock* switch_block = new SwitchBlock();
@@ -56,13 +56,13 @@ int main(int argc, char** argv) {
     reset_z->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
     switch_block->add_callback_msg_receiver((msg_receiver*) ros_switch_block);
 
-    // ((UpdatePIDcontroller*)update_controller)->PIDdata.kp = 0.5;
-    // ((UpdatePIDcontroller*)update_controller)->PIDdata.ki = 1;
-    // ((UpdatePIDcontroller*)update_controller)->PIDdata.kd = 2;
-    // ((UpdatePIDcontroller*)update_controller)->PIDdata.kdd = 0;
-    // ((UpdatePIDcontroller*)update_controller)->PIDdata.anti_windup = 0;
-    // ((UpdatePIDcontroller*)update_controller)->PIDdata.en_pv_derivation = 0;
-    // ((UpdatePIDcontroller*)update_controller)->PIDdata.id = block_id::PID_ROLL;
+    // ((UpdateController*)update_controller)->PIDdata.kp = 0.5;
+    // ((UpdateController*)update_controller)->PIDdata.ki = 1;
+    // ((UpdateController*)update_controller)->PIDdata.kd = 2;
+    // ((UpdateController*)update_controller)->PIDdata.kdd = 0;
+    // ((UpdateController*)update_controller)->PIDdata.anti_windup = 0;
+    // ((UpdateController*)update_controller)->PIDdata.en_pv_derivation = 0;
+    // ((UpdateController*)update_controller)->PIDdata.id = block_id::PID_ROLL;
 
     // UPDATE BEFORE FLIGHT
     ((UpdatePoseReference*)takeoff_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.5, 0.0);
