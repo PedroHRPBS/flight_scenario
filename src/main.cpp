@@ -26,6 +26,10 @@
 #include "ROSUnit_UpdateReferenceY_FS.hpp"
 #include "ROSUnit_UpdateReferenceZ_FS.hpp"
 #include "ROSUnit_UpdateReferenceYaw_FS.hpp"
+#include "SetReference_X.hpp"
+#include "SetReference_Y.hpp"
+#include "SetReference_Z.hpp"
+#include "SetReference_Yaw.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -70,8 +74,12 @@ int main(int argc, char** argv) {
     FlightElement* arm_motors = new Arm();
     FlightElement* disarm_motors = new Disarm();
 
-   
-    //******************Connections***************
+    FlightElement* ref_x = new SetReference_X();
+    FlightElement* ref_y = new SetReference_Y();
+    FlightElement* ref_z = new SetReference_Z();
+    FlightElement* ref_yaw = new SetReference_Yaw();
+
+    //******************Connectionerences***************
 
     update_controller_pid_x->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_y->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
@@ -102,7 +110,10 @@ int main(int argc, char** argv) {
     arm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
     disarm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
 
-    
+    ref_x->add_callback_msg_receiver((msg_receiver*)ros_updt_x_ref);
+    ref_y->add_callback_msg_receiver((msg_receiver*)ros_updt_y_ref);
+    ref_z->add_callback_msg_receiver((msg_receiver*)ros_updt_z_ref);
+    ref_yaw->add_callback_msg_receiver((msg_receiver*)ros_updt_yaw_ref);
 
     //*************Setting Flight Elements*************
 
@@ -192,6 +203,11 @@ int main(int argc, char** argv) {
 
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
 
+    //((SetReference_X*)ref_x)->setpoint_x = 1;
+    //((SetReference_Y*)ref_y)->setpoint_y = 2;
+    ((SetReference_Z*)ref_z)->setpoint_z = 3;
+    //((SetReference_Yaw*)ref_yaw)->setpoint_yaw = 4;
+
     //**********************************************
 
     //First Pipeline
@@ -220,6 +236,11 @@ int main(int argc, char** argv) {
     default_pipeline.addElement((FlightElement*)&wait_1s);
     default_pipeline.addElement((FlightElement*)set_initial_pose);
     default_pipeline.addElement((FlightElement*)arm_motors);
+    default_pipeline.addElement((FlightElement*)&wait_10s);
+    //default_pipeline.addElement((FlightElement*)ref_x);
+    //default_pipeline.addElement((FlightElement*)ref_y);
+    default_pipeline.addElement((FlightElement*)ref_z);
+    //default_pipeline.addElement((FlightElement*)ref_yaw);
     default_pipeline.addElement((FlightElement*)&wait_10s);
     default_pipeline.addElement((FlightElement*)switch_block);
     

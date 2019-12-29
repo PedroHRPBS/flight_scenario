@@ -19,7 +19,7 @@ void ROSUnit_UpdateReferenceX_FS::receive_msg_data(DataMessage* t_msg){
             srv.request.setpoint_x = ref_msg->getX();
 
             bool success = _setpoint_position_client.call(srv);
-            ROS_INFO("BEFORE SUCCES NEW X REFERENCE PUBLISHED: %f", srv.request.setpoint_x);
+
             if (success)
             {
                 ROS_INFO("NEW X REFERENCE PUBLISHED: %f", srv.request.setpoint_x);
