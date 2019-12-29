@@ -18,6 +18,10 @@ public:
     msg_type getType();
     const int getSize();
     void setPoseMessage(float, float, float, float, int);
+    void setPoseX(float);
+    void setPoseY(float);
+    void setPoseZ(float);
+    void setPoseYaw(float);
     
     UpdatePoseMessage_FS();
     ~UpdatePoseMessage_FS();

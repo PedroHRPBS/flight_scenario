@@ -21,6 +21,7 @@
 #include "ROSUnit_PositionSubscriber.hpp"
 #include "ROSUnit_ResetController.hpp"
 #include "ROSUnit_SwitchBlock.hpp"
+#include "ROSUnit_OrientationSubscriber.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -33,6 +34,7 @@ int main(int argc, char** argv) {
     ROSUnit* ros_updt_ctr = new ROSUnit_UpdateController(nh);
     ROSUnit* ros_updt_pose_ref = new ROSUnit_UpdatePoseReference(nh);
     ROSUnit* ros_pos_sub = new ROSUnit_PositionSubscriber(nh);
+    ROSUnit* ros_ori_sub = new ROSUnit_OrientationSubscriber(nh);
     ROSUnit* ros_rst_ctr = new ROSUnit_ResetController(nh);
     ROSUnit* ros_switch_block = new ROSUnit_SwitchBlock(nh);
     
@@ -89,6 +91,9 @@ int main(int argc, char** argv) {
     arm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
     disarm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
 
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) takeoff_waypoint);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) takeoff_waypoint);
+    
     //*************Setting Flight Elements*************
 
     ((UpdateController*)update_controller_pid_x)->pid_data.kp = 0.8;

@@ -11,7 +11,7 @@ ROSUnit_UpdatePoseReference::~ROSUnit_UpdatePoseReference() {
 
 void ROSUnit_UpdatePoseReference::receive_msg_data(DataMessage* t_msg){
     
-    if(t_msg->getType() == msg_type::UPDATEPOSEREFERENCE){
+    if(t_msg->getType() == msg_type::USERREFERENCE){
 
         UpdatePoseMessage_FS* ref_msg = (UpdatePoseMessage_FS*)t_msg;
 
