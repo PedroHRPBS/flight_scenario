@@ -12,7 +12,7 @@ ROSUnit_UpdateController::~ROSUnit_UpdateController() {
 
 void ROSUnit_UpdateController::receive_msg_data(DataMessage* t_msg){
 
-    if(t_msg->getType() == msg_type::pid_data_update){
+    if(t_msg->getType() == msg_type::UPDATECONTROLLER){
 
         ControllerMessage* _update_msg = (ControllerMessage*)t_msg;
         
