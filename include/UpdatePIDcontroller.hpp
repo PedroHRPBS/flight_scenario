@@ -1,7 +1,7 @@
 #pragma once
 #include "FlightElement.hpp"
 #include "MessageToBlock.hpp"
-#include "PIDDataMessage.hpp"
+#include "ControllerMessage.hpp"
 
 class UpdatePIDcontroller : public FlightElement{
 private:

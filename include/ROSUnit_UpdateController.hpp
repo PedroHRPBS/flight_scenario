@@ -1,7 +1,7 @@
 #pragma once
 #include <positioning_system/Update_Controller.h>
 #include "ROSUnit.hpp"
-#include "PIDDataMessage.hpp"
+#include "ControllerMessage.hpp"
 #include <positioning_system/Controller_param.h>
 
 class ROSUnit_UpdateController : public ROSUnit {

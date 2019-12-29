@@ -19,7 +19,7 @@ enum class block_id {PID_X=0, PID_Y=1, PID_Z=2, PID_ROLL=3, PID_PITCH=4,
 					PID_YAW=5, REF_X=6, REF_Y=7, REF_Z=8, REF_ROLL=9, REF_PITCH=10, 
 					REF_YAW=11, PID_PITCH_RATE = 12, PID_YAW_RATE = 13,
 					MRFT_X=14, MRFT_Y=15, MRFT_Z=16, MRFT_ROLL=17, MRFT_PITCH=18, 
-					MRFT_YAW=19};
+					MRFT_YAW=19, NULL_ID=999};
 enum class switcher_type {controller, provider, reference, null_type};
 enum class controller_type {pid, mrft};
 enum class reference_type {process_variable_ref, restricted_process_variable_ref};
