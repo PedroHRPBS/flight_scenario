@@ -1,7 +1,7 @@
 #pragma once
 #include "DataMessage.hpp"
 
-class SwitchBlockMsg : public DataMessage {
+class SwitchBlockMsg_FS : public DataMessage {
 
 private:
     msg_type _type;
@@ -11,9 +11,9 @@ public:
 
     msg_type getType();
     const int getSize();
-    void setSwitchBlockMsg(block_id t_block_out, block_id t_block_in);
+    void setSwitchBlockMsg_FS(block_id t_block_out, block_id t_block_in);
     block_id getBlockToSwitchIn();
     block_id getBlockToSwitchOut();
-    SwitchBlockMsg();
-    ~SwitchBlockMsg();
+    SwitchBlockMsg_FS();
+    ~SwitchBlockMsg_FS();
 };

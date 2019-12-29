@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
     FlightElement* takeoff_waypoint = new UpdatePoseReference();
     FlightElement* land_waypoint = new UpdatePoseReference();
     SwitchBlock* switch_block = new SwitchBlock();
-    switch_block->switch_msg.setSwitchBlockMsg(block_id::PID_Z, block_id::MRFT_Z);
+    switch_block->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::MRFT_Z);
     
     ResetController* reset_z = new ResetController();
     reset_z->target_block = block_id::PID_Z;
@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
     // ((UpdatePIDcontroller*)update_controller)->PIDdata.id = block_id::PID_ROLL;
 
     // UPDATE BEFORE FLIGHT
-    ((UpdatePoseReference*)takeoff_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 1.5, 1.54);
+    ((UpdatePoseReference*)takeoff_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.5, 0.0);
     ((UpdatePoseReference*)land_waypoint)->pose_reference.setPoseMessage(0.0, 0.0, 0.4, 1.54);
 
     //**********************************************
@@ -81,6 +81,7 @@ int main(int argc, char** argv) {
     default_pipeline.addElement((FlightElement*)takeoff_waypoint);
     default_pipeline.addElement((FlightElement*)&wait_1s);
     default_pipeline.addElement((FlightElement*)arm_motors);
+    default_pipeline.addElement((FlightElement*)&wait_10s);
     default_pipeline.addElement((FlightElement*)switch_block);
     
 

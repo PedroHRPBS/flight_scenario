@@ -2,7 +2,7 @@
 #include <positioning_system/Update_Controller.h>
 #include "ROSUnit.hpp"
 #include "PIDDataMessage.hpp"
-#include <positioning_system/PID_param.h>
+#include <positioning_system/Controller_param.h>
 
 class ROSUnit_UpdateController : public ROSUnit {
 

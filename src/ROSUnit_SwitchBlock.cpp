@@ -12,7 +12,7 @@ void ROSUnit_SwitchBlock::receive_msg_data(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::SWITCHBLOCK){
 
-        SwitchBlockMsg* _switch_msg = (SwitchBlockMsg*)t_msg;
+        SwitchBlockMsg_FS* _switch_msg = (SwitchBlockMsg_FS*)t_msg;
         
         positioning_system::SwitchBlock srv;
         srv.request.block_in = (int)(_switch_msg->getBlockToSwitchIn());

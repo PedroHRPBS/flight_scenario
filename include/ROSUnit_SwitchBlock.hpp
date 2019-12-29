@@ -1,6 +1,6 @@
 #pragma once
 #include "ROSUnit.hpp"
-#include "SwitchBlockMsg.hpp"
+#include "SwitchBlockMsg_FS.hpp"
 #include <positioning_system/SwitchBlock.h>
 
 class ROSUnit_SwitchBlock :  public ROSUnit{
@@ -10,7 +10,7 @@ class ROSUnit_SwitchBlock :  public ROSUnit{
         
     public:
         void receive_msg_data(DataMessage* t_msg);  
-        
+
         ROSUnit_SwitchBlock(ros::NodeHandle&);
         ~ROSUnit_SwitchBlock();
 };
