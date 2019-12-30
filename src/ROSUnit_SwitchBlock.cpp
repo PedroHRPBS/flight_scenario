@@ -22,7 +22,7 @@ void ROSUnit_SwitchBlock::receive_msg_data(DataMessage* t_msg){
 
         if (success)
         {
-            ROS_INFO("SWITCHING BLOCKS");
+            ROS_INFO("SWITCHING BLOCKS. IN: %d, OUT: %d",srv.request.block_in, srv.request.block_out);
         }
         else 
         {

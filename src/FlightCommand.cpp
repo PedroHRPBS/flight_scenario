@@ -16,6 +16,8 @@ void FlightCommand::perform(){
 
     }
 
+    _command = flight_command::NULL_TYPE;
+
 }
 
 void FlightCommand::receive_msg_data(DataMessage* t_msg){

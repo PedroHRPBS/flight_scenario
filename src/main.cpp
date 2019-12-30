@@ -70,7 +70,8 @@ int main(int argc, char** argv) {
 
     FlightElement* set_initial_pose = new SetInitialPose();
 
-    FlightElement* switch_block = new SwitchBlock();
+    FlightElement* switch_block_pid_mrft = new SwitchBlock();
+    FlightElement* switch_block_mrft_pid = new SwitchBlock();
     
     FlightElement* reset_z = new ResetController();
 
@@ -108,7 +109,8 @@ int main(int argc, char** argv) {
     set_initial_pose->add_callback_msg_receiver((msg_receiver*) ros_updt_z_ref);
     set_initial_pose->add_callback_msg_receiver((msg_receiver*) ros_updt_yaw_ref);
 
-    switch_block->add_callback_msg_receiver((msg_receiver*) ros_switch_block);
+    switch_block_pid_mrft->add_callback_msg_receiver((msg_receiver*) ros_switch_block);
+    switch_block_mrft_pid->add_callback_msg_receiver((msg_receiver*) ros_switch_block);
     //TODO Should I implement a reset controller for MRFT??
     reset_z->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
 
@@ -202,7 +204,8 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.id = block_id::MRFT_YAW;
 
-    ((SwitchBlock*)switch_block)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
+    ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
+    ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
 
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
 
@@ -271,12 +274,11 @@ int main(int argc, char** argv) {
 
     default_pipeline.addElement((FlightElement*)flight_command);
     
-    default_pipeline.addElement((FlightElement*)switch_block);
+    default_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
 
     default_pipeline.addElement((FlightElement*)flight_command);
 
-    ((SwitchBlock*)switch_block)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
-    default_pipeline.addElement((FlightElement*)switch_block);
+    default_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
 
     default_pipeline.addElement((FlightElement*)flight_command);
 
