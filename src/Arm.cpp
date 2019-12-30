@@ -18,6 +18,7 @@ void Arm::perform()
 {
     ArmDataMessage _arm_message;
     _arm_message.isArmed = true;
+    std::cout<<"arm"<<std::endl;
     this->emit_message((DataMessage*)&_arm_message);
 }
 

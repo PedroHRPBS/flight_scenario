@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(flight_scenario_manager)
+project(flight_scenario)
 
 add_compile_options(-std=c++11)
 
@@ -17,18 +17,16 @@ find_package(catkin REQUIRED COMPONENTS
 #   Waypoint.msg
 # )
 
-# add_service_files(
-#   FILES
-#   Arm.srv
-#   Update_Controller.srv
-#   Reset_Controller.srv
-# )
+add_service_files(
+  FILES
+  Flight_Command.srv
+)
 
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
+generate_messages(
+  DEPENDENCIES
+  std_msgs
   
-# )
+)
 
 catkin_package(
   INCLUDE_DIRS include
