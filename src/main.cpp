@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
     FlightElement* ref_z = new SetReference_Z();
     FlightElement* ref_yaw = new SetReference_Yaw();
 
-    FlightElement* flight_command = new FlightCommand((Arm*)arm_motors, (Disarm*)disarm_motors, (SetReference_Z*)ref_z, (ResetController*)reset_z);
+    FlightElement* flight_command = new FlightCommand();
 
     //******************Connectionerences***************
 
@@ -148,7 +148,10 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_z)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_z)->pid_data.id = block_id::PID_Z;
 
-    ((UpdateController*)update_controller_pid_roll)-switch_block->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.3;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kd = 0.075;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_roll)->pid_data.id = block_id::PID_ROLL;
@@ -259,26 +262,29 @@ int main(int argc, char** argv) {
     default_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
 
     default_pipeline.addElement((FlightElement*)flight_command);
-
-    default_pipeline.addElement((FlightElement*)reset_z);
-    default_pipeline.addElement((FlightElement*)ref_z);
-    default_pipeline.addElement((FlightElement*)arm_motors);
     
-    default_pipeline.addElement((FlightElement*)&z_cross_takeoff_waypoint_check);
-    default_pipeline.addElement((FlightElement*)&wait_2s);
+    default_pipeline.addElement((FlightElement*)ref_z);
+    default_pipeline.addElement((FlightElement*)reset_z);
+    default_pipeline.addElement((FlightElement*)arm_motors);
 
+    //default_pipeline.addElement((FlightElement*)&z_cross_takeoff_waypoint_check);
+
+    default_pipeline.addElement((FlightElement*)flight_command);
+    
     default_pipeline.addElement((FlightElement*)switch_block);
-    default_pipeline.addElement((FlightElement*)&wait_5s);
+
+    default_pipeline.addElement((FlightElement*)flight_command);
 
     ((SwitchBlock*)switch_block)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
     default_pipeline.addElement((FlightElement*)switch_block);
+
     default_pipeline.addElement((FlightElement*)flight_command);
 
     default_pipeline.addElement((FlightElement*)&z_cross_land_waypoint_check);
     default_pipeline.addElement((FlightElement*)&wait_1s);
     default_pipeline.addElement((FlightElement*)disarm_motors);
 
-    // FlightPipeline safety_pipeline;
+    FlightPipeline safety_pipeline;
     // safety_pipeline.addElement((FlightElement*)&z_cross_takeoff_waypoint_check);
     // safety_pipeline.addElement((FlightElement*)ref_z);
     // safety_pipeline.addElement((FlightElement*)&z_cross_land_waypoint_check);
