@@ -209,7 +209,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_roll)->mrft_data.id = block_id::MRFT_ROLL;
 
     ((UpdateController*)update_controller_mrft_pitch)->mrft_data.beta = -0.73;
-    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.relay_amp = 0.008;
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.relay_amp = 0.1;
     ((UpdateController*)update_controller_mrft_pitch)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_pitch)->mrft_data.id = block_id::MRFT_PITCH;
 
@@ -218,8 +218,8 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.id = block_id::MRFT_YAW;
 
-    ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_YAW, block_id::MRFT_YAW);
-    ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_YAW, block_id::PID_YAW);
+    ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_PITCH, block_id::MRFT_PITCH);
+    ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_PITCH, block_id::PID_PITCH);
 
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
     ((ResetController*)reset_y)->target_block = block_id::PID_Y;
@@ -290,12 +290,12 @@ int main(int argc, char** argv) {
 
     default_pipeline.addElement((FlightElement*)flight_command);
 
-    //default_pipeline.addElement((FlightElement*)update_controller_pid_zero);
+    default_pipeline.addElement((FlightElement*)update_controller_pid_zero);
     default_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
     default_pipeline.addElement((FlightElement*)flight_command);
     default_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
-    //default_pipeline.addElement((FlightElement*)update_controller_pid_y);
-    //default_pipeline.addElement((FlightElement*)reset_y);
+    default_pipeline.addElement((FlightElement*)update_controller_pid_y);
+    default_pipeline.addElement((FlightElement*)reset_y);
     default_pipeline.addElement((FlightElement*)flight_command);
 
     default_pipeline.addElement((FlightElement*)ref_z_on_land);
