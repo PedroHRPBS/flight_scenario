@@ -60,6 +60,7 @@ int main(int argc, char** argv) {
     FlightElement* update_controller_pid_roll = new UpdateController();
     FlightElement* update_controller_pid_pitch = new UpdateController();
     FlightElement* update_controller_pid_yaw = new UpdateController();
+    FlightElement* update_controller_pid_yaw_rate = new UpdateController();
     FlightElement* update_controller_pid_zero = new UpdateController();
 
     FlightElement* update_controller_mrft_x = new UpdateController();
@@ -68,6 +69,7 @@ int main(int argc, char** argv) {
     FlightElement* update_controller_mrft_roll = new UpdateController();
     FlightElement* update_controller_mrft_pitch = new UpdateController();
     FlightElement* update_controller_mrft_yaw = new UpdateController();
+    FlightElement* update_controller_mrft_yaw_rate = new UpdateController();
 
     FlightElement* set_initial_pose = new SetInitialPose();
 
@@ -96,6 +98,7 @@ int main(int argc, char** argv) {
     update_controller_pid_roll->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_pitch->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_yaw->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
+    update_controller_pid_yaw_rate->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_zero->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
 
     update_controller_mrft_x->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
@@ -104,6 +107,7 @@ int main(int argc, char** argv) {
     update_controller_mrft_roll->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_mrft_pitch->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_mrft_yaw->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
+    update_controller_mrft_yaw_rate->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
 
     ros_ori_sub->add_callback_msg_receiver((msg_receiver*) set_initial_pose);
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) set_initial_pose);
@@ -156,25 +160,25 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_y)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_y)->pid_data.id = block_id::PID_Y;
 
-    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 1.5; //0.4;
-    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.01 * 3;
-    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.8; //0.10;
+    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.7450; //0.4;
+    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980; //0.01 * 3;
+    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.3956; //0.10;
     ((UpdateController*)update_controller_pid_z)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_z)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_z)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_z)->pid_data.id = block_id::PID_Z;
 
-    ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.225; //0.3 * 0.6 * 0.5;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.1584; //0.225; //0.3 * 0.6 * 0.5;
     ((UpdateController*)update_controller_pid_roll)->pid_data.ki = 0.0;
-    ((UpdateController*)update_controller_pid_roll)->pid_data.kd = 0.04; //0.075 * 0.6 * 0.5;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kd = 0.0264; //0.04; //0.075 * 0.6 * 0.5;
     ((UpdateController*)update_controller_pid_roll)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_roll)->pid_data.id = block_id::PID_ROLL;
 
-    ((UpdateController*)update_controller_pid_pitch)->pid_data.kp = 0.225; //0.3 * 0.6 * 0.5;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kp = 0.1584; //0.225; //0.3 * 0.6 * 0.5;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.ki = 0.0;
-    ((UpdateController*)update_controller_pid_pitch)->pid_data.kd = 0.04; //0.075 * 0.6 * 0.5;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kd = 0.0264; //0.04; //0.075 * 0.6 * 0.5;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.en_pv_derivation = 1;
@@ -182,11 +186,19 @@ int main(int argc, char** argv) {
 
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 0.8;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.ki = 0.0;
-    ((UpdateController*)update_controller_pid_yaw)->pid_data.kd = 0.08;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kd = 0.0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.id = block_id::PID_YAW;
+
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.08;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.id = block_id::PID_YAW_RATE;
 
     ((UpdateController*)update_controller_mrft_x)->mrft_data.beta = -0.73;
     ((UpdateController*)update_controller_mrft_x)->mrft_data.relay_amp = 0.1;
@@ -218,6 +230,11 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.id = block_id::MRFT_YAW;
 
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
+
     ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::MRFT_Z);
     ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_Z, block_id::PID_Z);
 
@@ -226,8 +243,8 @@ int main(int argc, char** argv) {
 
     //((SetReference_X*)ref_x)->setpoint_x = 1;
     //((SetReference_Y*)ref_y)->setpoint_y = 2;
-    ((SetReference_Z*)ref_z_on_takeoff)->setpoint_z = 2.0;
-    ((SetReference_Z*)ref_z_on_land)->setpoint_z = 0.9;
+    ((SetReference_Z*)ref_z_on_takeoff)->setpoint_z = 1.5;
+    ((SetReference_Z*)ref_z_on_land)->setpoint_z = 0.2;
     //((SetReference_Yaw*)ref_yaw)->setpoint_yaw = 4;
 
     //First Pipeline
@@ -249,7 +266,7 @@ int main(int argc, char** argv) {
 
     SimplePlaneCondition z_cross_land_waypoint;
     z_cross_land_waypoint.selected_dim=Dimension3D::Z;
-    z_cross_land_waypoint.condition_value=0.9;
+    z_cross_land_waypoint.condition_value=0.2;
     z_cross_land_waypoint.condition_met_for_larger=false;
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_land_waypoint);
 
@@ -272,6 +289,7 @@ int main(int argc, char** argv) {
     default_pipeline.addElement((FlightElement*)update_controller_pid_roll);
     default_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
     default_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
+    default_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
 
     default_pipeline.addElement((FlightElement*)update_controller_mrft_x);
     default_pipeline.addElement((FlightElement*)update_controller_mrft_y);
@@ -279,6 +297,7 @@ int main(int argc, char** argv) {
     default_pipeline.addElement((FlightElement*)update_controller_mrft_roll);
     default_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
     default_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
+    default_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
 
     default_pipeline.addElement((FlightElement*)flight_command);
     
@@ -291,12 +310,12 @@ int main(int argc, char** argv) {
     default_pipeline.addElement((FlightElement*)flight_command);
 
     //default_pipeline.addElement((FlightElement*)update_controller_pid_zero);
-    default_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
-    default_pipeline.addElement((FlightElement*)flight_command);
-    default_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
-    //default_pipeline.addElement((FlightElement*)update_controller_pid_y);
-    //default_pipeline.addElement((FlightElement*)reset_y);
-    default_pipeline.addElement((FlightElement*)flight_command);
+    // default_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
+    // default_pipeline.addElement((FlightElement*)flight_command);
+    // default_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
+    // //default_pipeline.addElement((FlightElement*)update_controller_pid_y);
+    // //default_pipeline.addElement((FlightElement*)reset_y);
+    // default_pipeline.addElement((FlightElement*)flight_command);
 
     default_pipeline.addElement((FlightElement*)ref_z_on_land);
     default_pipeline.addElement((FlightElement*)&z_cross_land_waypoint_check);

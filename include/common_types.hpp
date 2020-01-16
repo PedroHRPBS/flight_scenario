@@ -13,13 +13,13 @@ const struct tPacketProp{
 enum class msg_type {FLIGHTCOMMAND, SWITCHBLOCK, UPDATECONTROLLER, arm_update, RestControllerMessage, SwitchBlock,MessageToBlock,TESTMSG, SERIALDATA ,reference, THREEAXISSENSORMSG, VELOCITY, ACCELERATION, THERMALIMAGE, optitrack, FLIGHTSCENARIO, POSITION, ATTITUDE, HEADING, NOZZLEMSG,control_system, USERREFERENCE, controller, float_msg, switcher, VECTOR3D, external_reference, ack,internal_msg_start,internal_ros,pid_data_update };
 enum class msg_type_optitrack {position, attitude};
 enum class msg_type_flight_scenario {USER, SET_PID};
-enum class control_system {roll, pitch, yaw, x, y, z, null_type};
-enum class block_type {controller, provider, reference};
+enum class control_system {roll=3, pitch=4, yaw=5, x=0, y=1, z=2, pitch_rate = 7, yaw_rate = 6, null_type};
 enum class block_id {PID_X=0, PID_Y=1, PID_Z=2, PID_ROLL=3, PID_PITCH=4, 
-					PID_YAW=5, REF_X=6, REF_Y=7, REF_Z=8, REF_ROLL=9, REF_PITCH=10, 
-					REF_YAW=11, PID_PITCH_RATE = 12, PID_YAW_RATE = 13,
+					PID_YAW=5, PID_YAW_RATE=6, REF_Y=7, REF_Z=8, REF_ROLL=9, REF_PITCH=10, 
+					REF_YAW=11, PID_PITCH_RATE = 12, REF_X = 13,
 					MRFT_X=14, MRFT_Y=15, MRFT_Z=16, MRFT_ROLL=17, MRFT_PITCH=18, 
-					MRFT_YAW=19, NULL_ID=999};
+					MRFT_YAW=19, MRFT_YAW_RATE=20, REF_YAW_RATE=21, NULL_ID=999};
+enum class block_type {controller, provider, reference};
 enum class switcher_type {controller, provider, reference, null_type};
 enum class controller_type {pid, mrft};
 enum class reference_type {process_variable_ref, restricted_process_variable_ref};
