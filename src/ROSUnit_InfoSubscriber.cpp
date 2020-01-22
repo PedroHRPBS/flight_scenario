@@ -18,6 +18,8 @@ void ROSUnit_InfoSubscriber::callbackInfo(const positioning_system::Info& msg){
     info_msg.number_of_waypoints = msg.number_of_waypoints;
     info_msg.armed = msg.armed;
 
+    std::cout << info_msg.number_of_waypoints << " " << info_msg.armed << std::endl;
+
     _instance_ptr->emit_message((DataMessage*) &info_msg); 
 
 }

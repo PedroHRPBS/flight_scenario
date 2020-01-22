@@ -52,7 +52,8 @@ int main(int argc, char** argv) {
     ROSUnit* ros_updt_z_ref = new ROSUnit_UpdateReferenceZ_FS(nh);
     ROSUnit* ros_updt_yaw_ref = new ROSUnit_UpdateReferenceYaw_FS(nh);
     ROSUnit* ros_flight_command = new ROSUnit_FlightCommand(nh);
-
+    ROSUnit* ros_info_sub = new ROSUnit_InfoSubscriber(nh);
+    
     //*****************Flight Elements*************
 
     FlightElement* update_controller_pid_x = new UpdateController();
