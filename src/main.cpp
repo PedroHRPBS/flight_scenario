@@ -283,7 +283,7 @@ int main(int argc, char** argv) {
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
     ((ResetController*)reset_y)->target_block = block_id::PID_Y;
 
-    ((SetReference_Z*)ref_z_on_takeoff)->setpoint_z = 1.5;
+    ((SetReference_Z*)ref_z_on_takeoff)->setpoint_z = 1.0;
     ((SetReference_Z*)ref_z_on_land)->setpoint_z = 0.2;
 
     Wait wait_1s;
@@ -291,7 +291,7 @@ int main(int argc, char** argv) {
 
     SimplePlaneCondition z_cross_takeoff_waypoint;
     z_cross_takeoff_waypoint.selected_dim=Dimension3D::Z;
-    z_cross_takeoff_waypoint.condition_value = 1.4;
+    z_cross_takeoff_waypoint.condition_value = 0.9;
     z_cross_takeoff_waypoint.condition_met_for_larger=true;
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_takeoff_waypoint);
 
