@@ -32,6 +32,7 @@
 #include "SetReference_Yaw.hpp"
 #include "ROSUnit_FlightCommand.hpp"
 #include "FlightCommand.hpp"
+#include "ROSUnit_InfoSubscriber.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
