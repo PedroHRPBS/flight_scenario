@@ -25,11 +25,14 @@ void StateMonitor::perform() {
             }
 
         }
-        std::cout << "current state: " << (int)(MainMissionStateManager.getMissionState()) << std::endl;
-        std::cout << "_armed: " << _armed << std::endl;
-        std::cout << "_number_of_waypoints: " << _number_of_waypoints << std::endl;
-        std::cout << "_altitude: " << _altitude << std::endl;
-        std::cout << "_error: " << _error << std::endl;
+
+        if(MainMissionStateManager.getMissionState() != old_state){
+            int_msg.data = (int)(MainMissionStateManager.getMissionState());
+            this->emit_message((DataMessage*) &int_msg);
+            old_state = MainMissionStateManager.getMissionState();
+        }
+        
+
         sleep(0.1);
     }
 }

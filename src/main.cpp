@@ -65,6 +65,8 @@ int main(int argc, char** argv) {
     ROSUnit* ros_set_mission_state_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Int, "/uav_control/set_mission_state");
     ROSUnit* ros_uav_attitude_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Float, "/uav_control/uav_attitude");
     
+    ROSUnit* ros_updt_uav_control_state_clnt = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client_Subscriber, ROSUnit_msg_type::ROSUnit_Int, "/ex_bldg_fire_mm/update_uav_control_state");
+
 
     //*****************Flight Elements*************
 
@@ -171,6 +173,8 @@ int main(int argc, char** argv) {
     ros_updt_yaw_ref->add_callback_msg_receiver((msg_receiver*) state_monitor);
     ros_info_sub->add_callback_msg_receiver((msg_receiver*) state_monitor);
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) state_monitor);
+
+    state_monitor->add_callback_msg_receiver((msg_receiver*)ros_updt_uav_control_state_clnt);
 
     //*************Setting Flight Elements*************
 
@@ -304,7 +308,7 @@ int main(int argc, char** argv) {
     //**********************************************
 
     
-
+    //TODO implement RESET to restart pipeline
     FlightPipeline initialization_pipeline, state_monitor_pipeline, take_off_pipeline, landing_pipeline;
 
     //The Wait is needed because otherwise the set_initial_pose will capture only zeros
@@ -329,12 +333,12 @@ int main(int argc, char** argv) {
     take_off_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
     take_off_pipeline.addElement((FlightElement*)reset_z);
     take_off_pipeline.addElement((FlightElement*)arm_motors);
-    take_off_pipeline.addElement((FlightElement*)&wait_1s);
+    take_off_pipeline.addElement((FlightElement*)z_cross_takeoff_waypoint_check);
     take_off_pipeline.addElement((FlightElement*)cs_to_hovering);
     //-----------
     landing_pipeline.addElement((FlightElement*)landing_check);
     landing_pipeline.addElement((FlightElement*)ref_z_on_land);
-    //landing_pipeline.addElement((FlightElement*)z_cross_land_waypoint_check);
+    landing_pipeline.addElement((FlightElement*)z_cross_land_waypoint_check);
     landing_pipeline.addElement((FlightElement*)&wait_1s);
     landing_pipeline.addElement((FlightElement*)disarm_motors);
     landing_pipeline.addElement((FlightElement*)cs_to_landed);
