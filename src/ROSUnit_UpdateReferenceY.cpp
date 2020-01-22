@@ -28,6 +28,8 @@ void ROSUnit_UpdateReferenceY_FS::receive_msg_data(DataMessage* t_msg){
             else 
             {
                 ROS_ERROR("Failed to call service /update_reference/y");
+                _error_msg.error = true;
+                this->emit_message((DataMessage*) &_error_msg);
             }
         }
     }

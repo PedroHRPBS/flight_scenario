@@ -12,8 +12,8 @@ const float MIN_ALT_FOR_HOVERING = 0.2;
 class StateMonitor : public FlightElement{
 
 private:
-    int _number_of_waypoints;
-    bool _armed, _error;
+    int _number_of_waypoints, _error = 0;
+    bool _armed;
     float _altitude;
     
 public:

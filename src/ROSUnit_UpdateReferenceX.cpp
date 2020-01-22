@@ -27,6 +27,8 @@ void ROSUnit_UpdateReferenceX_FS::receive_msg_data(DataMessage* t_msg){
             else 
             {
                 ROS_ERROR("Failed to call service /update_reference/x");
+                _error_msg.error = true;
+                this->emit_message((DataMessage*) &_error_msg);
             }
         }
     }

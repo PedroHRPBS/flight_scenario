@@ -4,12 +4,13 @@
 #include <positioning_system/Update_Z_Reference.h>
 #include "UpdatePoseMessage_FS.hpp"
 #include "MessageToBlock.hpp"
+#include "ErrorMsg.hpp"
 
 class ROSUnit_UpdateReferenceZ_FS : public ROSUnit{
 
 private:
     ros::ServiceClient _setpoint_position_client;
-
+    ErrorMsg _error_msg;
 public:
     void receive_msg_data(DataMessage* t_msg);
     

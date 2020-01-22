@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   genmsg
   message_generation
   positioning_system
+  common_srv
 )
 
 # add_message_files(
@@ -30,11 +31,12 @@ generate_messages(
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs message_runtime positioning_system
+  CATKIN_DEPENDS roscpp std_msgs message_runtime positioning_system common_srv
 )
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/ROSUnits_common
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -42,6 +44,7 @@ include_directories(
 FILE(GLOB SOURCE_FILES *.hpp *.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Navio2_cpp/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/ROSUnits_common/*.cpp
         )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

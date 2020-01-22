@@ -14,7 +14,7 @@ void StateMonitor::perform() {
         if(MainMissionStateManager.getMissionState() != uav_control_states::TAKING_OFF &&
             MainMissionStateManager.getMissionState() != uav_control_states::LANDING){
 
-            if(_error){
+            if(_error > 0){
                 MainMissionStateManager.updateMissionState(uav_control_states::ERROR);
             }else if(_number_of_waypoints > 0 && _armed){
                 MainMissionStateManager.updateMissionState(uav_control_states::FOLLOWING_TRAJECTORY);
@@ -46,7 +46,9 @@ void StateMonitor::receive_msg_data(DataMessage* t_msg){
     }else if(t_msg->getType() == msg_type::ERROR){
         ErrorMsg* error_msg = (ErrorMsg*)t_msg;
 
-        _error = error_msg->error;
+        if(error_msg->error){
+            _error++;
+        }
 
     }
 }

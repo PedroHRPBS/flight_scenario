@@ -36,6 +36,7 @@
 #include "ChangeInternalState.hpp"
 #include "InternalSystemStateCondition.hpp"
 #include "StateMonitor.hpp"
+#include "ROSUnit_Factory.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -56,6 +57,14 @@ int main(int argc, char** argv) {
     ROSUnit* ros_updt_yaw_ref = new ROSUnit_UpdateReferenceYaw_FS(nh);
     ROSUnit* ros_flight_command = new ROSUnit_FlightCommand(nh);
     ROSUnit* ros_info_sub = new ROSUnit_InfoSubscriber(nh);
+
+    ROSUnit_Factory ROSUnit_Factory_main{nh};
+	ROSUnit* ros_set_path_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Points, "/uav_control/set_path");
+	ROSUnit* ros_set_hover_point_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Point, "/uav_control/set_hover_point");
+    ROSUnit* ros_set_geofence_planes_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Points, "/uav_control/set_geofence_planes");
+    ROSUnit* ros_set_mission_state_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Int, "/uav_control/set_mission_state");
+    ROSUnit* ros_uav_attitude_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Float, "/uav_control/uav_attitude");
+    
 
     //*****************Flight Elements*************
 
@@ -99,17 +108,18 @@ int main(int argc, char** argv) {
 
     FlightElement* cs_to_hovering = new ChangeInternalState(uav_control_states::HOVERING);
     FlightElement* cs_to_landed = new ChangeInternalState(uav_control_states::LANDED);
+    FlightElement* cs_to_outside_source = new ChangeInternalState(uav_control_states::WARMING_UP);
 
-    InternalSystemStateCondition* taking_off_condition = new InternalSystemStateCondition(uav_control_states::TAKING_OFF);
-    WaitForCondition* taking_off_check = new WaitForCondition((Condition*)taking_off_condition);
+    InternalSystemStateCondition* uav_control_taking_off = new InternalSystemStateCondition(uav_control_states::TAKING_OFF);
+    WaitForCondition* taking_off_check = new WaitForCondition((Condition*)uav_control_taking_off);
 
-    InternalSystemStateCondition* landing_condition = new InternalSystemStateCondition(uav_control_states::LANDING);
-    WaitForCondition* landing_check = new WaitForCondition((Condition*)landing_condition);
+    InternalSystemStateCondition* uav_control_landing = new InternalSystemStateCondition(uav_control_states::LANDING);
+    WaitForCondition* landing_check = new WaitForCondition((Condition*)uav_control_landing);
 
 
     //******************Connections***************
 
-    //TODO ros connections for new conditions and change internal state and error on set_initial_pose
+    //TODO ros connections for new conditions  and error on set_initial_pose
     update_controller_pid_x->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_y->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_z->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
@@ -151,6 +161,13 @@ int main(int argc, char** argv) {
     ref_yaw->add_callback_msg_receiver((msg_receiver*)ros_updt_yaw_ref);
 
     ros_flight_command->add_callback_msg_receiver((msg_receiver*) flight_command);
+
+    ros_set_mission_state_srv->add_callback_msg_receiver((msg_receiver*) cs_to_outside_source);
+    
+    ros_updt_x_ref->add_callback_msg_receiver((msg_receiver*) state_monitor);
+    ros_updt_y_ref->add_callback_msg_receiver((msg_receiver*) state_monitor);
+    ros_updt_z_ref->add_callback_msg_receiver((msg_receiver*) state_monitor);
+    ros_updt_yaw_ref->add_callback_msg_receiver((msg_receiver*) state_monitor);
 
     //*************Setting Flight Elements*************
 
