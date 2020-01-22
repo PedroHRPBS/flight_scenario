@@ -33,6 +33,9 @@
 #include "ROSUnit_FlightCommand.hpp"
 #include "FlightCommand.hpp"
 #include "ROSUnit_InfoSubscriber.hpp"
+#include "ChangeInternalState.hpp"
+#include "InternalSystemStateCondition.hpp"
+#include "StateMonitor.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -53,7 +56,7 @@ int main(int argc, char** argv) {
     ROSUnit* ros_updt_yaw_ref = new ROSUnit_UpdateReferenceYaw_FS(nh);
     ROSUnit* ros_flight_command = new ROSUnit_FlightCommand(nh);
     ROSUnit* ros_info_sub = new ROSUnit_InfoSubscriber(nh);
-    
+
     //*****************Flight Elements*************
 
     FlightElement* update_controller_pid_x = new UpdateController();
@@ -92,8 +95,21 @@ int main(int argc, char** argv) {
 
     FlightElement* flight_command = new FlightCommand();
 
-    //******************Connectionerences***************
+    FlightElement* state_monitor = new StateMonitor();
 
+    FlightElement* cs_to_hovering = new ChangeInternalState(uav_control_states::HOVERING);
+    FlightElement* cs_to_landed = new ChangeInternalState(uav_control_states::LANDED);
+
+    InternalSystemStateCondition* taking_off_condition = new InternalSystemStateCondition(uav_control_states::TAKING_OFF);
+    WaitForCondition* taking_off_check = new WaitForCondition((Condition*)taking_off_condition);
+
+    InternalSystemStateCondition* landing_condition = new InternalSystemStateCondition(uav_control_states::LANDING);
+    WaitForCondition* landing_check = new WaitForCondition((Condition*)landing_condition);
+
+
+    //******************Connections***************
+
+    //TODO ros connections for new conditions and change internal state and error on set_initial_pose
     update_controller_pid_x->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_y->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_z->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
@@ -243,19 +259,11 @@ int main(int argc, char** argv) {
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
     ((ResetController*)reset_y)->target_block = block_id::PID_Y;
 
-    //((SetReference_X*)ref_x)->setpoint_x = 1;
-    //((SetReference_Y*)ref_y)->setpoint_y = 2;
     ((SetReference_Z*)ref_z_on_takeoff)->setpoint_z = 1.5;
     ((SetReference_Z*)ref_z_on_land)->setpoint_z = 0.2;
-    //((SetReference_Yaw*)ref_yaw)->setpoint_yaw = 4;
 
-    //First Pipeline
     Wait wait_1s;
     wait_1s.wait_time_ms=1000;
-    Wait wait_5s;
-    wait_5s.wait_time_ms=5000;
-    Wait wait_2s;
-    wait_2s.wait_time_ms=2000;
 
     SimplePlaneCondition z_cross_takeoff_waypoint;
     z_cross_takeoff_waypoint.selected_dim=Dimension3D::Z;
@@ -263,8 +271,7 @@ int main(int argc, char** argv) {
     z_cross_takeoff_waypoint.condition_met_for_larger=true;
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_takeoff_waypoint);
 
-    WaitForCondition z_cross_takeoff_waypoint_check;
-    z_cross_takeoff_waypoint_check.Wait_condition=(Condition*)&z_cross_takeoff_waypoint;
+    WaitForCondition* z_cross_takeoff_waypoint_check = new WaitForCondition((Condition*)&z_cross_takeoff_waypoint);
 
     SimplePlaneCondition z_cross_land_waypoint;
     z_cross_land_waypoint.selected_dim=Dimension3D::Z;
@@ -272,59 +279,49 @@ int main(int argc, char** argv) {
     z_cross_land_waypoint.condition_met_for_larger=false;
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_land_waypoint);
 
-    WaitForCondition z_cross_land_waypoint_check;
-    z_cross_land_waypoint_check.Wait_condition=(Condition*)&z_cross_land_waypoint;
+    WaitForCondition* z_cross_land_waypoint_check = new WaitForCondition((Condition*)&z_cross_land_waypoint);
 
     //**********************************************
 
     
 
-    FlightPipeline default_pipeline;
+    FlightPipeline initialization_pipeline, state_monitor_pipeline, take_off_pipeline, landing_pipeline;
 
     //The Wait is needed because otherwise the set_initial_pose will capture only zeros
-    default_pipeline.addElement((FlightElement*)&wait_1s);
-    default_pipeline.addElement((FlightElement*)set_initial_pose);
+    initialization_pipeline.addElement((FlightElement*)&wait_1s);
+    initialization_pipeline.addElement((FlightElement*)set_initial_pose);
+    initialization_pipeline.addElement((FlightElement*)update_controller_pid_x);
+    initialization_pipeline.addElement((FlightElement*)update_controller_pid_y);
+    initialization_pipeline.addElement((FlightElement*)update_controller_pid_z);
+    initialization_pipeline.addElement((FlightElement*)update_controller_pid_roll);
+    initialization_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
+    initialization_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
+    initialization_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
+    initialization_pipeline.addElement((FlightElement*)update_controller_mrft_x);
+    initialization_pipeline.addElement((FlightElement*)update_controller_mrft_y);
+    initialization_pipeline.addElement((FlightElement*)update_controller_mrft_z);
+    initialization_pipeline.addElement((FlightElement*)update_controller_mrft_roll);
+    initialization_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
+    initialization_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
+    initialization_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
+    //-----------
+    take_off_pipeline.addElement((FlightElement*)taking_off_check);
+    take_off_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
+    take_off_pipeline.addElement((FlightElement*)reset_z);
+    take_off_pipeline.addElement((FlightElement*)arm_motors);
+    take_off_pipeline.addElement((FlightElement*)z_cross_takeoff_waypoint_check);
+    take_off_pipeline.addElement((FlightElement*)cs_to_hovering);
+    //-----------
+    landing_pipeline.addElement((FlightElement*)landing_check);
+    landing_pipeline.addElement((FlightElement*)ref_z_on_land);
+    landing_pipeline.addElement((FlightElement*)z_cross_land_waypoint_check);
+    landing_pipeline.addElement((FlightElement*)&wait_1s);
+    landing_pipeline.addElement((FlightElement*)disarm_motors);
+    landing_pipeline.addElement((FlightElement*)cs_to_landed);
+    //-----------
+    state_monitor_pipeline.addElement((FlightElement*)state_monitor);
+    //-----------
     
-    default_pipeline.addElement((FlightElement*)update_controller_pid_x);
-    default_pipeline.addElement((FlightElement*)update_controller_pid_y);
-    default_pipeline.addElement((FlightElement*)update_controller_pid_z);
-    default_pipeline.addElement((FlightElement*)update_controller_pid_roll);
-    default_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
-    default_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
-    default_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
-
-    default_pipeline.addElement((FlightElement*)update_controller_mrft_x);
-    default_pipeline.addElement((FlightElement*)update_controller_mrft_y);
-    default_pipeline.addElement((FlightElement*)update_controller_mrft_z);
-    default_pipeline.addElement((FlightElement*)update_controller_mrft_roll);
-    default_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
-    default_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
-    default_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
-
-    default_pipeline.addElement((FlightElement*)flight_command);
-    
-    default_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
-    default_pipeline.addElement((FlightElement*)reset_z);
-    default_pipeline.addElement((FlightElement*)arm_motors);
-
-    default_pipeline.addElement((FlightElement*)&z_cross_takeoff_waypoint_check);
-
-    default_pipeline.addElement((FlightElement*)flight_command);
-
-    //default_pipeline.addElement((FlightElement*)update_controller_pid_zero);
-    // default_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
-    // default_pipeline.addElement((FlightElement*)flight_command);
-    // default_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
-    // //default_pipeline.addElement((FlightElement*)update_controller_pid_y);
-    // //default_pipeline.addElement((FlightElement*)reset_y);
-    // default_pipeline.addElement((FlightElement*)flight_command);
-
-    default_pipeline.addElement((FlightElement*)ref_z_on_land);
-    default_pipeline.addElement((FlightElement*)&z_cross_land_waypoint_check);
-    default_pipeline.addElement((FlightElement*)&wait_1s);
-    default_pipeline.addElement((FlightElement*)disarm_motors);
-
-    FlightPipeline safety_pipeline;
     // safety_pipeline.addElement((FlightElement*)&z_cross_takeoff_waypoint_check);
     // safety_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
     // safety_pipeline.addElement((FlightElement*)&z_cross_land_waypoint_check);
@@ -332,8 +329,10 @@ int main(int argc, char** argv) {
     // safety_pipeline.addElement((FlightElement*)disarm_motors);
     Logger::getAssignedLogger()->log("FlightScenario main_scenario",LoggerLevel::Info);
     FlightScenario main_scenario;
-    main_scenario.AddFlightPipeline(&default_pipeline);
-    main_scenario.AddFlightPipeline(&safety_pipeline);
+    main_scenario.AddFlightPipeline(&initialization_pipeline);
+    main_scenario.AddFlightPipeline(&take_off_pipeline);
+    main_scenario.AddFlightPipeline(&landing_pipeline);
+    main_scenario.AddFlightPipeline(&state_monitor_pipeline);
     main_scenario.StartScenario();
     Logger::getAssignedLogger()->log("Main Done",LoggerLevel::Info);
     
@@ -341,3 +340,26 @@ int main(int argc, char** argv) {
         ros::spinOnce();
     }
 }
+
+    // initialization_pipeline.addElement((FlightElement*)flight_command);
+    
+    // initialization_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
+    // initialization_pipeline.addElement((FlightElement*)reset_z);
+    // initialization_pipeline.addElement((FlightElement*)arm_motors);
+
+    // initialization_pipeline.addElement((FlightElement*)&z_cross_takeoff_waypoint_check);
+
+    // initialization_pipeline.addElement((FlightElement*)flight_command);
+
+    // //initialization_pipeline.addElement((FlightElement*)update_controller_pid_zero);
+    // // initialization_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
+    // // initialization_pipeline.addElement((FlightElement*)flight_command);
+    // // initialization_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
+    // // //initialization_pipeline.addElement((FlightElement*)update_controller_pid_y);
+    // // //initialization_pipeline.addElement((FlightElement*)reset_y);
+    // // initialization_pipeline.addElement((FlightElement*)flight_command);
+
+    // initialization_pipeline.addElement((FlightElement*)ref_z_on_land);
+    // initialization_pipeline.addElement((FlightElement*)&z_cross_land_waypoint_check);
+    // initialization_pipeline.addElement((FlightElement*)&wait_1s);
+    // initialization_pipeline.addElement((FlightElement*)disarm_motors);
