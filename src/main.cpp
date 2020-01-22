@@ -108,7 +108,8 @@ int main(int argc, char** argv) {
 
     FlightElement* cs_to_hovering = new ChangeInternalState(uav_control_states::HOVERING);
     FlightElement* cs_to_landed = new ChangeInternalState(uav_control_states::LANDED);
-    FlightElement* cs_to_outside_source = new ChangeInternalState(uav_control_states::WARMING_UP);
+    FlightElement* cs_to_taking_off = new ChangeInternalState(uav_control_states::TAKING_OFF);
+    FlightElement* cs_to_landing = new ChangeInternalState(uav_control_states::LANDING);
 
     InternalSystemStateCondition* uav_control_taking_off = new InternalSystemStateCondition(uav_control_states::TAKING_OFF);
     WaitForCondition* taking_off_check = new WaitForCondition((Condition*)uav_control_taking_off);
@@ -119,7 +120,6 @@ int main(int argc, char** argv) {
 
     //******************Connections***************
 
-    //TODO ros connections for new conditions  and error on set_initial_pose
     update_controller_pid_x->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_y->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_pid_z->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
@@ -162,12 +162,15 @@ int main(int argc, char** argv) {
 
     ros_flight_command->add_callback_msg_receiver((msg_receiver*) flight_command);
 
-    ros_set_mission_state_srv->add_callback_msg_receiver((msg_receiver*) cs_to_outside_source);
-    
+    ros_set_mission_state_srv->add_callback_msg_receiver((msg_receiver*) cs_to_taking_off);
+    ros_set_mission_state_srv->add_callback_msg_receiver((msg_receiver*) cs_to_landing);
+
     ros_updt_x_ref->add_callback_msg_receiver((msg_receiver*) state_monitor);
     ros_updt_y_ref->add_callback_msg_receiver((msg_receiver*) state_monitor);
     ros_updt_z_ref->add_callback_msg_receiver((msg_receiver*) state_monitor);
     ros_updt_yaw_ref->add_callback_msg_receiver((msg_receiver*) state_monitor);
+    ros_info_sub->add_callback_msg_receiver((msg_receiver*) state_monitor);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) state_monitor);
 
     //*************Setting Flight Elements*************
 
@@ -326,12 +329,12 @@ int main(int argc, char** argv) {
     take_off_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
     take_off_pipeline.addElement((FlightElement*)reset_z);
     take_off_pipeline.addElement((FlightElement*)arm_motors);
-    take_off_pipeline.addElement((FlightElement*)z_cross_takeoff_waypoint_check);
+    take_off_pipeline.addElement((FlightElement*)&wait_1s);
     take_off_pipeline.addElement((FlightElement*)cs_to_hovering);
     //-----------
     landing_pipeline.addElement((FlightElement*)landing_check);
     landing_pipeline.addElement((FlightElement*)ref_z_on_land);
-    landing_pipeline.addElement((FlightElement*)z_cross_land_waypoint_check);
+    //landing_pipeline.addElement((FlightElement*)z_cross_land_waypoint_check);
     landing_pipeline.addElement((FlightElement*)&wait_1s);
     landing_pipeline.addElement((FlightElement*)disarm_motors);
     landing_pipeline.addElement((FlightElement*)cs_to_landed);
