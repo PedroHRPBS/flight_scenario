@@ -38,6 +38,7 @@
 #include "StateMonitor.hpp"
 #include "ROSUnit_Factory.hpp"
 #include "ROSUnit_RestNormSettingsClnt.hpp"
+#include "SetRestNormSettings.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -59,6 +60,7 @@ int main(int argc, char** argv) {
     ROSUnit* ros_flight_command = new ROSUnit_FlightCommand(nh);
     ROSUnit* ros_info_sub = new ROSUnit_InfoSubscriber(nh);
     ROSUnit* ros_restnorm_settings = new ROSUnit_RestNormSettingsClnt(nh);
+
     ROSUnit_Factory ROSUnit_Factory_main{nh};
 	//ROSUnit* ros_set_path_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Points, "uav_control/set_path");
 	ROSUnit* ros_set_hover_point_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Point, "uav_control/set_hover_point");
@@ -120,6 +122,7 @@ int main(int argc, char** argv) {
     InternalSystemStateCondition* uav_control_landing = new InternalSystemStateCondition(uav_control_states::LANDING);
     WaitForCondition* landing_check = new WaitForCondition((Condition*)uav_control_landing);
 
+    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.5);
 
     //******************Connections***************
 
@@ -176,6 +179,8 @@ int main(int argc, char** argv) {
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) state_monitor);
 
     state_monitor->add_callback_msg_receiver((msg_receiver*)ros_updt_uav_control_state_clnt);
+
+    set_settings->add_callback_msg_receiver((msg_receiver*)ros_restnorm_settings);
 
     //*************Setting Flight Elements*************
 
@@ -334,6 +339,7 @@ int main(int argc, char** argv) {
     //take_off_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
     take_off_pipeline.addElement((FlightElement*)reset_z);
     take_off_pipeline.addElement((FlightElement*)arm_motors);
+    take_off_pipeline.addElement((FlightElement*)set_settings);
     //take_off_pipeline.addElement((FlightElement*)z_cross_takeoff_waypoint_check);
     //take_off_pipeline.addElement((FlightElement*)cs_to_hovering);
     //-----------
