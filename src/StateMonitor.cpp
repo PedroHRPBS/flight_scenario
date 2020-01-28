@@ -10,7 +10,7 @@ StateMonitor::~StateMonitor() {
 
 void StateMonitor::perform() {
     while(1){
-
+        //TODO remove TAKING_OFF, considering it's being done by Outdoor navigation
         if(MainMissionStateManager.getMissionState() != uav_control_states::TAKING_OFF &&
             MainMissionStateManager.getMissionState() != uav_control_states::LANDING){
 

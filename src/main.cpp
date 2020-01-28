@@ -122,7 +122,7 @@ int main(int argc, char** argv) {
     InternalSystemStateCondition* uav_control_landing = new InternalSystemStateCondition(uav_control_states::LANDING);
     WaitForCondition* landing_check = new WaitForCondition((Condition*)uav_control_landing);
 
-    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.5);
+    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.2);
 
     //******************Connections***************
 
@@ -341,7 +341,7 @@ int main(int argc, char** argv) {
     take_off_pipeline.addElement((FlightElement*)arm_motors);
     take_off_pipeline.addElement((FlightElement*)set_settings);
     //take_off_pipeline.addElement((FlightElement*)z_cross_takeoff_waypoint_check);
-    //take_off_pipeline.addElement((FlightElement*)cs_to_hovering);
+    take_off_pipeline.addElement((FlightElement*)cs_to_hovering);
     //-----------
     landing_pipeline.addElement((FlightElement*)landing_check);
     landing_pipeline.addElement((FlightElement*)ref_z_on_land);
