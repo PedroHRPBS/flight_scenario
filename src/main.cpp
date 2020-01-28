@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
     ROSUnit* ros_updt_yaw_ref = new ROSUnit_UpdateReferenceYaw_FS(nh);
     ROSUnit* ros_flight_command = new ROSUnit_FlightCommand(nh);
     ROSUnit* ros_info_sub = new ROSUnit_InfoSubscriber(nh);
-
+    ROSUnit* ros_restnorm_settings = new ROSUnit_RestNormSettingsClnt(nh);
     ROSUnit_Factory ROSUnit_Factory_main{nh};
 	//ROSUnit* ros_set_path_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Points, "uav_control/set_path");
 	ROSUnit* ros_set_hover_point_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Point, "uav_control/set_hover_point");

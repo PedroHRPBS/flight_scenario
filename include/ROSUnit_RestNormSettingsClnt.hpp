@@ -1,6 +1,5 @@
 #pragma once
 #include "ROSUnit.hpp"
-#include "FlightScenarioMessage.hpp"
 #include "RestrictedNormRefSettingsMsg.hpp"
 #include <positioning_system/Restricted_Norm_Settings.h>
 

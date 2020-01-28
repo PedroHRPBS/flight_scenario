@@ -15,7 +15,7 @@ enum class msg_type {UAV_CONTROL_STATE, INTEGER, ERROR, INFO, FLIGHTCOMMAND, SWI
 					reference, THREEAXISSENSORMSG, VELOCITY, ACCELERATION, THERMALIMAGE, optitrack, 
 					FLIGHTSCENARIO, POSITION, ATTITUDE, HEADING, NOZZLEMSG,control_system, USERREFERENCE, 
 					controller, float_msg, switcher, VECTOR3D, external_reference, ack,internal_msg_start, 
-					internal_ros, pid_data_update, FLOAT, POSE, VECTOR, TAGGEDPOSES, POSES, POINTS, EMPTY};
+					internal_ros, pid_data_update, FLOAT, POSE, VECTOR, TAGGEDPOSES, POSES, POINTS, EMPTY, RESTNORMREF_SETTINGS};
 enum class msg_type_optitrack {position, attitude};
 enum class msg_type_flight_scenario {USER, SET_PID};
 enum class control_system {roll=3, pitch=4, yaw=5, x=0, y=1, z=2, pitch_rate = 7, yaw_rate = 6, null_type};
