@@ -1,4 +1,4 @@
- #include "ros/ros.h"
+#include "ros/ros.h"
 #include <iostream>
 #include "ROSUnit.hpp"
 #include "logger.hpp"
@@ -37,6 +37,7 @@
 #include "InternalSystemStateCondition.hpp"
 #include "StateMonitor.hpp"
 #include "ROSUnit_Factory.hpp"
+#include "ROSUnit_RestNormSettingsClnt.hpp"
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -284,7 +285,7 @@ int main(int argc, char** argv) {
     ((ResetController*)reset_y)->target_block = block_id::PID_Y;
 
     ((SetReference_Z*)ref_z_on_takeoff)->setpoint_z = 1.0;
-    ((SetReference_Z*)ref_z_on_land)->setpoint_z = 0.2;
+    ((SetReference_Z*)ref_z_on_land)->setpoint_z = 0.0;
 
     Wait wait_1s;
     wait_1s.wait_time_ms=1000;
@@ -299,7 +300,7 @@ int main(int argc, char** argv) {
 
     SimplePlaneCondition z_cross_land_waypoint;
     z_cross_land_waypoint.selected_dim=Dimension3D::Z;
-    z_cross_land_waypoint.condition_value=0.2;
+    z_cross_land_waypoint.condition_value=0.1;
     z_cross_land_waypoint.condition_met_for_larger=false;
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_land_waypoint);
 
@@ -330,11 +331,11 @@ int main(int argc, char** argv) {
     initialization_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
     //-----------
     take_off_pipeline.addElement((FlightElement*)taking_off_check);
-    take_off_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
+    //take_off_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
     take_off_pipeline.addElement((FlightElement*)reset_z);
     take_off_pipeline.addElement((FlightElement*)arm_motors);
-    take_off_pipeline.addElement((FlightElement*)z_cross_takeoff_waypoint_check);
-    take_off_pipeline.addElement((FlightElement*)cs_to_hovering);
+    //take_off_pipeline.addElement((FlightElement*)z_cross_takeoff_waypoint_check);
+    //take_off_pipeline.addElement((FlightElement*)cs_to_hovering);
     //-----------
     landing_pipeline.addElement((FlightElement*)landing_check);
     landing_pipeline.addElement((FlightElement*)ref_z_on_land);
