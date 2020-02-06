@@ -334,6 +334,7 @@ int main(int argc, char** argv) {
     initialization_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
     initialization_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
     initialization_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
+    initialization_pipeline.addElement((FlightElement*)set_settings);
     initialization_pipeline.addElement((FlightElement*)flight_command);
     initialization_pipeline.addElement((FlightElement*)update_controller_pid_zero);
     initialization_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
