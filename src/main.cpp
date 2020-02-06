@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
     FlightElement* switch_block_mrft_pid = new SwitchBlock();
     
     FlightElement* reset_z = new ResetController();
-    FlightElement* reset_y = new ResetController();
+    FlightElement* reset_x = new ResetController();
     
     FlightElement* arm_motors = new Arm();
     FlightElement* disarm_motors = new Disarm();
@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
     switch_block_mrft_pid->add_callback_msg_receiver((msg_receiver*) ros_switch_block);
     //TODO Should I implement a reset controller for MRFT??
     reset_z->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
-    reset_y->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
+    reset_x->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
 
     arm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
     disarm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
@@ -190,7 +190,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_zero)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_zero)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_zero)->pid_data.en_pv_derivation = 1;
-    ((UpdateController*)update_controller_pid_zero)->pid_data.id = block_id::PID_Y;
+    ((UpdateController*)update_controller_pid_zero)->pid_data.id = block_id::PID_X;
 
     ((UpdateController*)update_controller_pid_x)->pid_data.kp = 1.7213*0.3;
     ((UpdateController*)update_controller_pid_x)->pid_data.ki = 0.0;
@@ -283,11 +283,11 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
 
-    ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::MRFT_Z);
-    ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_Z, block_id::PID_Z);
+    ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
+    ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
 
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
-    ((ResetController*)reset_y)->target_block = block_id::PID_Y;
+    ((ResetController*)reset_x)->target_block = block_id::PID_X;
 
     ((SetReference_Z*)ref_z_on_takeoff)->setpoint_z = 1.0;
     ((SetReference_Z*)ref_z_on_land)->setpoint_z = 0.0;
@@ -334,6 +334,13 @@ int main(int argc, char** argv) {
     initialization_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
     initialization_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
     initialization_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
+    initialization_pipeline.addElement((FlightElement*)flight_command);
+    initialization_pipeline.addElement((FlightElement*)update_controller_pid_zero);
+    initialization_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
+    initialization_pipeline.addElement((FlightElement*)flight_command);
+    initialization_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
+    initialization_pipeline.addElement((FlightElement*)update_controller_pid_x);
+    initialization_pipeline.addElement((FlightElement*)reset_x);
     //-----------
     take_off_pipeline.addElement((FlightElement*)taking_off_check);
     //take_off_pipeline.addElement((FlightElement*)ref_z_on_takeoff);
@@ -387,7 +394,7 @@ int main(int argc, char** argv) {
     // // initialization_pipeline.addElement((FlightElement*)flight_command);
     // // initialization_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
     // // //initialization_pipeline.addElement((FlightElement*)update_controller_pid_y);
-    // // //initialization_pipeline.addElement((FlightElement*)reset_y);
+    // // //initialization_pipeline.addElement((FlightElement*)reset_x);
     // // initialization_pipeline.addElement((FlightElement*)flight_command);
 
     // initialization_pipeline.addElement((FlightElement*)ref_z_on_land);
