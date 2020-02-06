@@ -192,47 +192,47 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_zero)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_zero)->pid_data.id = block_id::PID_X;
 
-    ((UpdateController*)update_controller_pid_x)->pid_data.kp = 1.7213*0.3;
+    ((UpdateController*)update_controller_pid_x)->pid_data.kp = 1.7213*0.3*0.5;
     ((UpdateController*)update_controller_pid_x)->pid_data.ki = 0.0;
-    ((UpdateController*)update_controller_pid_x)->pid_data.kd = 0.7064*0.3;
+    ((UpdateController*)update_controller_pid_x)->pid_data.kd = 0.7064*0.3*0.5;
     ((UpdateController*)update_controller_pid_x)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_x)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_x)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_x)->pid_data.id = block_id::PID_X;
 
-    ((UpdateController*)update_controller_pid_y)->pid_data.kp = 1.7213*0.3;
+    ((UpdateController*)update_controller_pid_y)->pid_data.kp = 1.7213*0.3*0.5;
     ((UpdateController*)update_controller_pid_y)->pid_data.ki = 0.0;
-    ((UpdateController*)update_controller_pid_y)->pid_data.kd = 0.7064*0.3;
+    ((UpdateController*)update_controller_pid_y)->pid_data.kd = 0.7064*0.3*0.5;
     ((UpdateController*)update_controller_pid_y)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_y)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_y)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_y)->pid_data.id = block_id::PID_Y;
 
-    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.7450; //0.4;
-    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980; //0.01 * 3;
-    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.3956; //0.10;
+    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.7450*0.5; //0.4;
+    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980*0.5; //0.01 * 3;
+    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.3956*0.5; //0.10;
     ((UpdateController*)update_controller_pid_z)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_z)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_z)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_z)->pid_data.id = block_id::PID_Z;
 
-    ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.225; //0.3 * 0.6 * 0.5;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.225*0.5; //0.3 * 0.6 * 0.5;
     ((UpdateController*)update_controller_pid_roll)->pid_data.ki = 0.0;
-    ((UpdateController*)update_controller_pid_roll)->pid_data.kd = 0.04; //0.075 * 0.6 * 0.5;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kd = 0.04*0.5; //0.075 * 0.6 * 0.5;
     ((UpdateController*)update_controller_pid_roll)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_roll)->pid_data.id = block_id::PID_ROLL;
 
-    ((UpdateController*)update_controller_pid_pitch)->pid_data.kp = 0.225; //0.3 * 0.6 * 0.5;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kp = 0.225*0.5; //0.3 * 0.6 * 0.5;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.ki = 0.0;
-    ((UpdateController*)update_controller_pid_pitch)->pid_data.kd = 0.04; //0.075 * 0.6 * 0.5;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kd = 0.04*0.5; //0.075 * 0.6 * 0.5;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.id = block_id::PID_PITCH;
 
-    ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 0.8;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 0.8*0.5;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.ki = 0.0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kd = 0.0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kdd = 0.0;
@@ -240,7 +240,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_yaw)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.id = block_id::PID_YAW;
 
-    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.08;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.08*0.5;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.ki = 0.0;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kd = 0.0;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kdd = 0.0;
