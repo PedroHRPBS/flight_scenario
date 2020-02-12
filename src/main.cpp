@@ -40,6 +40,7 @@
 #include "ROSUnit_RestNormSettingsClnt.hpp"
 #include "SetRestNormSettings.hpp"
 #include "SetHeightOffset.hpp"
+#include "SetRelativeWaypoint.hpp"
 
 #define TESTING
 #undef MISSION
@@ -66,7 +67,7 @@ int main(int argc, char** argv) {
     ROSUnit* ros_restnorm_settings = new ROSUnit_RestNormSettingsClnt(nh);
 
     ROSUnit_Factory ROSUnit_Factory_main{nh};
-	//ROSUnit* ros_set_path_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Points, "uav_control/set_path");
+	ROSUnit* ros_set_path_clnt = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, ROSUnit_msg_type::ROSUnit_Poses, "uav_control/set_path");
 	ROSUnit* ros_set_hover_point_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server, ROSUnit_msg_type::ROSUnit_Point, "uav_control/set_hover_point");
     //ROSUnit* ros_set_geofence_planes_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Points, "/uav_control/set_geofence_planes");
     ROSUnit* ros_set_mission_state_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server, ROSUnit_msg_type::ROSUnit_Int, "uav_control/set_mission_state");
@@ -127,7 +128,14 @@ int main(int argc, char** argv) {
 
     FlightElement* set_settings = new SetRestNormSettings(true, false, 0.2);
     FlightElement* set_height_offset = new SetHeightOffset();
-
+    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0.5, 0.);
+    FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(0.5, 0.5, 0.5, 0.);
+    FlightElement* relative_waypoint_square_2 = new SetRelativeWaypoint(0., -1., 0., 0.);
+    FlightElement* relative_waypoint_square_3 = new SetRelativeWaypoint(-1., 0., 0., 0.);
+    FlightElement* relative_waypoint_square_4 = new SetRelativeWaypoint(0., 1., 0., 0.);
+    FlightElement* relative_waypoint_square_5 = new SetRelativeWaypoint(1., 0., 0., 0.);
+    FlightElement* relative_waypoint_square_6 = new SetRelativeWaypoint(-0.5, -0.5, 0., 0.);
+    FlightElement* land_relative_waypoint = new SetRelativeWaypoint(0., 0., -10., 0.);
 
     //******************Connections***************
 
@@ -150,6 +158,23 @@ int main(int argc, char** argv) {
 
     ros_ori_sub->add_callback_msg_receiver((msg_receiver*) set_initial_pose);
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) set_initial_pose);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) takeoff_relative_waypoint);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) takeoff_relative_waypoint);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_1);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_1);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_2);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_2);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_3);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_3);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_4);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_4);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_5);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_5);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_6);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_6);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) land_relative_waypoint);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) land_relative_waypoint);
+
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) set_height_offset);
 
     set_initial_pose->add_callback_msg_receiver((msg_receiver*) ros_updt_x_ref);
@@ -185,10 +210,18 @@ int main(int argc, char** argv) {
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) state_monitor);
 
     state_monitor->add_callback_msg_receiver((msg_receiver*)ros_updt_uav_control_state_clnt);
-;
+
     set_settings->add_callback_msg_receiver((msg_receiver*)ros_restnorm_settings);
 
-    set_height_offset->add_callback_msg_receiver((msg_receiver*)ros_set_height_offset);
+    set_height_offset->add_callback_msg_receiver((msg_receiver*) ros_set_height_offset);
+    takeoff_relative_waypoint->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
+    relative_waypoint_square_1->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
+    relative_waypoint_square_2->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
+    relative_waypoint_square_3->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
+    relative_waypoint_square_4->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
+    relative_waypoint_square_5->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
+    relative_waypoint_square_6->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
+    land_relative_waypoint->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
 
     //*************Setting Flight Elements*************
 
@@ -338,13 +371,18 @@ int main(int argc, char** argv) {
     testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)arm_motors);
     testing_pipeline.addElement((FlightElement*)flight_command);
+    testing_pipeline.addElement((FlightElement*)set_settings);
     testing_pipeline.addElement((FlightElement*)reset_z);
-    //ADD SET_WAYPOINT FOR TAKEOFF (RELATIVE)
+    testing_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
     testing_pipeline.addElement((FlightElement*)flight_command);
-    //ADD MISSION WAYPOINTS (RELATIVE)
+    testing_pipeline.addElement((FlightElement*)relative_waypoint_square_1);
+    testing_pipeline.addElement((FlightElement*)relative_waypoint_square_2);
+    testing_pipeline.addElement((FlightElement*)relative_waypoint_square_3);
+    testing_pipeline.addElement((FlightElement*)relative_waypoint_square_4);
+    testing_pipeline.addElement((FlightElement*)relative_waypoint_square_5);
+    testing_pipeline.addElement((FlightElement*)relative_waypoint_square_6);
     testing_pipeline.addElement((FlightElement*)flight_command);
-    //ADD SET_WAYPOINT FOR LAND (RELATIVE)
-
+    testing_pipeline.addElement((FlightElement*)land_relative_waypoint);
     #endif
 
     #ifdef MISSION
