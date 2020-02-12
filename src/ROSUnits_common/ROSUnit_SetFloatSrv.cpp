@@ -18,7 +18,6 @@ ROSUnit_SetFloatSrv::ROSUnit_SetFloatSrv(std::string t_name, ros::NodeHandle& t_
     internal_counter++;
 }
 
-
 ROSUnit_SetFloatSrv::~ROSUnit_SetFloatSrv()
 {
 

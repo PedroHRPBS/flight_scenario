@@ -1,6 +1,12 @@
 #pragma once
 #include "ros/ros.h"
 #include "ROSUnit.hpp"
+#include "ROSUnit_FloatPub.hpp"
+#include "ROSUnit_FloatSub.hpp"
+#include "ROSUnit_Point2DPub.hpp"
+#include "ROSUnit_Point2DSub.hpp"
+#include "ROSUnit_PointPub.hpp"
+#include "ROSUnit_PointSub.hpp"
 #include "ROSUnit_EmptyClnt.hpp"
 #include "ROSUnit_EmptySrv.hpp"
 #include "ROSUnit_SetFloatClnt.hpp"
@@ -18,10 +24,9 @@
 #include "ROSUnit_SetVectorClnt.hpp"
 #include "ROSUnit_SetVectorSrv.hpp"
 
-
 #include <string>
-enum ROSUnit_tx_rx_type {Client_Subscriber,Server_Publisher};
-enum ROSUnit_msg_type {ROSUnit_Empty,ROSUnit_Float,ROSUnit_Int,ROSUnit_Point,ROSUnit_Points,ROSUnit_Pose,ROSUnit_Poses,ROSUnit_Vector};
+enum ROSUnit_tx_rx_type {Client,Subscriber,Server,Publisher};
+enum ROSUnit_msg_type {ROSUnit_Empty,ROSUnit_Float,ROSUnit_Int,ROSUnit_Point,ROSUnit_Points,ROSUnit_Pose,ROSUnit_Poses,ROSUnit_Vector,ROSUnit_Point2D};
 
 class ROSUnit_Factory {
 private:
