@@ -130,9 +130,11 @@ int main(int argc, char** argv) {
     FlightElement* set_height_offset = new SetHeightOffset();
     FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0.5, 0.);
     FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(0.5, 0.5, 0.5, 0.);
-    FlightElement* relative_waypoint_square_2 = new SetRelativeWaypoint(0., -1., 0., 0.);
-    FlightElement* relative_waypoint_square_3 = new SetRelativeWaypoint(-1., 0., 0., 0.);
-    FlightElement* relative_waypoint_square_4 = new SetRelativeWaypoint(0., 1., 0., 0.);
+    //FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
+    //FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(0.5, 0.5, 0., 0.);
+    FlightElement* relative_waypoint_square_2 = new SetRelativeWaypoint(-2., -0.5, 0., 0.);
+    FlightElement* relative_waypoint_square_3 = new SetRelativeWaypoint(-2., -0.5, 0., 0.);
+    FlightElement* relative_waypoint_square_4 = new SetRelativeWaypoint(4., 1., 0., 0.);
     FlightElement* relative_waypoint_square_5 = new SetRelativeWaypoint(1., 0., 0., 0.);
     FlightElement* relative_waypoint_square_6 = new SetRelativeWaypoint(-0.5, -0.5, 0., 0.);
     FlightElement* land_relative_waypoint = new SetRelativeWaypoint(0., 0., -10., 0.);
@@ -273,7 +275,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_pitch)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.id = block_id::PID_PITCH;
 
-    ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 0.8;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 0.8*2;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.ki = 0.0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kd = 0.0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kdd = 0.0;
@@ -281,7 +283,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_yaw)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.id = block_id::PID_YAW;
 
-    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.08;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.08*2;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.ki = 0.0;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kd = 0.0;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kdd = 0.0;
@@ -359,7 +361,6 @@ int main(int argc, char** argv) {
     FlightPipeline testing_pipeline;
 
     testing_pipeline.addElement((FlightElement*)&wait_1s);
-    testing_pipeline.addElement((FlightElement*)set_initial_pose);
     testing_pipeline.addElement((FlightElement*)update_controller_pid_x);
     testing_pipeline.addElement((FlightElement*)update_controller_pid_y);
     testing_pipeline.addElement((FlightElement*)update_controller_pid_z);
@@ -368,7 +369,10 @@ int main(int argc, char** argv) {
     testing_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
     testing_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
     testing_pipeline.addElement((FlightElement*)set_height_offset);
+    testing_pipeline.addElement((FlightElement*)&wait_1s);
+    testing_pipeline.addElement((FlightElement*)set_initial_pose);
     testing_pipeline.addElement((FlightElement*)flight_command);
+    testing_pipeline.addElement((FlightElement*)reset_z);
     testing_pipeline.addElement((FlightElement*)arm_motors);
     testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)set_settings);
@@ -376,10 +380,15 @@ int main(int argc, char** argv) {
     testing_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
     testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)relative_waypoint_square_1);
+    testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)relative_waypoint_square_2);
+    testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)relative_waypoint_square_3);
+    testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)relative_waypoint_square_4);
+    testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)relative_waypoint_square_5);
+    testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)relative_waypoint_square_6);
     testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)land_relative_waypoint);
