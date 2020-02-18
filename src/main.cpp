@@ -42,8 +42,9 @@
 #include "SetHeightOffset.hpp"
 #include "SetRelativeWaypoint.hpp"
 
-#define TESTING
+#undef TESTING
 #undef MISSION
+#define MRFT
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -233,7 +234,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_zero)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_zero)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_zero)->pid_data.en_pv_derivation = 1;
-    ((UpdateController*)update_controller_pid_zero)->pid_data.id = block_id::PID_Y;
+    ((UpdateController*)update_controller_pid_zero)->pid_data.id = block_id::PID_X;
 
     ((UpdateController*)update_controller_pid_x)->pid_data.kp = 0.51639;
     ((UpdateController*)update_controller_pid_x)->pid_data.ki = 0.0;
@@ -326,8 +327,8 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
 
-    ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::MRFT_Z);
-    ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_Z, block_id::PID_Z);
+    ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
+    ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
 
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
     ((ResetController*)reset_y)->target_block = block_id::PID_Y;
@@ -359,6 +360,36 @@ int main(int argc, char** argv) {
 
     //**********************************************
 
+    #ifdef MRFT
+    FlightPipeline mrft_pipeline;
+
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_z);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_roll);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
+    mrft_pipeline.addElement((FlightElement*)set_height_offset);
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_pipeline.addElement((FlightElement*)set_initial_pose);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    mrft_pipeline.addElement((FlightElement*)arm_motors);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)set_settings);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_zero);
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_x);
+    mrft_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    #endif
     
     #ifdef TESTING
     FlightPipeline testing_pipeline;
@@ -442,6 +473,9 @@ int main(int argc, char** argv) {
     #endif
     Logger::getAssignedLogger()->log("FlightScenario main_scenario",LoggerLevel::Info);
     FlightScenario main_scenario;
+    #ifdef MRFT
+    main_scenario.AddFlightPipeline(&mrft_pipeline);
+    #endif
     #ifdef TESTING
     main_scenario.AddFlightPipeline(&testing_pipeline);
     #endif
