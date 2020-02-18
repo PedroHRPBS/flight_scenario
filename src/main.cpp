@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
     FlightElement* switch_block_mrft_pid = new SwitchBlock();
     
     FlightElement* reset_z = new ResetController();
-    FlightElement* reset_y = new ResetController();
+    FlightElement* reset_x = new ResetController();
     
     FlightElement* arm_motors = new Arm();
     FlightElement* disarm_motors = new Disarm();
@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
     switch_block_mrft_pid->add_callback_msg_receiver((msg_receiver*) ros_switch_block);
 
     reset_z->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
-    reset_y->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
+    reset_x->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
 
     arm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
     disarm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
@@ -331,7 +331,7 @@ int main(int argc, char** argv) {
     ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
 
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
-    ((ResetController*)reset_y)->target_block = block_id::PID_Y;
+    ((ResetController*)reset_x)->target_block = block_id::PID_X;
 
     ((SetReference_Z*)ref_z_on_takeoff)->setpoint_z = 1.0;
     ((SetReference_Z*)ref_z_on_land)->setpoint_z = 0.0;
@@ -386,9 +386,11 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)update_controller_pid_zero);
     mrft_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
     mrft_pipeline.addElement((FlightElement*)flight_command);
-    mrft_pipeline.addElement((FlightElement*)update_controller_pid_x);
     mrft_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
-    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)set_initial_pose);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_x);
+    mrft_pipeline.addElement((FlightElement*)reset_x);
+
     #endif
     
     #ifdef TESTING
