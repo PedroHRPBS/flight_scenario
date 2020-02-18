@@ -126,7 +126,7 @@ int main(int argc, char** argv) {
     InternalSystemStateCondition* uav_control_landing = new InternalSystemStateCondition(uav_control_states::LANDING);
     WaitForCondition* landing_check = new WaitForCondition((Condition*)uav_control_landing);
 
-    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.2);
+    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.5);
     FlightElement* set_height_offset = new SetHeightOffset();
     FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0.5, 0.);
     FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(0.5, 0.5, 0.5, 0.);
@@ -338,6 +338,9 @@ int main(int argc, char** argv) {
     Wait wait_1s;
     wait_1s.wait_time_ms=1000;
 
+    Wait wait_100ms;
+    wait_100ms.wait_time_ms=100;
+
     SimplePlaneCondition z_cross_takeoff_waypoint;
     z_cross_takeoff_waypoint.selected_dim=Dimension3D::Z;
     z_cross_takeoff_waypoint.condition_value = 0.9;
@@ -373,6 +376,7 @@ int main(int argc, char** argv) {
     testing_pipeline.addElement((FlightElement*)set_initial_pose);
     testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)reset_z);
+    testing_pipeline.addElement((FlightElement*)&wait_100ms);
     testing_pipeline.addElement((FlightElement*)arm_motors);
     testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)set_settings);
