@@ -1,7 +1,7 @@
 #pragma once
 #include "ROSUnit.hpp"
 #include "RestrictedNormRefSettingsMsg.hpp"
-#include <positioning_system/Restricted_Norm_Settings.h>
+#include <flight_controller/Restricted_Norm_Settings.h>
 
 class ROSUnit_RestNormSettingsClnt :  public ROSUnit{
 

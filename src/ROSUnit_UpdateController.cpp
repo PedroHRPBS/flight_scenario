@@ -2,7 +2,7 @@
 
 ROSUnit_UpdateController::ROSUnit_UpdateController(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler){
 
-    _update_controller_client = t_main_handler.serviceClient<positioning_system::Update_Controller>("update_controller");
+    _update_controller_client = t_main_handler.serviceClient<flight_controller::Update_Controller>("update_controller");
 
 }
 
@@ -16,7 +16,7 @@ void ROSUnit_UpdateController::receive_msg_data(DataMessage* t_msg){
 
         ControllerMessage* _update_msg = (ControllerMessage*)t_msg;
         
-        positioning_system::Update_Controller srv;
+        flight_controller::Update_Controller srv;
 
         srv.request.controller_parameters.id = (int)(_update_msg->getID());
         srv.request.controller_parameters.pid_kp = _update_msg->getPIDParam().kp;

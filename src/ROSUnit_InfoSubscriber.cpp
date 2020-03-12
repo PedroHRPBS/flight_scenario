@@ -13,7 +13,7 @@ ROSUnit_InfoSubscriber::~ROSUnit_InfoSubscriber() {
 
 }
 
-void ROSUnit_InfoSubscriber::callbackInfo(const positioning_system::Info& msg){
+void ROSUnit_InfoSubscriber::callbackInfo(const flight_controller::Info& msg){
 
     info_msg.number_of_waypoints = msg.number_of_waypoints;
     info_msg.armed = msg.armed;

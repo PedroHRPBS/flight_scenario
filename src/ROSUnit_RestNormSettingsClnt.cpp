@@ -1,7 +1,7 @@
 #include "ROSUnit_RestNormSettingsClnt.hpp"
 
 ROSUnit_RestNormSettingsClnt::ROSUnit_RestNormSettingsClnt(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler) {
-    _clnt_rest_norm_settings = t_main_handler.serviceClient<positioning_system::Restricted_Norm_Settings>("restricted_norm_settings");
+    _clnt_rest_norm_settings = t_main_handler.serviceClient<flight_controller::Restricted_Norm_Settings>("restricted_norm_settings");
 }   
 
 ROSUnit_RestNormSettingsClnt::~ROSUnit_RestNormSettingsClnt() {
@@ -14,7 +14,7 @@ void ROSUnit_RestNormSettingsClnt::receive_msg_data(DataMessage* t_msg){
 
         RestrictedNormRefSettingsMsg* _settings_msg = (RestrictedNormRefSettingsMsg*)t_msg;
         
-        positioning_system::Restricted_Norm_Settings srv;
+        flight_controller::Restricted_Norm_Settings srv;
         srv.request.enabled = _settings_msg->enabled;
         srv.request.delete_existing_waypoints = _settings_msg->delete_existing_waypoints;
         srv.request.max_norm = _settings_msg->getMaxNorm();
