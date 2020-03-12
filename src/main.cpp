@@ -129,13 +129,14 @@ int main(int argc, char** argv) {
 
     FlightElement* set_settings = new SetRestNormSettings(true, false, 0.5);
     FlightElement* set_height_offset = new SetHeightOffset();
+    FlightElement* initial_pose_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
     FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0.5, 0.);
-    FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(0.5, 0.5, 0.5, 0.);
+    FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(1.0, 1.0, 0.5, 0.);
     //FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
     //FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(0.5, 0.5, 0., 0.);
     FlightElement* relative_waypoint_square_2 = new SetRelativeWaypoint(-2., -0.5, 0., 0.);
     FlightElement* relative_waypoint_square_3 = new SetRelativeWaypoint(-2., -0.5, 0., 0.);
-    FlightElement* relative_waypoint_square_4 = new SetRelativeWaypoint(4., 1., 0., 0.);
+    FlightElement* relative_waypoint_square_4 = new SetRelativeWaypoint(2., 1., 0., 0.);
     FlightElement* relative_waypoint_square_5 = new SetRelativeWaypoint(1., 0., 0., 0.);
     FlightElement* relative_waypoint_square_6 = new SetRelativeWaypoint(-0.5, -0.5, 0., 0.);
     FlightElement* land_relative_waypoint = new SetRelativeWaypoint(0., 0., -10., 0.);
@@ -159,8 +160,8 @@ int main(int argc, char** argv) {
     update_controller_mrft_yaw->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
     update_controller_mrft_yaw_rate->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
 
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) set_initial_pose);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) set_initial_pose);
+    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) initial_pose_waypoint);
+    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) initial_pose_waypoint);
     ros_ori_sub->add_callback_msg_receiver((msg_receiver*) takeoff_relative_waypoint);
     ros_pos_sub->add_callback_msg_receiver((msg_receiver*) takeoff_relative_waypoint);
     ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_1);
@@ -217,6 +218,7 @@ int main(int argc, char** argv) {
     set_settings->add_callback_msg_receiver((msg_receiver*)ros_restnorm_settings);
 
     set_height_offset->add_callback_msg_receiver((msg_receiver*) ros_set_height_offset);
+    initial_pose_waypoint->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
     takeoff_relative_waypoint->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
     relative_waypoint_square_1->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
     relative_waypoint_square_2->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
@@ -413,13 +415,13 @@ int main(int argc, char** argv) {
     testing_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
     testing_pipeline.addElement((FlightElement*)set_height_offset);
     testing_pipeline.addElement((FlightElement*)&wait_1s);
-    testing_pipeline.addElement((FlightElement*)set_initial_pose);
+    testing_pipeline.addElement((FlightElement*)set_settings);
+    testing_pipeline.addElement((FlightElement*)initial_pose_waypoint);
     testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)reset_z);
     testing_pipeline.addElement((FlightElement*)&wait_100ms);
     testing_pipeline.addElement((FlightElement*)arm_motors);
     testing_pipeline.addElement((FlightElement*)flight_command);
-    testing_pipeline.addElement((FlightElement*)set_settings);
     testing_pipeline.addElement((FlightElement*)reset_z);
     testing_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
     testing_pipeline.addElement((FlightElement*)flight_command);
