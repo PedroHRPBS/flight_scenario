@@ -131,14 +131,12 @@ int main(int argc, char** argv) {
     FlightElement* set_height_offset = new SetHeightOffset();
     FlightElement* initial_pose_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
     FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0.5, 0.);
-    FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(1.0, 1.0, 0.5, 0.);
-    //FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
-    //FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(0.5, 0.5, 0., 0.);
-    FlightElement* relative_waypoint_square_2 = new SetRelativeWaypoint(-2., -0.5, 0., 0.);
-    FlightElement* relative_waypoint_square_3 = new SetRelativeWaypoint(-2., -0.5, 0., 0.);
-    FlightElement* relative_waypoint_square_4 = new SetRelativeWaypoint(2., 1., 0., 0.);
-    FlightElement* relative_waypoint_square_5 = new SetRelativeWaypoint(1., 0., 0., 0.);
-    FlightElement* relative_waypoint_square_6 = new SetRelativeWaypoint(-0.5, -0.5, 0., 0.);
+    FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(1.0, 0.0, 0.5, 0.);
+    FlightElement* relative_waypoint_square_2 = new SetRelativeWaypoint(.0, 1.0, 0., 0.);
+    FlightElement* relative_waypoint_square_3 = new SetRelativeWaypoint(-2., 0., 0., 0.);
+    FlightElement* relative_waypoint_square_4 = new SetRelativeWaypoint(0.0, -2., 0., 0.);
+    FlightElement* relative_waypoint_square_5 = new SetRelativeWaypoint(2., 0., 0., 0.);
+    FlightElement* relative_waypoint_square_6 = new SetRelativeWaypoint(-1.0, -1.0, 0., 0.);
     FlightElement* land_relative_waypoint = new SetRelativeWaypoint(0., 0., -10., 0.);
 
     //******************Connections***************
