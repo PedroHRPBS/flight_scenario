@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
     InternalSystemStateCondition* uav_control_landing = new InternalSystemStateCondition(uav_control_states::LANDING);
     WaitForCondition* landing_check = new WaitForCondition((Condition*)uav_control_landing);
 
-    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.5);
+    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.25);
     FlightElement* set_height_offset = new SetHeightOffset();
     FlightElement* initial_pose_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
     FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0.5, 0.);
@@ -276,7 +276,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_pitch)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.id = block_id::PID_PITCH;
 
-    ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 0.8*2;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 1.6;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.ki = 0.0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kd = 0.0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kdd = 0.0;
@@ -284,7 +284,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_yaw)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.id = block_id::PID_YAW;
 
-    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.08*2;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.08; //TODO check this new value, trying to reduce the jumps while flying.
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.ki = 0.0;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kd = 0.0;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kdd = 0.0;
