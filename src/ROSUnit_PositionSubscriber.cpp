@@ -4,7 +4,7 @@ PositionMsg ROSUnit_PositionSubscriber::position_msg;
 
 ROSUnit_PositionSubscriber::ROSUnit_PositionSubscriber(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler)  {
 
-    _sub_position = t_main_handler.subscribe("uav_control/uav_position", 10, callbackPosition);
+    _sub_position = t_main_handler.subscribe("uav_control/uav_position", 2, callbackPosition);
     _instance_ptr = this;
 
 }

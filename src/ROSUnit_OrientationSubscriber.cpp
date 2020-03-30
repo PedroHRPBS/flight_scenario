@@ -4,7 +4,7 @@ Vector3DMessage ROSUnit_OrientationSubscriber::orientation_msg;
 
 ROSUnit_OrientationSubscriber::ROSUnit_OrientationSubscriber(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler)  {
 
-    _sub_orientation = t_main_handler.subscribe("uav_control/uav_orientation", 10, callbackOrientation);
+    _sub_orientation = t_main_handler.subscribe("uav_control/uav_orientation", 2, callbackOrientation);
     _instance_ptr = this;
 
 }
