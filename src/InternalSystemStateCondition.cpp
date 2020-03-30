@@ -8,7 +8,7 @@ bool InternalSystemStateCondition::isConditionMet(){
 	return (MainMissionStateManager.getMissionState() == m_check_state);
 }
 
-void InternalSystemStateCondition::receive_msg_data(DataMessage* t_msg){
+void InternalSystemStateCondition::receiveMsgData(DataMessage* t_msg){
 
 }
     

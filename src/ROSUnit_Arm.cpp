@@ -10,7 +10,7 @@ ROSUnit_Arm::~ROSUnit_Arm() {
 
 }
 
-void ROSUnit_Arm::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_Arm::receiveMsgData(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::arm_update){
 

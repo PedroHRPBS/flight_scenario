@@ -13,10 +13,10 @@ void SetRestNormSettings::perform(){
     _settings_msg.enabled = _enabled;
     _settings_msg.delete_existing_waypoints = _delete;
     _settings_msg.setMaxNorm(_max_norm);
-    this->emit_message((DataMessage*)&_settings_msg);
+    this->emitMsgUnicastDefault((DataMessage*)&_settings_msg);
 }
 
-void SetRestNormSettings::receive_msg_data(DataMessage* t_msg){
+void SetRestNormSettings::receiveMsgData(DataMessage* t_msg){
 
 }
 

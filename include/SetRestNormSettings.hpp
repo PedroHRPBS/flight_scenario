@@ -17,7 +17,7 @@ public:
 
     void perform();
 
-    void receive_msg_data(DataMessage* t_msg);
+    void receiveMsgData(DataMessage* t_msg);
     
     SetRestNormSettings(bool, bool, float);
     ~SetRestNormSettings();

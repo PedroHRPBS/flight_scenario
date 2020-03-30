@@ -3,12 +3,12 @@
 #include "MsgReceiver.hpp"
 #include "ROSUnit.hpp"
 
-class FlightElement : public msg_emitter, public msg_receiver{
+class FlightElement : public MsgEmitter, public MsgReceiver{
 
 public:
 
     virtual void perform() = 0;
-    virtual void receive_msg_data(DataMessage* t_msg) = 0;
+    virtual void receiveMsgData(DataMessage* t_msg) = 0;
 
     FlightElement();
     ~FlightElement();

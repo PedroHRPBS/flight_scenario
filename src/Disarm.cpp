@@ -18,10 +18,10 @@ void Disarm::perform(){
     
     ArmDataMessage _arm_message;
     _arm_message.isArmed = false;
-    this->emit_message((DataMessage*)&_arm_message);
+    this->emitMsgUnicastDefault((DataMessage*)&_arm_message);
 
 }
-void Disarm::receive_msg_data(DataMessage* t_msg){
+void Disarm::receiveMsgData(DataMessage* t_msg){
 
 }
 

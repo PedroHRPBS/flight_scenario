@@ -11,7 +11,7 @@ class ROSUnit_FlightCommand :  public ROSUnit{
         static FlightCommandMsg _command_msg; 
         ros::ServiceServer _srv_flight_command;
         static bool callbackFlightCommand(flight_scenario::Flight_Command::Request  &req, flight_scenario::Flight_Command::Response &res);
-        void receive_msg_data(DataMessage* t_msg);  
+        void receiveMsgData(DataMessage* t_msg);  
 
     public:
         ROSUnit_FlightCommand(ros::NodeHandle&);

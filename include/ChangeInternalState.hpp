@@ -11,7 +11,7 @@ private:
     
 public:
     void perform();
-    void receive_msg_data(DataMessage*);
+    void receiveMsgData(DataMessage*);
 
     ChangeInternalState(uav_control_states);
     ~ChangeInternalState();

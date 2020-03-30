@@ -18,10 +18,10 @@ void ROSUnit_InfoSubscriber::callbackInfo(const flight_controller::Info& msg){
     //info_msg.number_of_waypoints = msg.number_of_waypoints;
     info_msg.armed = msg.armed;
     
-    _instance_ptr->emit_message((DataMessage*) &info_msg); 
+    _instance_ptr->emitMsgUnicastDefault((DataMessage*) &info_msg); 
 
 }
 
-void ROSUnit_InfoSubscriber::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_InfoSubscriber::receiveMsgData(DataMessage* t_msg){
 
 }

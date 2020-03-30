@@ -9,7 +9,7 @@ class ROSUnit_RestNormSettingsClnt :  public ROSUnit{
         ros::ServiceClient _clnt_rest_norm_settings;
         
     public:
-        void receive_msg_data(DataMessage* t_msg);  
+        void receiveMsgData(DataMessage* t_msg);  
         ROSUnit_RestNormSettingsClnt(ros::NodeHandle&);
         ~ROSUnit_RestNormSettingsClnt();
 };

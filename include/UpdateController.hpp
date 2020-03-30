@@ -14,7 +14,7 @@ public:
 	block_id target_block;
 
     void perform();
-    void receive_msg_data(DataMessage* t_msg);
+    void receiveMsgData(DataMessage* t_msg);
     
     UpdateController();
     ~UpdateController();

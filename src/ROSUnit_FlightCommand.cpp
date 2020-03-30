@@ -11,7 +11,7 @@ ROSUnit_FlightCommand::~ROSUnit_FlightCommand() {
 
 }
 
-void ROSUnit_FlightCommand::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_FlightCommand::receiveMsgData(DataMessage* t_msg){
 
 
 }
@@ -22,7 +22,7 @@ bool ROSUnit_FlightCommand::callbackFlightCommand(flight_scenario::Flight_Comman
     data = req.flight_command_id;
 
     _command_msg.setFlightCommand(data);
-    _instance_ptr->emit_message((DataMessage*) &_command_msg);
+    _instance_ptr->emitMsgUnicastDefault((DataMessage*) &_command_msg);
     
     return true;
 }

@@ -20,7 +20,7 @@ void FlightCommand::perform(){
 
 }
 
-void FlightCommand::receive_msg_data(DataMessage* t_msg){
+void FlightCommand::receiveMsgData(DataMessage* t_msg){
 
     if(t_msg->getType() == msg_type::FLIGHTCOMMAND){
         FlightCommandMsg* command_msg = (FlightCommandMsg*)t_msg;

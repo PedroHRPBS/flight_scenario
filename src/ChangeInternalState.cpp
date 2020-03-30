@@ -13,7 +13,7 @@ void ChangeInternalState::perform() {
     std::cout << "Current state: " << (int)m_new_state << std::endl;
 }
 
-void ChangeInternalState::receive_msg_data(DataMessage* t_msg){
+void ChangeInternalState::receiveMsgData(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::INTEGER){
         IntegerMsg* int_msg = (IntegerMsg*)t_msg;

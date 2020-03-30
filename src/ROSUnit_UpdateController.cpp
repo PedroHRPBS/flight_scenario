@@ -10,7 +10,7 @@ ROSUnit_UpdateController::~ROSUnit_UpdateController() {
 
 }
 
-void ROSUnit_UpdateController::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_UpdateController::receiveMsgData(DataMessage* t_msg){
 
     if(t_msg->getType() == msg_type::UPDATECONTROLLER){
 

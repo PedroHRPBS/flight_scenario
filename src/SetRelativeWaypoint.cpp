@@ -19,12 +19,14 @@ void SetRelativeWaypoint::perform(){
     waypoint.y = _current_y + _waypoint_y;
     waypoint.z = _current_z + _waypoint_z;
     waypoint.yaw = _current_yaw + _waypoint_yaw;
-
+    std::cout << "HERE" << "\n";
     waypoint_msg.p.poses.push_back(waypoint);
-    this->emit_message((DataMessage*)&waypoint_msg);
+    std::cout << "HERE" << "\n";
+    this->emitMsgUnicastDefault((DataMessage*)&waypoint_msg);
+    std::cout << "HERE" << "\n";
 }
 
-void SetRelativeWaypoint::receive_msg_data(DataMessage* t_msg){
+void SetRelativeWaypoint::receiveMsgData(DataMessage* t_msg){
 
     if(t_msg->getType() == msg_type::POSITION){
         _current_x = ((PositionMsg*) t_msg)->x;

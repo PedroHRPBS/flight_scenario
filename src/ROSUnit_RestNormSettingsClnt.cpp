@@ -8,7 +8,7 @@ ROSUnit_RestNormSettingsClnt::~ROSUnit_RestNormSettingsClnt() {
 
 }
 
-void ROSUnit_RestNormSettingsClnt::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_RestNormSettingsClnt::receiveMsgData(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::RESTNORMREF_SETTINGS){
 

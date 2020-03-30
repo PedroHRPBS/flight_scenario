@@ -16,7 +16,6 @@ public:
    
     const int getSize();
     msg_type getType();
-    controller_msg_type getControllerMsgType();
     void setPIDParam(PID_parameters);
     void set_dt(float);
     void setMRFTParam(MRFT_parameters);

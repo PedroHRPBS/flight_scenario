@@ -10,7 +10,7 @@ ROSUnit_ResetController::~ROSUnit_ResetController() {
 
 }
 
-void ROSUnit_ResetController::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_ResetController::receiveMsgData(DataMessage* t_msg){
 
     if(t_msg->getType() == msg_type::RestControllerMessage){
 

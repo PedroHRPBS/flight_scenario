@@ -12,24 +12,14 @@
 #include "Disarm.hpp"
 #include "FlightScenario.hpp"
 #include "UpdateController.hpp"
-#include "SetInitialPose.hpp"
 #include "ResetController.hpp"
 #include "SwitchBlock.hpp"
 #include "ROSUnit_Arm.hpp"
 #include "ROSUnit_UpdateController.hpp"
-#include "ROSUnit_UpdatePoseReference.hpp"
 #include "ROSUnit_PositionSubscriber.hpp"
 #include "ROSUnit_ResetController.hpp"
 #include "ROSUnit_SwitchBlock.hpp"
 #include "ROSUnit_OrientationSubscriber.hpp"
-#include "ROSUnit_UpdateReferenceX_FS.hpp"
-#include "ROSUnit_UpdateReferenceY_FS.hpp"
-#include "ROSUnit_UpdateReferenceZ_FS.hpp"
-#include "ROSUnit_UpdateReferenceYaw_FS.hpp"
-#include "SetReference_X.hpp"
-#include "SetReference_Y.hpp"
-#include "SetReference_Z.hpp"
-#include "SetReference_Yaw.hpp"
 #include "ROSUnit_FlightCommand.hpp"
 #include "FlightCommand.hpp"
 #include "ROSUnit_InfoSubscriber.hpp"
@@ -64,13 +54,45 @@ int main(int argc, char** argv) {
     ROSUnit* ros_restnorm_settings = new ROSUnit_RestNormSettingsClnt(nh);
 
     ROSUnit_Factory ROSUnit_Factory_main{nh};
-	ROSUnit* ros_set_path_clnt = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, ROSUnit_msg_type::ROSUnit_Poses, "uav_control/set_path");
-	ROSUnit* ros_set_hover_point_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server, ROSUnit_msg_type::ROSUnit_Point, "uav_control/set_hover_point");
-    //ROSUnit* ros_set_geofence_planes_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server_Publisher, ROSUnit_msg_type::ROSUnit_Points, "/uav_control/set_geofence_planes");
-    ROSUnit* ros_set_mission_state_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server, ROSUnit_msg_type::ROSUnit_Int, "uav_control/set_mission_state");
-    ROSUnit* ros_uav_attitude_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server, ROSUnit_msg_type::ROSUnit_Float, "uav_control/uav_attitude");
-    ROSUnit* ros_updt_uav_control_state_clnt = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, ROSUnit_msg_type::ROSUnit_Int, "ex_bldg_fire_mm/update_uav_control_state");
-    ROSUnit* ros_set_height_offset = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client,ROSUnit_msg_type::ROSUnit_Float,"set_height_offset"); 
+	ROSUnit* ros_set_path_clnt = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client,
+                                                                    ROSUnit_msg_type::ROSUnit_Poses,
+                                                                    "uav_control/set_path");
+	ROSUnit* ros_set_hover_point_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server, 
+                                                                    ROSUnit_msg_type::ROSUnit_Point,
+                                                                    "uav_control/set_hover_point");
+    ROSUnit* ros_set_mission_state_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server,
+                                                                            ROSUnit_msg_type::ROSUnit_Int,
+                                                                            "uav_control/set_mission_state");
+    ROSUnit* ros_uav_attitude_srv = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server,
+                                                                    ROSUnit_msg_type::ROSUnit_Float,
+                                                                    "uav_control/uav_attitude");
+    ROSUnit* ros_updt_uav_control_state_clnt = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client,
+                                                                                ROSUnit_msg_type::ROSUnit_Int,
+                                                                                "ex_bldg_fire_mm/update_uav_control_state");
+    ROSUnit* ros_set_height_offset = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client,
+                                                                    ROSUnit_msg_type::ROSUnit_Float,
+                                                                    "set_height_offset"); 
+    ROSUnit* rosunit_x_provider = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Subscriber, 
+                                                                    ROSUnit_msg_type::ROSUnit_Point,
+                                                                    "/providers/x");
+    ROSUnit* rosunit_y_provider = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Subscriber, 
+                                                                    ROSUnit_msg_type::ROSUnit_Point,
+                                                                    "/providers/y");
+    ROSUnit* rosunit_z_provider = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Subscriber, 
+                                                                    ROSUnit_msg_type::ROSUnit_Point,
+                                                                    "/providers/z");
+    ROSUnit* rosunit_roll_provider = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Subscriber, 
+                                                                    ROSUnit_msg_type::ROSUnit_Point,
+                                                                    "/providers/roll");
+    ROSUnit* rosunit_pitch_provider = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Subscriber, 
+                                                                    ROSUnit_msg_type::ROSUnit_Point,
+                                                                    "/providers/pitch");
+    ROSUnit* rosunit_yaw_provider = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Subscriber, 
+                                                                    ROSUnit_msg_type::ROSUnit_Point,
+                                                                    "/providers/yaw");
+    ROSUnit* rosunit_yaw_rate_provider = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Subscriber, 
+                                                                    ROSUnit_msg_type::ROSUnit_Point,
+                                                                    "/providers/yaw_rate");
 
     //*****************Flight Elements*************
 
@@ -129,75 +151,75 @@ int main(int argc, char** argv) {
 
     //******************Connections***************
 
-    update_controller_pid_x->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_pid_y->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_pid_z->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_pid_roll->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_pid_pitch->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_pid_yaw->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_pid_yaw_rate->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_pid_zero->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
+    update_controller_pid_x->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_pid_y->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_pid_z->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_pid_roll->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_pid_pitch->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_pid_yaw->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_pid_yaw_rate->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_pid_zero->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
 
-    update_controller_mrft_x->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_mrft_y->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_mrft_z->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_mrft_roll->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_mrft_pitch->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_mrft_yaw->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
-    update_controller_mrft_yaw_rate->add_callback_msg_receiver((msg_receiver*) ros_updt_ctr);
+    update_controller_mrft_x->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_mrft_y->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_mrft_z->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_mrft_roll->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_mrft_pitch->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_mrft_yaw->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_mrft_yaw_rate->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
 
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) initial_pose_waypoint);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) initial_pose_waypoint);
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) takeoff_relative_waypoint);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) takeoff_relative_waypoint);
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_1);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_1);
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_2);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_2);
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_3);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_3);
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_4);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_4);
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_5);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_5);
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_6);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) relative_waypoint_square_6);
-    ros_ori_sub->add_callback_msg_receiver((msg_receiver*) land_relative_waypoint);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) land_relative_waypoint);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) initial_pose_waypoint);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) initial_pose_waypoint);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) takeoff_relative_waypoint);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) takeoff_relative_waypoint);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_1);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_1);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_2);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_2);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_3);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_3);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_4);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_4);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_5);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_5);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_6);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_6);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) land_relative_waypoint);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) land_relative_waypoint);
 
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) set_height_offset);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) set_height_offset);
 
-    switch_block_pid_mrft->add_callback_msg_receiver((msg_receiver*) ros_switch_block);
-    switch_block_mrft_pid->add_callback_msg_receiver((msg_receiver*) ros_switch_block);
+    switch_block_pid_mrft->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_mrft_pid->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
 
-    reset_z->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
-    reset_x->add_callback_msg_receiver((msg_receiver*) ros_rst_ctr);
+    reset_z->addCallbackMsgReceiver((MsgReceiver*) ros_rst_ctr);
+    reset_x->addCallbackMsgReceiver((MsgReceiver*) ros_rst_ctr);
 
-    arm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
-    disarm_motors->add_callback_msg_receiver((msg_receiver*) ros_arm_srv);
+    arm_motors->addCallbackMsgReceiver((MsgReceiver*) ros_arm_srv);
+    disarm_motors->addCallbackMsgReceiver((MsgReceiver*) ros_arm_srv);
 
-    ros_flight_command->add_callback_msg_receiver((msg_receiver*) flight_command);
+    ros_flight_command->addCallbackMsgReceiver((MsgReceiver*) flight_command);
 
-    ros_set_mission_state_srv->add_callback_msg_receiver((msg_receiver*) cs_to_taking_off);
-    ros_set_mission_state_srv->add_callback_msg_receiver((msg_receiver*) cs_to_landing);
+    ros_set_mission_state_srv->addCallbackMsgReceiver((MsgReceiver*) cs_to_taking_off);
+    ros_set_mission_state_srv->addCallbackMsgReceiver((MsgReceiver*) cs_to_landing);
 
-    ros_info_sub->add_callback_msg_receiver((msg_receiver*) state_monitor);
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) state_monitor);
+    ros_info_sub->addCallbackMsgReceiver((MsgReceiver*) state_monitor);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) state_monitor);
 
-    state_monitor->add_callback_msg_receiver((msg_receiver*)ros_updt_uav_control_state_clnt);
+    state_monitor->addCallbackMsgReceiver((MsgReceiver*)ros_updt_uav_control_state_clnt);
 
-    set_settings->add_callback_msg_receiver((msg_receiver*)ros_restnorm_settings);
+    set_settings->addCallbackMsgReceiver((MsgReceiver*)ros_restnorm_settings);
 
-    set_height_offset->add_callback_msg_receiver((msg_receiver*) ros_set_height_offset);
-    initial_pose_waypoint->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
-    takeoff_relative_waypoint->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
-    relative_waypoint_square_1->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
-    relative_waypoint_square_2->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
-    relative_waypoint_square_3->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
-    relative_waypoint_square_4->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
-    relative_waypoint_square_5->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
-    relative_waypoint_square_6->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
-    land_relative_waypoint->add_callback_msg_receiver((msg_receiver*) ros_set_path_clnt);
+    set_height_offset->addCallbackMsgReceiver((MsgReceiver*) ros_set_height_offset);
+    initial_pose_waypoint->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
+    takeoff_relative_waypoint->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
+    relative_waypoint_square_1->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
+    relative_waypoint_square_2->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
+    relative_waypoint_square_3->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
+    relative_waypoint_square_4->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
+    relative_waypoint_square_5->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
+    relative_waypoint_square_6->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
+    land_relative_waypoint->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
 
     //*************Setting Flight Elements*************
 
@@ -316,7 +338,7 @@ int main(int argc, char** argv) {
     z_cross_takeoff_waypoint.selected_dim=Dimension3D::Z;
     z_cross_takeoff_waypoint.condition_value = 0.9;
     z_cross_takeoff_waypoint.condition_met_for_larger=true;
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_takeoff_waypoint);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) &z_cross_takeoff_waypoint);
 
     WaitForCondition* z_cross_takeoff_waypoint_check = new WaitForCondition((Condition*)&z_cross_takeoff_waypoint);
 
@@ -324,7 +346,7 @@ int main(int argc, char** argv) {
     z_cross_land_waypoint.selected_dim=Dimension3D::Z;
     z_cross_land_waypoint.condition_value=0.1;
     z_cross_land_waypoint.condition_met_for_larger=false;
-    ros_pos_sub->add_callback_msg_receiver((msg_receiver*) &z_cross_land_waypoint);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) &z_cross_land_waypoint);
 
     WaitForCondition* z_cross_land_waypoint_check = new WaitForCondition((Condition*)&z_cross_land_waypoint);
 

@@ -9,7 +9,7 @@ public:
 	int wait_time_ms;
     void perform();
 
-    void receive_msg_data(DataMessage* t_msg);
+    void receiveMsgData(DataMessage* t_msg);
     
     Wait();
     ~Wait();

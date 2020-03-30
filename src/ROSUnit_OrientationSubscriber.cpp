@@ -22,10 +22,10 @@ void ROSUnit_OrientationSubscriber::callbackOrientation(const geometry_msgs::Poi
 
     orientation_msg.setVector3DMessage(tmp);
 
-    _instance_ptr->emit_message((DataMessage*) &orientation_msg); 
+    _instance_ptr->emitMsgUnicastDefault((DataMessage*) &orientation_msg); 
 
 }
 
-void ROSUnit_OrientationSubscriber::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_OrientationSubscriber::receiveMsgData(DataMessage* t_msg){
 
 }

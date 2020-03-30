@@ -28,7 +28,7 @@ void StateMonitor::perform() {
 
         if(MainMissionStateManager.getMissionState() != old_state){
             int_msg.data = (int)(MainMissionStateManager.getMissionState());
-            this->emit_message((DataMessage*) &int_msg);
+            this->emitMsgUnicastDefault((DataMessage*) &int_msg);
             old_state = MainMissionStateManager.getMissionState();
         }
         
@@ -37,7 +37,7 @@ void StateMonitor::perform() {
     }
 }
 
-void StateMonitor::receive_msg_data(DataMessage* t_msg){
+void StateMonitor::receiveMsgData(DataMessage* t_msg){
 
     if(t_msg->getType() == msg_type::INFO){
         InfoMsg* info_msg = (InfoMsg*)t_msg;

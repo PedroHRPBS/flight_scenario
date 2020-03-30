@@ -9,7 +9,7 @@ void Wait::perform(){
     
 }
 
-void Wait::receive_msg_data(DataMessage* t_msg){}
+void Wait::receiveMsgData(DataMessage* t_msg){}
 
 Wait::Wait(){}
 Wait::~Wait(){}

@@ -13,7 +13,7 @@ private:
        
 public:
 
-    void receive_msg_data(DataMessage*);
+    void receiveMsgData(DataMessage*);
     ROSUnit_InfoSubscriber(ros::NodeHandle&);
     ~ROSUnit_InfoSubscriber();
 };

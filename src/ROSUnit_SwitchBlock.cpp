@@ -8,7 +8,7 @@ ROSUnit_SwitchBlock::~ROSUnit_SwitchBlock() {
 
 }
 
-void ROSUnit_SwitchBlock::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_SwitchBlock::receiveMsgData(DataMessage* t_msg){
     
     if(t_msg->getType() == msg_type::SWITCHBLOCK){
 

@@ -12,7 +12,7 @@ private:
 
 public:
     void perform();
-    void receive_msg_data(DataMessage* t_msg);
+    void receiveMsgData(DataMessage* t_msg);
     SetRelativeWaypoint(float, float, float, float);
     ~SetRelativeWaypoint();
 };

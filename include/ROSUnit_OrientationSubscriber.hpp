@@ -13,7 +13,7 @@ private:
        
 public:
 
-    void receive_msg_data(DataMessage*);
+    void receiveMsgData(DataMessage*);
     ROSUnit_OrientationSubscriber(ros::NodeHandle&);
     ~ROSUnit_OrientationSubscriber();
 };

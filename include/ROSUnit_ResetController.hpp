@@ -10,7 +10,7 @@ private:
     ros::ServiceClient _reset_controller_client;
 
 public:
-    void receive_msg_data(DataMessage* t_msg);
+    void receiveMsgData(DataMessage* t_msg);
     ROSUnit_ResetController(ros::NodeHandle&);
     ~ROSUnit_ResetController();
 };

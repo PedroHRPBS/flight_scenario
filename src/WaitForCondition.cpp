@@ -12,6 +12,6 @@ void WaitForCondition::perform(){
     }
     std::cout<< "CONDITION MATCHED" << std::endl;
 }
-void WaitForCondition::receive_msg_data(DataMessage* t_msg){
+void WaitForCondition::receiveMsgData(DataMessage* t_msg){
     
 }

@@ -3,7 +3,7 @@
 #include "MsgUavControlState.hpp"
 #include "internal_states.hpp"
                                 
-class MissionStateManager : public msg_emitter
+class MissionStateManager : public MsgEmitter
 {
     private:
         uav_control_states current_uav_control_state = uav_control_states::WARMING_UP;

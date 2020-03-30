@@ -19,10 +19,10 @@ void ROSUnit_PositionSubscriber::callbackPosition(const geometry_msgs::Point& ms
     position_msg.y = msg.y;
     position_msg.z = msg.z;
 
-    _instance_ptr->emit_message((DataMessage*) &position_msg); 
+    _instance_ptr->emitMsgUnicastDefault((DataMessage*) &position_msg); 
 
 }
 
-void ROSUnit_PositionSubscriber::receive_msg_data(DataMessage* t_msg){
+void ROSUnit_PositionSubscriber::receiveMsgData(DataMessage* t_msg){
 
 }

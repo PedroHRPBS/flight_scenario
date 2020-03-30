@@ -9,7 +9,7 @@ class ROSUnit_SwitchBlock :  public ROSUnit{
         ros::ServiceClient _switch_client;
         
     public:
-        void receive_msg_data(DataMessage* t_msg);  
+        void receiveMsgData(DataMessage* t_msg);  
 
         ROSUnit_SwitchBlock(ros::NodeHandle&);
         ~ROSUnit_SwitchBlock();

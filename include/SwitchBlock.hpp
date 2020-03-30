@@ -10,7 +10,7 @@ public:
     SwitchBlockMsg_FS switch_msg;
 
     void perform();
-    void receive_msg_data(DataMessage* t_msg);
+    void receiveMsgData(DataMessage* t_msg);
     
     SwitchBlock();
     ~SwitchBlock();

@@ -18,9 +18,9 @@ void Arm::perform()
 {
     ArmDataMessage _arm_message;
     _arm_message.isArmed = true;
-    this->emit_message((DataMessage*)&_arm_message);
+    this->emitMsgUnicastDefault((DataMessage*)&_arm_message);
 }
 
-void Arm::receive_msg_data(DataMessage* t_msg){
+void Arm::receiveMsgData(DataMessage* t_msg){
 
 }
