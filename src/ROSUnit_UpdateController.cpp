@@ -28,6 +28,12 @@ void ROSUnit_UpdateController::receiveMsgData(DataMessage* t_msg){
         srv.request.controller_parameters.mrft_beta = _update_msg->getMRFTParam().beta;
         srv.request.controller_parameters.mrft_relay_amp = _update_msg->getMRFTParam().relay_amp;
         srv.request.controller_parameters.mrft_bias = _update_msg->getMRFTParam().bias;
+        srv.request.controller_parameters.sm_alpha1 = _update_msg->getSMParam().alpha1;
+        srv.request.controller_parameters.sm_alpha2 = _update_msg->getSMParam().alpha2;
+        srv.request.controller_parameters.sm_h1 = _update_msg->getSMParam().h1;
+        srv.request.controller_parameters.sm_h2 = _update_msg->getSMParam().h2;
+
+
 
         bool success = _update_controller_client.call(srv);
 
