@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     ROSUnit* ros_flight_command = new ROSUnit_FlightCommand(nh);
     ROSUnit* ros_info_sub = new ROSUnit_InfoSubscriber(nh);
     ROSUnit* ros_restnorm_settings = new ROSUnit_RestNormSettingsClnt(nh);
-    ROSUnit* ros_controloutput_sub = new ROSUnit_ControlOutputSubscriber(nh);
+    
 
     ROSUnit_Factory ROSUnit_Factory_main{nh};
 	ROSUnit* ros_set_path_clnt = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client,
