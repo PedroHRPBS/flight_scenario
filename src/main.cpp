@@ -115,6 +115,10 @@ int main(int argc, char** argv) {
     FlightElement* update_controller_mrft_yaw = new UpdateController();
     FlightElement* update_controller_mrft_yaw_rate = new UpdateController();
 
+    FlightElement* update_controller_sm_x = new UpdateController();
+    FlightElement* update_controller_sm_y = new UpdateController();
+
+
     FlightElement* switch_block_pid_mrft = new SwitchBlock();
     FlightElement* switch_block_mrft_pid = new SwitchBlock();
     
@@ -169,6 +173,10 @@ int main(int argc, char** argv) {
     update_controller_mrft_pitch->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
     update_controller_mrft_yaw->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
     update_controller_mrft_yaw_rate->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+
+    update_controller_sm_x->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_sm_y->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+
 
     ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) initial_pose_waypoint);
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) initial_pose_waypoint);
@@ -323,6 +331,18 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.relay_amp = 0.1;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
+
+    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.3;
+    ((UpdateController*)update_controller_sm_x)->sm_data.alpha2 = 1.0;
+    ((UpdateController*)update_controller_sm_x)->sm_data.h1 = 1.5;
+    ((UpdateController*)update_controller_sm_x)->sm_data.h2 = 2.0;
+    ((UpdateController*)update_controller_sm_x)->sm_data.id = block_id::SM_X;
+
+    ((UpdateController*)update_controller_sm_y)->sm_data.alpha1 = 0.3;
+    ((UpdateController*)update_controller_sm_y)->sm_data.alpha2 = 1.0;
+    ((UpdateController*)update_controller_sm_y)->sm_data.h1 = 1.5;
+    ((UpdateController*)update_controller_sm_y)->sm_data.h2 = 2.0;
+    ((UpdateController*)update_controller_sm_y)->sm_data.id = block_id::SM_Y;
 
     ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
     ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
