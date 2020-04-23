@@ -33,9 +33,10 @@
 #include "SetRelativeWaypoint.hpp"
 #include "ROSUnit_ControlOutputSubscriber.hpp"
 
-#define TESTING
+#undef TESTING
 #undef MISSION
 #undef MRFT
+#define MRFT_TAKEOFF_DNN
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -146,7 +147,7 @@ int main(int argc, char** argv) {
     FlightElement* set_settings = new SetRestNormSettings(true, false, 0.25);
     FlightElement* set_height_offset = new SetHeightOffset();
     FlightElement* initial_pose_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
-    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 0.5, 0.);
+    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 2.0, 0.); //DNN: this is set to 2m height
     FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(1.0, 0.0, 0.5, 0.);
     FlightElement* relative_waypoint_square_2 = new SetRelativeWaypoint(.0, 1.0, 0., 0.);
     FlightElement* relative_waypoint_square_3 = new SetRelativeWaypoint(-2., 0., 0., 0.);
@@ -156,6 +157,26 @@ int main(int argc, char** argv) {
     FlightElement* land_relative_waypoint = new SetRelativeWaypoint(0., 0., -10., 0.);
 
     //******************Connections***************
+
+    update_controller_pid_x->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::pid);
+    update_controller_pid_y->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::pid);
+    update_controller_pid_z->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::pid);
+    update_controller_pid_roll->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::pid);
+    update_controller_pid_pitch->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::pid);
+    update_controller_pid_yaw->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::pid);
+    update_controller_pid_yaw_rate->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::pid);
+    update_controller_pid_zero->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::pid);
+
+    update_controller_mrft_x->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::mrft);
+    update_controller_mrft_y->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::mrft);
+    update_controller_mrft_z->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::mrft);
+    update_controller_mrft_roll->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::mrft);
+    update_controller_mrft_pitch->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::mrft);
+    update_controller_mrft_yaw->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::mrft);
+    update_controller_mrft_yaw_rate->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::mrft);
+
+    update_controller_sm_x->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::sm);
+    update_controller_sm_y->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::sm);
 
     update_controller_pid_x->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
     update_controller_pid_y->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
@@ -490,6 +511,35 @@ int main(int argc, char** argv) {
     // safety_pipeline.addElement((FlightElement*)&wait_1s);
     // safety_pipeline.addElement((FlightElement*)disarm_motors);
     #endif
+
+    #ifdef MRFT_TAKEOFF_DNN
+    FlightPipeline mrft_takeoff_dnn_pipeline;
+
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_sm_x);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_sm_y);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_pid_z); //Both need to be updated, because together they become one
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_mrft_z);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_mrft_roll);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)set_height_offset);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)set_settings);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)flight_command);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)reset_z);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)&wait_100ms);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)arm_motors);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)flight_command); //At this moment the DNN node should be run
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)reset_z);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)flight_command);
+
+    
+    #endif
+
     Logger::getAssignedLogger()->log("FlightScenario main_scenario",LoggerLevel::Info);
     FlightScenario main_scenario;
     #ifdef MRFT
@@ -504,6 +554,10 @@ int main(int argc, char** argv) {
     main_scenario.AddFlightPipeline(&landing_pipeline);
     main_scenario.AddFlightPipeline(&state_monitor_pipeline);
     #endif
+    #ifdef MRFT_TAKEOFF_DNN
+    main_scenario.AddFlightPipeline(&mrft_takeoff_dnn_pipeline);
+    #endif
+
     main_scenario.StartScenario();
     Logger::getAssignedLogger()->log("Main Done",LoggerLevel::Info);
     
