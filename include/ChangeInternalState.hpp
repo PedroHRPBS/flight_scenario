@@ -1,7 +1,7 @@
 #pragma once
 #include "internal_states.hpp"
 #include "FlightElement.hpp"
-#include "IntegerMsg.hpp"
+#include "common_srv/IntegerMsg.hpp"
 #include "MissionStateManager.hpp"
 
 class ChangeInternalState : public FlightElement {

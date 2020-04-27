@@ -1,8 +1,8 @@
 #pragma once
-#include "PosesMsg.hpp"
+#include "common_srv/PosesMsg.hpp"
 #include "FlightElement.hpp"
 #include "PositionMsg.hpp"
-#include "Vector3DMessage.hpp"
+#include "common_srv/Vector3DMessage.hpp"
 
 class SetRelativeWaypoint : public FlightElement{
 

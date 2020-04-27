@@ -1,6 +1,7 @@
 #pragma once
 #include "FlightElement.hpp"
 #include "FlightCommandMsg.hpp"
+#include "common_types.hpp"
 
 class FlightCommand : public FlightElement {
 

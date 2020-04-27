@@ -1,7 +1,7 @@
 #pragma once
 #include "FlightElement.hpp"
 #include "PositionMsg.hpp"
-#include "FloatMsg.hpp"
+#include "common_srv/FloatMsg.hpp"
 
 class SetHeightOffset : public FlightElement{
 

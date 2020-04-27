@@ -1,6 +1,6 @@
 #include "ros/ros.h"
 #include <iostream>
-#include "ROSUnit.hpp"
+#include "common_srv/ROSUnit.hpp"
 #include "logger.hpp"
 #include "std_logger.hpp"
 #include "FlightElement.hpp"
@@ -26,7 +26,7 @@
 #include "ChangeInternalState.hpp"
 #include "InternalSystemStateCondition.hpp"
 #include "StateMonitor.hpp"
-#include "ROSUnit_Factory.hpp"
+#include "common_srv/ROSUnit_Factory.hpp"
 #include "ROSUnit_RestNormSettingsClnt.hpp"
 #include "SetRestNormSettings.hpp"
 #include "SetHeightOffset.hpp"

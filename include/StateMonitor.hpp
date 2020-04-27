@@ -3,7 +3,7 @@
 #include "InfoMsg.hpp"
 #include "PositionMsg.hpp"
 #include "ErrorMsg.hpp"
-#include "IntegerMsg.hpp"
+#include "common_srv/IntegerMsg.hpp"
 #include "MissionStateManager.hpp"
 #include "internal_states.hpp"
 

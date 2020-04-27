@@ -1,5 +1,5 @@
 #pragma once
-#include "MsgReceiver.hpp"
+#include "common_srv/MsgReceiver.hpp"
 
 class Condition :public MsgReceiver {
 private:

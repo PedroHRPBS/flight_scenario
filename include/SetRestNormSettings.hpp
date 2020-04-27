@@ -4,7 +4,7 @@
 #include "RestrictedNormRefSettingsMsg.hpp"
 #include "MessageToBlock.hpp"
 #include "PositionMsg.hpp"
-#include "Vector3DMessage.hpp"
+#include "common_srv/Vector3DMessage.hpp"
 
 class SetRestNormSettings : public FlightElement{
 

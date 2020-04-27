@@ -1,6 +1,6 @@
 #pragma once
-#include "DataMessage.hpp"
-
+#include "common_srv/DataMessage.hpp"
+#include "common_types.hpp"
 class SwitchBlockMsg_FS : public DataMessage {
 
 private:
