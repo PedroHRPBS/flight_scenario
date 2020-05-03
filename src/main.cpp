@@ -124,10 +124,17 @@ int main(int argc, char** argv) {
     FlightElement* update_controller_sm_x = new UpdateController();
     FlightElement* update_controller_sm_y = new UpdateController();
 
-
     FlightElement* switch_block_pid_mrft = new SwitchBlock();
     FlightElement* switch_block_mrft_pid = new SwitchBlock();
-    
+
+    FlightElement* switch_block_sm_to_mrft_x = new SwitchBlock();
+    FlightElement* switch_block_mrft_to_pid_x = new SwitchBlock();
+    FlightElement* switch_block_sm_to_mrft_y = new SwitchBlock();
+    FlightElement* switch_block_mrft_to_pid_y = new SwitchBlock();
+    FlightElement* switch_block_mrftpid_to_pid_z = new SwitchBlock();
+    FlightElement* switch_block_mrft_to_pid_roll = new SwitchBlock();
+    FlightElement* switch_block_mrft_to_pid_pitch = new SwitchBlock();
+
     FlightElement* reset_z = new ResetController();
     FlightElement* reset_x = new ResetController();
     
@@ -227,6 +234,13 @@ int main(int argc, char** argv) {
 
     switch_block_pid_mrft->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
     switch_block_mrft_pid->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_sm_to_mrft_x->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_mrft_to_pid_x->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_sm_to_mrft_y->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_mrft_to_pid_y->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_mrftpid_to_pid_z->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_mrft_to_pid_roll->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_mrft_to_pid_pitch->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
 
     reset_z->addCallbackMsgReceiver((MsgReceiver*) ros_rst_ctr);
     reset_x->addCallbackMsgReceiver((MsgReceiver*) ros_rst_ctr);
@@ -372,6 +386,14 @@ int main(int argc, char** argv) {
 
     ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
     ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
+
+    ((SwitchBlock*)switch_block_sm_to_mrft_x)->switch_msg.setSwitchBlockMsg_FS(block_id::SM_X, block_id::MRFT_X);
+    ((SwitchBlock*)switch_block_mrft_to_pid_x)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_X, block_id::PID_X);
+    ((SwitchBlock*)switch_block_sm_to_mrft_y)->switch_msg.setSwitchBlockMsg_FS(block_id::SM_Y, block_id::MRFT_Y);
+    ((SwitchBlock*)switch_block_mrft_to_pid_y)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_Y, block_id::PID_Y);
+    ((SwitchBlock*)switch_block_mrftpid_to_pid_z)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_MRFT_Z, block_id::PID_Z);
+    ((SwitchBlock*)switch_block_mrft_to_pid_roll)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
+    ((SwitchBlock*)switch_block_mrft_to_pid_pitch)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_PITCH, block_id::PID_PITCH);
 
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
     ((ResetController*)reset_x)->target_block = block_id::PID_X;
@@ -564,18 +586,29 @@ int main(int argc, char** argv) {
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)flight_command);
 
     x_pipeline.addElement((FlightElement*)DNN_confirmation_x);
-
+    x_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    x_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_x);
 
     y_pipeline.addElement((FlightElement*)DNN_confirmation_y);
-
+    y_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    y_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_y);
 
     z_pipeline.addElement((FlightElement*)DNN_confirmation_z);
-
+    z_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    z_pipeline.addElement((FlightElement*)switch_block_mrftpid_to_pid_z);
 
     roll_pipeline.addElement((FlightElement*)DNN_confirmation_roll);
-
+    roll_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    roll_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_roll);
+    //TODO check if a timer here is enough
+    roll_pipeline.addElement((FlightElement*)switch_block_sm_to_mrft_x);
 
     pitch_pipeline.addElement((FlightElement*)DNN_confirmation_pitch);
+    pitch_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    pitch_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_pitch);
+    //TODO check if a timer here is enough
+    pitch_pipeline.addElement((FlightElement*)switch_block_sm_to_mrft_y);
+
 
     
     #endif
@@ -596,6 +629,11 @@ int main(int argc, char** argv) {
     #endif
     #ifdef MRFT_TAKEOFF_DNN
     main_scenario.AddFlightPipeline(&mrft_takeoff_dnn_pipeline);
+    main_scenario.AddFlightPipeline(&x_pipeline);
+    main_scenario.AddFlightPipeline(&y_pipeline);
+    main_scenario.AddFlightPipeline(&z_pipeline);
+    main_scenario.AddFlightPipeline(&roll_pipeline);
+    main_scenario.AddFlightPipeline(&pitch_pipeline);
     #endif
 
     main_scenario.StartScenario();
