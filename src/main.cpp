@@ -32,6 +32,7 @@
 #include "SetHeightOffset.hpp"
 #include "SetRelativeWaypoint.hpp"
 #include "ROSUnit_ControlOutputSubscriber.hpp"
+#include "DNNConfirmationCondition.hpp"
 
 #undef TESTING
 #undef MISSION
@@ -96,6 +97,10 @@ int main(int argc, char** argv) {
     ROSUnit* rosunit_yaw_rate_provider = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Subscriber, 
                                                                     ROSUnit_msg_type::ROSUnit_Point,
                                                                     "/providers/yaw_rate");
+    ROSUnit* rosunit_dnn_confirmation = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server,
+                                                                    ROSUnit_msg_type::ROSUnit_Int,
+                                                                    "/dnn_confirmation");
+    
 
     //*****************Flight Elements*************
 
@@ -393,6 +398,27 @@ int main(int argc, char** argv) {
 
     WaitForCondition* z_cross_land_waypoint_check = new WaitForCondition((Condition*)&z_cross_land_waypoint);
 
+
+    DNNConfirmationCondition DNN_confirmed_x = DNNConfirmationCondition(control_system::x);
+    rosunit_dnn_confirmation->addCallbackMsgReceiver((MsgReceiver*) &DNN_confirmed_x);
+    DNNConfirmationCondition DNN_confirmed_y = DNNConfirmationCondition(control_system::y);
+    rosunit_dnn_confirmation->addCallbackMsgReceiver((MsgReceiver*) &DNN_confirmed_y);
+    DNNConfirmationCondition DNN_confirmed_z = DNNConfirmationCondition(control_system::z);
+    rosunit_dnn_confirmation->addCallbackMsgReceiver((MsgReceiver*) &DNN_confirmed_z);
+    DNNConfirmationCondition DNN_confirmed_roll = DNNConfirmationCondition(control_system::roll);
+    rosunit_dnn_confirmation->addCallbackMsgReceiver((MsgReceiver*) &DNN_confirmed_roll);
+    DNNConfirmationCondition DNN_confirmed_pitch = DNNConfirmationCondition(control_system::pitch);
+    rosunit_dnn_confirmation->addCallbackMsgReceiver((MsgReceiver*) &DNN_confirmed_pitch);
+
+
+    WaitForCondition* DNN_confirmation_x = new WaitForCondition((Condition*)&DNN_confirmed_x);
+    WaitForCondition* DNN_confirmation_y = new WaitForCondition((Condition*)&DNN_confirmed_y);
+    WaitForCondition* DNN_confirmation_z = new WaitForCondition((Condition*)&DNN_confirmed_z);
+    WaitForCondition* DNN_confirmation_roll = new WaitForCondition((Condition*)&DNN_confirmed_roll);
+    WaitForCondition* DNN_confirmation_pitch = new WaitForCondition((Condition*)&DNN_confirmed_pitch);
+
+
+
     //**********************************************
 
     #ifdef MRFT
@@ -513,7 +539,7 @@ int main(int argc, char** argv) {
     #endif
 
     #ifdef MRFT_TAKEOFF_DNN
-    FlightPipeline mrft_takeoff_dnn_pipeline;
+    FlightPipeline mrft_takeoff_dnn_pipeline, x_pipeline, y_pipeline, z_pipeline, roll_pipeline, pitch_pipeline;
 
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)&wait_1s);
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_sm_x);
@@ -536,6 +562,20 @@ int main(int argc, char** argv) {
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)reset_z);
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)flight_command);
+
+    x_pipeline.addElement((FlightElement*)DNN_confirmation_x);
+
+
+    y_pipeline.addElement((FlightElement*)DNN_confirmation_y);
+
+
+    z_pipeline.addElement((FlightElement*)DNN_confirmation_z);
+
+
+    roll_pipeline.addElement((FlightElement*)DNN_confirmation_roll);
+
+
+    pitch_pipeline.addElement((FlightElement*)DNN_confirmation_pitch);
 
     
     #endif
