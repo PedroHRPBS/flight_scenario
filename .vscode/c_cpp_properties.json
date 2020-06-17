@@ -1,20 +1,23 @@
 {
     "configurations": [
         {
-            "browse": {
-                "databaseFilename": "",
-                "limitSymbolsToIncludedHeaders": true
-            },
+            "name": "Linux",
             "includePath": [
-                "/home/pedrohrpbs/catkin_ws_NAVIO/src/positioning_system/include/**",
-                "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/include/**",
-                "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/**",
+                "${workspaceFolder}/**"
             ],
-            "name": "ROS",
-            "intelliSenseMode": "gcc-x64",
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
-            "cppStandard": "c++17"
+            "intelliSenseMode": "clang-x64",
+            "defines": [],
+            "compilerArgs": [],
+            "cppStandard": "c++17",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         }
     ],
     "version": 4
