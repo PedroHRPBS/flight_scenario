@@ -33,10 +33,11 @@
 #include "SetRelativeWaypoint.hpp"
 #include "ROSUnit_ControlOutputSubscriber.hpp"
 #include "DNNConfirmationCondition.hpp"
+#include "SetCameraStatus.hpp"
 
 #undef TESTING
 #undef MISSION
-#define MRFT
+#define MRFT_OSAMA
 #undef MRFT_TAKEOFF_DNN
 
 int main(int argc, char** argv) {
@@ -100,7 +101,9 @@ int main(int argc, char** argv) {
     ROSUnit* rosunit_dnn_confirmation = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Server,
                                                                     ROSUnit_msg_type::ROSUnit_Int,
                                                                     "/dnn_confirmation");
-    
+    ROSUnit* rosunit_camera_status = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client,
+                                                                            ROSUnit_msg_type::ROSUnit_Int,
+                                                                            "set_camera_status");
 
     //*****************Flight Elements*************
 
@@ -166,8 +169,11 @@ int main(int argc, char** argv) {
 
     FlightElement* set_settings = new SetRestNormSettings(true, false, 0.25);
     FlightElement* set_height_offset = new SetHeightOffset();
+    FlightElement* set_camera_enabled = new SetCameraStatus(1);
+    FlightElement* set_camera_disabled = new SetCameraStatus(0);
     FlightElement* initial_pose_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
     FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 1.0, 0.); //DNN: this is set to 2m height
+    FlightElement* absolute_zero_Z_relative_waypoint = new SetRelativeWaypoint(0., 0., -100.0, 0.); //DNN: this is set to 2m height
     FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(1.0, 0.0, 0.5, 0.);
     FlightElement* relative_waypoint_square_2 = new SetRelativeWaypoint(.0, 1.0, 0., 0.);
     FlightElement* relative_waypoint_square_3 = new SetRelativeWaypoint(-2., 0., 0., 0.);
@@ -223,6 +229,8 @@ int main(int argc, char** argv) {
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) initial_pose_waypoint);
     ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) takeoff_relative_waypoint);
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) takeoff_relative_waypoint);
+    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) absolute_zero_Z_relative_waypoint);
+    ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) absolute_zero_Z_relative_waypoint);
     ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_1);
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_1);
     ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) relative_waypoint_square_2);
@@ -275,9 +283,12 @@ int main(int argc, char** argv) {
 
     set_settings->addCallbackMsgReceiver((MsgReceiver*)ros_restnorm_settings);
 
+    set_camera_enabled->addCallbackMsgReceiver((MsgReceiver*) rosunit_camera_status);
+    set_camera_disabled->addCallbackMsgReceiver((MsgReceiver*) rosunit_camera_status);
     set_height_offset->addCallbackMsgReceiver((MsgReceiver*) ros_set_height_offset);
     initial_pose_waypoint->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
     takeoff_relative_waypoint->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
+    absolute_zero_Z_relative_waypoint->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
     relative_waypoint_square_1->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
     relative_waypoint_square_2->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
     relative_waypoint_square_3->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
@@ -465,7 +476,7 @@ int main(int argc, char** argv) {
 
     //**********************************************
 
-    #ifdef MRFT
+    #ifdef MRFT_OSAMA
     FlightPipeline mrft_pipeline;
 
     mrft_pipeline.addElement((FlightElement*)&wait_1s);
@@ -495,10 +506,14 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)reset_z);
     mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
     mrft_pipeline.addElement((FlightElement*)flight_command);
-    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_z);
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_z);   //S1.1
+    mrft_pipeline.addElement((FlightElement*)absolute_zero_Z_relative_waypoint); //S1.2
+    mrft_pipeline.addElement((FlightElement*)set_camera_enabled); //S1.3    
     mrft_pipeline.addElement((FlightElement*)flight_command);
-    mrft_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_z);
-
+    mrft_pipeline.addElement((FlightElement*)set_camera_disabled); //S2.3   
+    // mrft_pipeline.addElement((FlightElement*)&wait_100ms); //CHECK IF THIS IS NEEDED
+    mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint); //S2.2 
+    mrft_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_z); //S2.1 
 
     // //mrft_pipeline.addElement((FlightElement*)set_initial_pose);
     // mrft_pipeline.addElement((FlightElement*)flight_command);
@@ -659,7 +674,7 @@ int main(int argc, char** argv) {
 
     Logger::getAssignedLogger()->log("FlightScenario main_scenario",LoggerLevel::Info);
     FlightScenario main_scenario;
-    #ifdef MRFT
+    #ifdef MRFT_OSAMA
     main_scenario.AddFlightPipeline(&mrft_pipeline);
     #endif
     #ifdef TESTING

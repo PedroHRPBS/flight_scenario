@@ -17,7 +17,11 @@ void SetRelativeWaypoint::perform(){
 
     waypoint.x = _current_x + _waypoint_x;
     waypoint.y = _current_y + _waypoint_y;
-    waypoint.z = _current_z + _waypoint_z;
+    if(_waypoint_z <= -10){
+        waypoint.z = 0.0;
+    }else{
+        waypoint.z = _current_z + _waypoint_z;
+    }
     waypoint.yaw = _current_yaw + _waypoint_yaw;
     waypoint_msg.p.poses.push_back(waypoint);
 
