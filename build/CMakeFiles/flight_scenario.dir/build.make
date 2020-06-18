@@ -825,9 +825,33 @@ CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.o.provides: 
 CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.o.provides.build: CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.o
 
 
+CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
+CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o: ../src/SetCameraStatus.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o"
+	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetCameraStatus.cpp
+
+CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.i"
+	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetCameraStatus.cpp > CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.i
+
+CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.s"
+	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetCameraStatus.cpp -o CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.s
+
+CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o.requires:
+
+.PHONY : CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o.requires
+
+CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o.provides: CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o.requires
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o.provides.build
+.PHONY : CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o.provides
+
+CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o.provides.build: CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o
+
+
 CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o: ../src/SetHeightOffset.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetHeightOffset.cpp
 
 CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.i: cmake_force
@@ -851,7 +875,7 @@ CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o.provides.build: CMakeFi
 
 CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o: ../src/SetRelativeWaypoint.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetRelativeWaypoint.cpp
 
 CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.i: cmake_force
@@ -875,7 +899,7 @@ CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o.provides.build: CMa
 
 CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o: ../src/SetRestNormSettings.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetRestNormSettings.cpp
 
 CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.i: cmake_force
@@ -899,7 +923,7 @@ CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o.provides.build: CMa
 
 CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o: ../src/SimplePlaneCondition.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SimplePlaneCondition.cpp
 
 CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.i: cmake_force
@@ -923,7 +947,7 @@ CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o.provides.build: CM
 
 CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o: ../src/StateMonitor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/StateMonitor.cpp
 
 CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.i: cmake_force
@@ -947,7 +971,7 @@ CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o.provides.build: CMakeFiles
 
 CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o: ../src/SwitchBlock.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlock.cpp
 
 CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.i: cmake_force
@@ -971,7 +995,7 @@ CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o.provides.build: CMakeFiles/
 
 CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o: ../src/SwitchBlockMsg_FS.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlockMsg_FS.cpp
 
 CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.i: cmake_force
@@ -995,7 +1019,7 @@ CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o.provides.build: CMake
 
 CMakeFiles/flight_scenario.dir/src/Timer.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/Timer.cpp.o: ../src/Timer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/flight_scenario.dir/src/Timer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/flight_scenario.dir/src/Timer.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/Timer.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/Timer.cpp
 
 CMakeFiles/flight_scenario.dir/src/Timer.cpp.i: cmake_force
@@ -1019,7 +1043,7 @@ CMakeFiles/flight_scenario.dir/src/Timer.cpp.o.provides.build: CMakeFiles/flight
 
 CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o: ../src/UpdateController.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/UpdateController.cpp
 
 CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.i: cmake_force
@@ -1043,7 +1067,7 @@ CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o.provides.build: CMakeF
 
 CMakeFiles/flight_scenario.dir/src/Wait.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/Wait.cpp.o: ../src/Wait.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/flight_scenario.dir/src/Wait.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/flight_scenario.dir/src/Wait.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/Wait.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/Wait.cpp
 
 CMakeFiles/flight_scenario.dir/src/Wait.cpp.i: cmake_force
@@ -1067,7 +1091,7 @@ CMakeFiles/flight_scenario.dir/src/Wait.cpp.o.provides.build: CMakeFiles/flight_
 
 CMakeFiles/flight_scenario.dir/src/WaitForCondition.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/WaitForCondition.cpp.o: ../src/WaitForCondition.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/flight_scenario.dir/src/WaitForCondition.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/flight_scenario.dir/src/WaitForCondition.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/WaitForCondition.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/WaitForCondition.cpp
 
 CMakeFiles/flight_scenario.dir/src/WaitForCondition.cpp.i: cmake_force
@@ -1091,7 +1115,7 @@ CMakeFiles/flight_scenario.dir/src/WaitForCondition.cpp.o.provides.build: CMakeF
 
 CMakeFiles/flight_scenario.dir/src/logger.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/logger.cpp.o: ../src/logger.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/flight_scenario.dir/src/logger.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/flight_scenario.dir/src/logger.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/logger.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/logger.cpp
 
 CMakeFiles/flight_scenario.dir/src/logger.cpp.i: cmake_force
@@ -1115,7 +1139,7 @@ CMakeFiles/flight_scenario.dir/src/logger.cpp.o.provides.build: CMakeFiles/fligh
 
 CMakeFiles/flight_scenario.dir/src/main.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/flight_scenario.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/flight_scenario.dir/src/main.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/main.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/main.cpp
 
 CMakeFiles/flight_scenario.dir/src/main.cpp.i: cmake_force
@@ -1139,7 +1163,7 @@ CMakeFiles/flight_scenario.dir/src/main.cpp.o.provides.build: CMakeFiles/flight_
 
 CMakeFiles/flight_scenario.dir/src/std_logger.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
 CMakeFiles/flight_scenario.dir/src/std_logger.cpp.o: ../src/std_logger.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/flight_scenario.dir/src/std_logger.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/flight_scenario.dir/src/std_logger.cpp.o"
 	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/std_logger.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/std_logger.cpp
 
 CMakeFiles/flight_scenario.dir/src/std_logger.cpp.i: cmake_force
@@ -1195,6 +1219,7 @@ flight_scenario_OBJECTS = \
 "CMakeFiles/flight_scenario.dir/src/ResetController.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/ResetControllerMessage.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.o" \
+"CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o" \
@@ -1245,6 +1270,7 @@ devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/Re
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/ResetController.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/ResetControllerMessage.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.o
+devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o
@@ -1280,7 +1306,7 @@ devel/lib/flight_scenario/flight_scenario: /usr/lib/x86_64-linux-gnu/libboost_at
 devel/lib/flight_scenario/flight_scenario: /usr/lib/x86_64-linux-gnu/libpthread.so
 devel/lib/flight_scenario/flight_scenario: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Linking CXX executable devel/lib/flight_scenario/flight_scenario"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Linking CXX executable devel/lib/flight_scenario/flight_scenario"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/flight_scenario.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -1320,6 +1346,7 @@ CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/Refe
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/ResetController.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/ResetControllerMessage.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.o.requires
+CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o.requires

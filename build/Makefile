@@ -1642,6 +1642,33 @@ src/RestrictedNormRefSettingsMsg.cpp.s:
 	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.s
 .PHONY : src/RestrictedNormRefSettingsMsg.cpp.s
 
+src/SetCameraStatus.o: src/SetCameraStatus.cpp.o
+
+.PHONY : src/SetCameraStatus.o
+
+# target to build an object file
+src/SetCameraStatus.cpp.o:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o
+.PHONY : src/SetCameraStatus.cpp.o
+
+src/SetCameraStatus.i: src/SetCameraStatus.cpp.i
+
+.PHONY : src/SetCameraStatus.i
+
+# target to preprocess a source file
+src/SetCameraStatus.cpp.i:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.i
+.PHONY : src/SetCameraStatus.cpp.i
+
+src/SetCameraStatus.s: src/SetCameraStatus.cpp.s
+
+.PHONY : src/SetCameraStatus.s
+
+# target to generate assembly for a file
+src/SetCameraStatus.cpp.s:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.s
+.PHONY : src/SetCameraStatus.cpp.s
+
 src/SetHeightOffset.o: src/SetHeightOffset.cpp.o
 
 .PHONY : src/SetHeightOffset.o
@@ -2176,6 +2203,9 @@ help:
 	@echo "... src/RestrictedNormRefSettingsMsg.o"
 	@echo "... src/RestrictedNormRefSettingsMsg.i"
 	@echo "... src/RestrictedNormRefSettingsMsg.s"
+	@echo "... src/SetCameraStatus.o"
+	@echo "... src/SetCameraStatus.i"
+	@echo "... src/SetCameraStatus.s"
 	@echo "... src/SetHeightOffset.o"
 	@echo "... src/SetHeightOffset.i"
 	@echo "... src/SetHeightOffset.s"

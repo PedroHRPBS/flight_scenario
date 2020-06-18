@@ -36,6 +36,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/ResetController.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/ResetController.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/ResetControllerMessage.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/ResetControllerMessage.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/RestrictedNormRefSettingsMsg.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.o"
+  "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetCameraStatus.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetHeightOffset.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetRelativeWaypoint.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetRestNormSettings.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o"
