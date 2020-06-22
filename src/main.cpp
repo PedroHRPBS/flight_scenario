@@ -37,6 +37,7 @@
 
 #undef TESTING
 #undef MISSION
+#undef MRFT
 #define MRFT_OSAMA
 #undef MRFT_TAKEOFF_DNN
 
@@ -136,6 +137,7 @@ int main(int argc, char** argv) {
     FlightElement* switch_block_mrft_to_pid_y = new SwitchBlock();
     FlightElement* switch_block_mrft_to_pid_z = new SwitchBlock();
     FlightElement* switch_block_mrftpid_to_pid_z = new SwitchBlock();
+    FlightElement* switch_block_pid_to_mrftpid_z = new SwitchBlock();
     FlightElement* switch_block_mrft_to_pid_roll = new SwitchBlock();
     FlightElement* switch_block_mrft_to_pid_pitch = new SwitchBlock();
     FlightElement* switch_block_pid_to_sm_x = new SwitchBlock();
@@ -172,8 +174,14 @@ int main(int argc, char** argv) {
     FlightElement* set_camera_enabled = new SetCameraStatus(1);
     FlightElement* set_camera_disabled = new SetCameraStatus(0);
     FlightElement* initial_pose_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
-    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 1.0, 0.); //DNN: this is set to 2m height
-    FlightElement* absolute_zero_Z_relative_waypoint = new SetRelativeWaypoint(0., 0., -100.0, 0.); //DNN: this is set to 2m height
+    
+    #ifdef MRFT
+    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 2.0, 0.); //DNN: this is set to 2m height 
+    #endif
+    #ifdef MRFT_OSAMA
+    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 1.0, 0.);
+    #endif
+    FlightElement* absolute_zero_Z_relative_waypoint = new SetRelativeWaypoint(0., 0., -100.0, 0.); 
     FlightElement* relative_waypoint_square_1 = new SetRelativeWaypoint(1.0, 0.0, 0.5, 0.);
     FlightElement* relative_waypoint_square_2 = new SetRelativeWaypoint(.0, 1.0, 0., 0.);
     FlightElement* relative_waypoint_square_3 = new SetRelativeWaypoint(-2., 0., 0., 0.);
@@ -256,6 +264,7 @@ int main(int argc, char** argv) {
     switch_block_mrft_to_pid_y->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
     switch_block_mrft_to_pid_z->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
     switch_block_mrftpid_to_pid_z->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_pid_to_mrftpid_z->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
     switch_block_mrft_to_pid_roll->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
     switch_block_mrft_to_pid_pitch->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
     switch_block_pid_to_sm_x->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
@@ -323,9 +332,16 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_y)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_y)->pid_data.id = block_id::PID_Y;
 
+    #ifdef MRFT
+    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.0207354403983584; //1.27; //0.7450; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.52054894712171/5; //0.0980; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.0; //0.23; //0.3956; 
+    #endif
+    #ifdef MRFT_OSAMA
     ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.7450; 
     ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980; 
     ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.3956; 
+    #endif
     ((UpdateController*)update_controller_pid_z)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_z)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_z)->pid_data.en_pv_derivation = 1;
@@ -374,7 +390,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_y)->mrft_data.id = block_id::MRFT_Y;
 
     ((UpdateController*)update_controller_mrft_z)->mrft_data.beta = -0.73;
-    ((UpdateController*)update_controller_mrft_z)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.relay_amp = 0.1; //0.1;
     ((UpdateController*)update_controller_mrft_z)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_z)->mrft_data.id = block_id::MRFT_Z;
     
@@ -419,6 +435,7 @@ int main(int argc, char** argv) {
     ((SwitchBlock*)switch_block_mrft_to_pid_y)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_Y, block_id::PID_Y);
     ((SwitchBlock*)switch_block_mrft_to_pid_z)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_Z, block_id::PID_Z);
     ((SwitchBlock*)switch_block_mrftpid_to_pid_z)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_MRFT_Z, block_id::PID_Z);
+    ((SwitchBlock*)switch_block_pid_to_mrftpid_z)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::PID_MRFT_Z);
     ((SwitchBlock*)switch_block_mrft_to_pid_roll)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
     ((SwitchBlock*)switch_block_mrft_to_pid_pitch)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_PITCH, block_id::PID_PITCH);
     ((SwitchBlock*)switch_block_pid_to_sm_x)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_X, block_id::SM_X);
@@ -475,6 +492,49 @@ int main(int argc, char** argv) {
 
 
     //**********************************************
+    #ifdef MRFT
+    FlightPipeline mrft_pipeline, z_pipeline;
+
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_z);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_roll);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_z);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_roll);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrftpid_z);    
+    mrft_pipeline.addElement((FlightElement*)set_height_offset);
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_pipeline.addElement((FlightElement*)set_settings);
+    mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    mrft_pipeline.addElement((FlightElement*)arm_motors);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    
+    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_z);
+    // mrft_pipeline.addElement((FlightElement*)flight_command);
+    // mrft_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_z);
+    mrft_pipeline.addElement((FlightElement*)land_relative_waypoint);
+
+    z_pipeline.addElement((FlightElement*)DNN_confirmation_z);
+    z_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    z_pipeline.addElement((FlightElement*)switch_block_mrftpid_to_pid_z);
+
+
+    #endif
 
     #ifdef MRFT_OSAMA
     FlightPipeline mrft_pipeline;
@@ -511,19 +571,12 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)set_camera_enabled); //S1.3    
     mrft_pipeline.addElement((FlightElement*)flight_command);
     mrft_pipeline.addElement((FlightElement*)set_camera_disabled); //S2.3   
-    // mrft_pipeline.addElement((FlightElement*)&wait_100ms); //CHECK IF THIS IS NEEDED
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
     mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint); //S2.2 
     mrft_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_z); //S2.1 
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)land_relative_waypoint);
 
-    // //mrft_pipeline.addElement((FlightElement*)set_initial_pose);
-    // mrft_pipeline.addElement((FlightElement*)flight_command);
-    // mrft_pipeline.addElement((FlightElement*)reset_z);
-    // mrft_pipeline.addElement((FlightElement*)&wait_100ms);
-    // mrft_pipeline.addElement((FlightElement*)arm_motors);
-    // mrft_pipeline.addElement((FlightElement*)flight_command);
-    // mrft_pipeline.addElement((FlightElement*)set_settings);
-    // mrft_pipeline.addElement((FlightElement*)reset_z);
-    // mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
     // mrft_pipeline.addElement((FlightElement*)flight_command);
     // mrft_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
     // mrft_pipeline.addElement((FlightElement*)update_controller_pid_zero);
@@ -674,6 +727,10 @@ int main(int argc, char** argv) {
 
     Logger::getAssignedLogger()->log("FlightScenario main_scenario",LoggerLevel::Info);
     FlightScenario main_scenario;
+    #ifdef MRFT
+    main_scenario.AddFlightPipeline(&mrft_pipeline);
+    main_scenario.AddFlightPipeline(&z_pipeline);
+    #endif
     #ifdef MRFT_OSAMA
     main_scenario.AddFlightPipeline(&mrft_pipeline);
     #endif
