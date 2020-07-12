@@ -12,6 +12,8 @@ void DNNConfirmationCondition::receiveMsgData(DataMessage* t_msg){
 	IntegerMsg* int_msg = (IntegerMsg*)t_msg;
     int cs_data = int_msg->data;
 
-    _isConditionMet = (cs_data == (int)_cs);
+    if(!_isConditionMet){
+        _isConditionMet = (cs_data == (int)_cs);
+    }
 }
     

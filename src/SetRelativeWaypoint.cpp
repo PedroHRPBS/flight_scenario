@@ -17,9 +17,12 @@ void SetRelativeWaypoint::perform(){
 
     waypoint.x = _current_x + _waypoint_x;
     waypoint.y = _current_y + _waypoint_y;
-    if(_waypoint_z <= -10){
+    if(_waypoint_z == -10){
         waypoint.z = 0.0;
-    }else{
+    }else if(_waypoint_z == -99){ //TODO fix this, this is just for the MRFT ID
+        waypoint.z = 1.0;
+    }
+    else{
         waypoint.z = _current_z + _waypoint_z;
     }
     waypoint.yaw = _current_yaw + _waypoint_yaw;
