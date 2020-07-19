@@ -15,8 +15,19 @@ void SetRelativeWaypoint::perform(){
     Pose waypoint;
     PosesMsg waypoint_msg;
 
-    waypoint.x = _current_x + _waypoint_x;
-    waypoint.y = _current_y + _waypoint_y;
+
+    if(_waypoint_x == -10){
+        waypoint.x = 0.0;
+    }else{
+        waypoint.x = _current_x + _waypoint_x;
+    }
+
+    if(_waypoint_y == -10){
+        waypoint.y = 0.0;
+    }else{
+        waypoint.y = _current_y + _waypoint_y;
+    }
+
     if(_waypoint_z == -10){
         waypoint.z = 0.0;
     }else if(_waypoint_z == -99){ //TODO fix this, this is just for the MRFT ID
@@ -25,7 +36,13 @@ void SetRelativeWaypoint::perform(){
     else{
         waypoint.z = _current_z + _waypoint_z;
     }
-    waypoint.yaw = _current_yaw + _waypoint_yaw;
+
+    if(_waypoint_yaw == -10){
+        waypoint.yaw = 0.0;
+    }else{
+        waypoint.yaw = _current_yaw + _waypoint_yaw;
+    }
+    
     waypoint_msg.p.poses.push_back(waypoint);
 
     this->emitMsgUnicastDefault((DataMessage*)&waypoint_msg);
