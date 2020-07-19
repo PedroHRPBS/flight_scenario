@@ -1642,6 +1642,33 @@ src/RestrictedNormRefSettingsMsg.cpp.s:
 	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.s
 .PHONY : src/RestrictedNormRefSettingsMsg.cpp.s
 
+src/SetAbsoluteWaypoint.o: src/SetAbsoluteWaypoint.cpp.o
+
+.PHONY : src/SetAbsoluteWaypoint.o
+
+# target to build an object file
+src/SetAbsoluteWaypoint.cpp.o:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SetAbsoluteWaypoint.cpp.o
+.PHONY : src/SetAbsoluteWaypoint.cpp.o
+
+src/SetAbsoluteWaypoint.i: src/SetAbsoluteWaypoint.cpp.i
+
+.PHONY : src/SetAbsoluteWaypoint.i
+
+# target to preprocess a source file
+src/SetAbsoluteWaypoint.cpp.i:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SetAbsoluteWaypoint.cpp.i
+.PHONY : src/SetAbsoluteWaypoint.cpp.i
+
+src/SetAbsoluteWaypoint.s: src/SetAbsoluteWaypoint.cpp.s
+
+.PHONY : src/SetAbsoluteWaypoint.s
+
+# target to generate assembly for a file
+src/SetAbsoluteWaypoint.cpp.s:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SetAbsoluteWaypoint.cpp.s
+.PHONY : src/SetAbsoluteWaypoint.cpp.s
+
 src/SetCameraStatus.o: src/SetCameraStatus.cpp.o
 
 .PHONY : src/SetCameraStatus.o
@@ -2203,6 +2230,9 @@ help:
 	@echo "... src/RestrictedNormRefSettingsMsg.o"
 	@echo "... src/RestrictedNormRefSettingsMsg.i"
 	@echo "... src/RestrictedNormRefSettingsMsg.s"
+	@echo "... src/SetAbsoluteWaypoint.o"
+	@echo "... src/SetAbsoluteWaypoint.i"
+	@echo "... src/SetAbsoluteWaypoint.s"
 	@echo "... src/SetCameraStatus.o"
 	@echo "... src/SetCameraStatus.i"
 	@echo "... src/SetCameraStatus.s"

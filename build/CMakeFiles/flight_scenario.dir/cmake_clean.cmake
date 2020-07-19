@@ -31,6 +31,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/flight_scenario.dir/src/ResetController.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/ResetControllerMessage.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/RestrictedNormRefSettingsMsg.cpp.o"
+  "CMakeFiles/flight_scenario.dir/src/SetAbsoluteWaypoint.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/SetCameraStatus.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/SetHeightOffset.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/SetRelativeWaypoint.cpp.o"
