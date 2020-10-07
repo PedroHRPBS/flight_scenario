@@ -42,6 +42,13 @@
 #define MRFT
 #undef MRFT_OSAMA
 #undef MRFT_TAKEOFF_DNN
+#undef BIG_HEXA
+#define SMALL_HEXA
+#undef QUAD
+#define FULL_ID
+#undef INNER_ONLY
+#undef Z_ONLY
+#undef OUTTER_ONLY
 
 int main(int argc, char** argv) {
     Logger::assignLogger(new StdLogger());
@@ -149,6 +156,8 @@ int main(int argc, char** argv) {
     FlightElement* switch_block_pid_to_mrft_pitch = new SwitchBlock();
     FlightElement* switch_block_pid_to_mrft_roll = new SwitchBlock();
     FlightElement* switch_block_pid_to_mrft_z = new SwitchBlock();
+    FlightElement* switch_block_pid_to_mrft_x = new SwitchBlock();
+    FlightElement* switch_block_pid_to_mrft_y = new SwitchBlock();
 
 
 
@@ -174,21 +183,27 @@ int main(int argc, char** argv) {
     WaitForCondition* landing_check = new WaitForCondition((Condition*)uav_control_landing);
 
     #ifdef MRFT
+    #ifdef FULL_ID
+    FlightElement* set_settings = new SetRestNormSettings(true, false, 1.0); //DNN this should be large
+    #else
     FlightElement* set_settings = new SetRestNormSettings(true, false, 1.0); //DNN this should be large
     #endif
-    #ifdef MRFT_OSAMA
-    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.25); //DNN this should be large
     #endif
-    FlightElement* land_set_settings = new SetRestNormSettings(true, false, 0.25); //DNN this should be large
+    #ifdef TESTING
+    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.5); //DNN this should be large
+    #endif
+    FlightElement* land_set_settings = new SetRestNormSettings(true, false, 0.15); //DNN this should be large
+    FlightElement* waypoint_set_settings = new SetRestNormSettings(true, false, 0.40); //DNN this should be large
+
     FlightElement* set_height_offset = new SetHeightOffset();
     FlightElement* set_camera_enabled = new SetCameraStatus(1);
     FlightElement* set_camera_disabled = new SetCameraStatus(0);
     FlightElement* initial_pose_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
     
     #ifdef MRFT
-    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 1.0, 0.); //DNN: this is set to 1m height 
+    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 1.0, -10); //DNN: this is set to 1m height 
     #endif
-    #ifdef MRFT_OSAMA
+    #ifdef TESTING
     FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 1.0, 0.);
     #endif
     FlightElement* absolute_zero_Z_relative_waypoint = new SetRelativeWaypoint(0., 0., -10, 0.); 
@@ -246,15 +261,15 @@ int main(int argc, char** argv) {
     update_controller_sm_y->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
 
 
-    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) initial_pose_waypoint);
+    rosunit_yaw_provider->addCallbackMsgReceiver((MsgReceiver*) initial_pose_waypoint);
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) initial_pose_waypoint);
-    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) takeoff_relative_waypoint);
+    rosunit_yaw_provider->addCallbackMsgReceiver((MsgReceiver*) takeoff_relative_waypoint);
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) takeoff_relative_waypoint);
-    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) absolute_zero_Z_relative_waypoint);
+    rosunit_yaw_provider->addCallbackMsgReceiver((MsgReceiver*) absolute_zero_Z_relative_waypoint);
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) absolute_zero_Z_relative_waypoint);
-    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) dnn_keep_height_to_1_yaw_to_0_waypoint);
+    rosunit_yaw_provider->addCallbackMsgReceiver((MsgReceiver*) dnn_keep_height_to_1_yaw_to_0_waypoint);
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) dnn_keep_height_to_1_yaw_to_0_waypoint);
-    ros_ori_sub->addCallbackMsgReceiver((MsgReceiver*) land_relative_waypoint);
+    rosunit_yaw_provider->addCallbackMsgReceiver((MsgReceiver*) land_relative_waypoint);
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) land_relative_waypoint);
 
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) set_height_offset);
@@ -277,6 +292,9 @@ int main(int argc, char** argv) {
     switch_block_pid_to_mrft_pitch->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
     switch_block_pid_to_mrft_roll->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
     switch_block_pid_to_mrft_z->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_pid_to_mrft_x->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+    switch_block_pid_to_mrft_y->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
+
 
 
     reset_z->addCallbackMsgReceiver((MsgReceiver*) ros_rst_ctr);
@@ -297,6 +315,9 @@ int main(int argc, char** argv) {
 
     set_settings->addCallbackMsgReceiver((MsgReceiver*)ros_restnorm_settings);
     land_set_settings->addCallbackMsgReceiver((MsgReceiver*)ros_restnorm_settings);
+    waypoint_set_settings->addCallbackMsgReceiver((MsgReceiver*)ros_restnorm_settings);
+
+    
 
     
     set_camera_enabled->addCallbackMsgReceiver((MsgReceiver*) rosunit_camera_status);
@@ -317,7 +338,7 @@ int main(int argc, char** argv) {
     land_relative_waypoint->addCallbackMsgReceiver((MsgReceiver*) ros_set_path_clnt);
 
     //*************Setting Flight Elements*************
-
+    #ifdef QUAD
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kp = 0.020665478735248;
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.ki = 0.418196371304911;
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kd = 0.0;
@@ -343,31 +364,31 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_y)->pid_data.id = block_id::PID_Y;
 
     #ifdef MRFT
+    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.7854; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.2397; 
+    #endif
+    #ifdef MRFT_OSAMA
     ((UpdateController*)update_controller_pid_z)->pid_data.kp = 1.203771824957346; 
     ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980; 
     ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.276192820872928; 
-    #endif
-    #ifdef MRFT_OSAMA
-    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.785493; //1.203771824957346; 
-    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980; 
-    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.239755; //0.276192820872928; 
     #endif
     ((UpdateController*)update_controller_pid_z)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_z)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_z)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_z)->pid_data.id = block_id::PID_Z;
 
-    ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.185; //0.286708; //0.225 * 0.8; 
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.185 * 0.8; //0.286708; //0.225 * 0.8; 
     ((UpdateController*)update_controller_pid_roll)->pid_data.ki = 0.0;
-    ((UpdateController*)update_controller_pid_roll)->pid_data.kd = 0.037; //0.056559; //0.04 * 0.8;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kd = 0.037 * 0.8; //0.056559; //0.04 * 0.8;
     ((UpdateController*)update_controller_pid_roll)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.en_pv_derivation = 1;
     ((UpdateController*)update_controller_pid_roll)->pid_data.id = block_id::PID_ROLL;
 
-    ((UpdateController*)update_controller_pid_pitch)->pid_data.kp = 0.185;//0.275252; //0.225 * 0.8; 
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kp = 0.185 * 0.8;//0.275252; //0.225 * 0.8; 
     ((UpdateController*)update_controller_pid_pitch)->pid_data.ki = 0.0;
-    ((UpdateController*)update_controller_pid_pitch)->pid_data.kd =  0.037;// 0.051266; //0.04 * 0.8; 
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kd =  0.037 * 0.8;// 0.051266; //0.04 * 0.8; 
     ((UpdateController*)update_controller_pid_pitch)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.en_pv_derivation = 1;
@@ -424,18 +445,262 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
 
-    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.035;
-    ((UpdateController*)update_controller_sm_x)->sm_data.alpha2 = 0.06;
+    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.035*2; //TODO change for different hexa
+    ((UpdateController*)update_controller_sm_x)->sm_data.alpha2 = 0.06*2;
     ((UpdateController*)update_controller_sm_x)->sm_data.h1 = 1.0;
     ((UpdateController*)update_controller_sm_x)->sm_data.h2 = 2.5;
     ((UpdateController*)update_controller_sm_x)->sm_data.id = block_id::SM_X;
 
-    ((UpdateController*)update_controller_sm_y)->sm_data.alpha1 = 0.035;
-    ((UpdateController*)update_controller_sm_y)->sm_data.alpha2 = 0.06;
+    ((UpdateController*)update_controller_sm_y)->sm_data.alpha1 = 0.035*2;
+    ((UpdateController*)update_controller_sm_y)->sm_data.alpha2 = 0.06*2;
     ((UpdateController*)update_controller_sm_y)->sm_data.h1 = 1.0;
     ((UpdateController*)update_controller_sm_y)->sm_data.h2 = 2.5;
     ((UpdateController*)update_controller_sm_y)->sm_data.id = block_id::SM_Y;
+    #endif
+    #ifdef SMALL_HEXA
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kp = 0.0949693434978209;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.ki = 0.00987536113123831 * 2;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kd = 0.0;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.id = block_id::PID_Z;
 
+    ((UpdateController*)update_controller_pid_x)->pid_data.kp = 0.696435; //0.51639 * 0.8;
+    ((UpdateController*)update_controller_pid_x)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_x)->pid_data.kd = 0.375166; //0.21192 * 0.8;
+    ((UpdateController*)update_controller_pid_x)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_x)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_x)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_x)->pid_data.id = block_id::PID_X;
+
+    ((UpdateController*)update_controller_pid_y)->pid_data.kp = 0.568331;// 0.51639 * 0.8;
+    ((UpdateController*)update_controller_pid_y)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_y)->pid_data.kd =  0.306157;// * 0.8;
+    ((UpdateController*)update_controller_pid_y)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_y)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_y)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_y)->pid_data.id = block_id::PID_Y;
+
+    #ifdef MRFT
+    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.7854;
+    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980;
+    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.2397;
+    #endif
+    #ifdef MRFT_OSAMA
+    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 1.203771824957346; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.276192820872928; 
+    #endif
+    ((UpdateController*)update_controller_pid_z)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_z)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_z)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_z)->pid_data.id = block_id::PID_Z;
+
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.2254;//0.3831; 0.2254; //0.286708; //0.225 * 0.8; 
+    ((UpdateController*)update_controller_pid_roll)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kd = 0.0497; //0.0756; 0.0497; //0.056559; //0.04 * 0.8;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.id = block_id::PID_ROLL;
+
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kp = 0.2060;//0.2060;0.3642;//0.185;//0.275252; //0.225 * 0.8; 
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kd =  0.0420;//0.0420;0.0678;//0.037;// 0.051266; //0.04 * 0.8; 
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.id = block_id::PID_PITCH;
+
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 1.6*2;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.id = block_id::PID_YAW;
+
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.16;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.id = block_id::PID_YAW_RATE;
+
+    ((UpdateController*)update_controller_mrft_x)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_x)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_x)->mrft_data.bias = -0.03;
+    ((UpdateController*)update_controller_mrft_x)->mrft_data.id = block_id::MRFT_X;
+
+    ((UpdateController*)update_controller_mrft_y)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_y)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_y)->mrft_data.bias = 0.05;
+    ((UpdateController*)update_controller_mrft_y)->mrft_data.id = block_id::MRFT_Y;
+
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.relay_amp = 0.107461735722299; //0.1;
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.id = block_id::MRFT_Z;
+    
+    ((UpdateController*)update_controller_mrft_roll)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_roll)->mrft_data.relay_amp = 0.04;
+    ((UpdateController*)update_controller_mrft_roll)->mrft_data.bias = 0;
+    ((UpdateController*)update_controller_mrft_roll)->mrft_data.id = block_id::MRFT_ROLL;
+
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.relay_amp = 0.04;
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.bias = 0;
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.id = block_id::MRFT_PITCH;
+
+    ((UpdateController*)update_controller_mrft_yaw)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_yaw)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_yaw)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_yaw)->mrft_data.id = block_id::MRFT_YAW;
+
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
+
+    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.05; //TODO change for different hexa
+    ((UpdateController*)update_controller_sm_x)->sm_data.alpha2 = 0.1;
+    ((UpdateController*)update_controller_sm_x)->sm_data.h1 = 0.85;
+    ((UpdateController*)update_controller_sm_x)->sm_data.h2 = 2.0;
+    ((UpdateController*)update_controller_sm_x)->sm_data.id = block_id::SM_X;
+
+    ((UpdateController*)update_controller_sm_y)->sm_data.alpha1 = 0.05;
+    ((UpdateController*)update_controller_sm_y)->sm_data.alpha2 = 0.1;
+    ((UpdateController*)update_controller_sm_y)->sm_data.h1 = 0.85;
+    ((UpdateController*)update_controller_sm_y)->sm_data.h2 = 2.0;
+    ((UpdateController*)update_controller_sm_y)->sm_data.id = block_id::SM_Y;
+    #endif
+    #ifdef BIG_HEXA
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kp = 0.0949693434978209; //0.0471678657335786;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.ki = 0.00987536113123831; //0.293805309650484;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kd = 0.0;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.id = block_id::PID_Z;
+
+    ((UpdateController*)update_controller_pid_x)->pid_data.kp = 0.6534; //0.419085; //0.51639 * 0.8;
+    ((UpdateController*)update_controller_pid_x)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_x)->pid_data.kd = 0.3831; //0.181531; //0.21192 * 0.8;
+    ((UpdateController*)update_controller_pid_x)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_x)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_x)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_x)->pid_data.id = block_id::PID_X;
+
+    ((UpdateController*)update_controller_pid_y)->pid_data.kp = 0.7176;//0.547576;// 0.51639 * 0.8;
+    ((UpdateController*)update_controller_pid_y)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_y)->pid_data.kd =  0.4208;//0.294976;// * 0.8;
+    ((UpdateController*)update_controller_pid_y)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_y)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_y)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_y)->pid_data.id = block_id::PID_Y;
+
+    #ifdef MRFT
+    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.730936; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980*2;
+    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.190225; 
+    #endif
+    #ifdef TESTING
+    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 0.730936; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980*2; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.190225; 
+    #endif
+    #ifdef MRFT_OSAMA
+    ((UpdateController*)update_controller_pid_z)->pid_data.kp = 1.203771824957346; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.ki = 0.0980; 
+    ((UpdateController*)update_controller_pid_z)->pid_data.kd = 0.276192820872928; 
+    #endif
+    ((UpdateController*)update_controller_pid_z)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_z)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_z)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_z)->pid_data.id = block_id::PID_Z;
+
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.2121; //0.172195; //0.3302; //0.286708; //0.225 * 0.8; 
+    ((UpdateController*)update_controller_pid_roll)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kd = 0.0489; //0.042464; //0.0931; //0.056559; //0.04 * 0.8;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.id = block_id::PID_ROLL;
+
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kp = 0.2506;// 0.3360; //0.2811;//0.275252; //0.225 * 0.8; 
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kd =  0.0578;//0.0684; //0.053100; //0.0868;// 0.051266; //0.04 * 0.8; 
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.id = block_id::PID_PITCH;
+
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 1.6 * 2;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.id = block_id::PID_YAW;
+
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.16 * 2;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.ki = 0.0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kdd = 0.0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.anti_windup = 0;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.id = block_id::PID_YAW_RATE;
+
+    ((UpdateController*)update_controller_mrft_x)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_x)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_x)->mrft_data.bias = -0.04;
+    ((UpdateController*)update_controller_mrft_x)->mrft_data.id = block_id::MRFT_X;
+
+    ((UpdateController*)update_controller_mrft_y)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_y)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_y)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_y)->mrft_data.id = block_id::MRFT_Y;
+
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.relay_amp = 0.107461735722299; //0.174232919028851 / 2; //0.1;
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.id = block_id::MRFT_Z;
+    
+    ((UpdateController*)update_controller_mrft_roll)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_roll)->mrft_data.relay_amp = 0.04;
+    ((UpdateController*)update_controller_mrft_roll)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_roll)->mrft_data.id = block_id::MRFT_ROLL;
+
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.relay_amp = 0.04;
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.id = block_id::MRFT_PITCH;
+
+    ((UpdateController*)update_controller_mrft_yaw)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_yaw)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_yaw)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_yaw)->mrft_data.id = block_id::MRFT_YAW;
+
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.beta = -0.73;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.relay_amp = 0.1;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
+
+    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.035; //TODO change for different hexa
+    ((UpdateController*)update_controller_sm_x)->sm_data.alpha2 = 0.06;
+    ((UpdateController*)update_controller_sm_x)->sm_data.h1 = 1.0;
+    ((UpdateController*)update_controller_sm_x)->sm_data.h2 = 2.0;
+    ((UpdateController*)update_controller_sm_x)->sm_data.id = block_id::SM_X;
+
+    ((UpdateController*)update_controller_sm_y)->sm_data.alpha1 = 0.035 / 2;
+    ((UpdateController*)update_controller_sm_y)->sm_data.alpha2 = 0.06 / 2;
+    ((UpdateController*)update_controller_sm_y)->sm_data.h1 = 1.0;
+    ((UpdateController*)update_controller_sm_y)->sm_data.h2 = 2.0;
+    ((UpdateController*)update_controller_sm_y)->sm_data.id = block_id::SM_Y;
+    #endif
+    
     ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
     ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
 
@@ -454,6 +719,8 @@ int main(int argc, char** argv) {
     ((SwitchBlock*)switch_block_pid_to_sm_y)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Y, block_id::SM_Y);
     ((SwitchBlock*)switch_block_pid_to_mrft_pitch)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_PITCH, block_id::MRFT_PITCH);
     ((SwitchBlock*)switch_block_pid_to_mrft_roll)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
+    ((SwitchBlock*)switch_block_pid_to_mrft_x)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_X, block_id::MRFT_X);
+    ((SwitchBlock*)switch_block_pid_to_mrft_y)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Y, block_id::MRFT_Y);
     ((SwitchBlock*)switch_block_pid_to_mrft_z)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::MRFT_Z);
     
     
@@ -586,8 +853,10 @@ int main(int argc, char** argv) {
     #endif
 
     #ifdef MRFT
+    #ifdef FULL_ID
     FlightPipeline mrft_pipeline, z_pipeline, roll_pipeline, pitch_pipeline, inner_pipeline, y_pipeline, x_pipeline;
 
+    
     mrft_pipeline.addElement((FlightElement*)&wait_1s);
     mrft_pipeline.addElement((FlightElement*)update_controller_pid_x);
     mrft_pipeline.addElement((FlightElement*)update_controller_pid_y);
@@ -605,6 +874,9 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
     mrft_pipeline.addElement((FlightElement*)update_controller_sm_x);
     mrft_pipeline.addElement((FlightElement*)update_controller_sm_y);
+ 
+    mrft_pipeline.addElement((FlightElement*)set_height_offset);
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
 
     mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_x); 
     mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_y);  
@@ -612,8 +884,6 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_roll); 
     mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_pitch);  
 
-    mrft_pipeline.addElement((FlightElement*)set_height_offset);
-    mrft_pipeline.addElement((FlightElement*)&wait_1s);
     mrft_pipeline.addElement((FlightElement*)set_settings);
     mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint);
     mrft_pipeline.addElement((FlightElement*)flight_command);
@@ -624,7 +894,7 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)reset_z);
     mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
     mrft_pipeline.addElement((FlightElement*)flight_command);
-    mrft_pipeline.addElement((FlightElement*)land_set_settings);   
+    mrft_pipeline.addElement((FlightElement*)waypoint_set_settings);   
     mrft_pipeline.addElement((FlightElement*)&wait_100ms);
     mrft_pipeline.addElement((FlightElement*)absolute_origin_1m_height);
     mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_1);
@@ -634,6 +904,9 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_5);
     mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_6);
     mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_7);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)land_set_settings);   
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
     mrft_pipeline.addElement((FlightElement*)land_relative_waypoint);
     
     z_pipeline.addElement((FlightElement*)DNN_confirmation_z);
@@ -658,7 +931,205 @@ int main(int argc, char** argv) {
 
     x_pipeline.addElement((FlightElement*)DNN_confirmation_x);
     x_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_x);
+    #endif
+    #ifdef INNER_ONLY
+    FlightPipeline mrft_pipeline, z_pipeline, roll_pipeline, pitch_pipeline, inner_pipeline, y_pipeline, x_pipeline;
 
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_z);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_roll);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_z);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_roll);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
+    mrft_pipeline.addElement((FlightElement*)update_controller_sm_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_sm_y);
+
+    mrft_pipeline.addElement((FlightElement*)set_height_offset);
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_pipeline.addElement((FlightElement*)set_settings);
+    mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    mrft_pipeline.addElement((FlightElement*)arm_motors);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_x);
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_roll);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_y);
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_pitch);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)land_set_settings);   
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    mrft_pipeline.addElement((FlightElement*)land_relative_waypoint);
+    
+    z_pipeline.addElement((FlightElement*)DNN_confirmation_z);
+    z_pipeline.addElement((FlightElement*)update_controller_pid_z);
+    z_pipeline.addElement((FlightElement*)switch_block_mrftpid_to_pid_z);
+
+    roll_pipeline.addElement((FlightElement*)DNN_confirmation_roll);
+    roll_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_roll);
+    roll_pipeline.addElement((FlightElement*)switch_block_sm_to_pid_x);
+
+    pitch_pipeline.addElement((FlightElement*)DNN_confirmation_pitch);
+    pitch_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_pitch);
+    pitch_pipeline.addElement((FlightElement*)switch_block_sm_to_pid_y);
+
+    y_pipeline.addElement((FlightElement*)DNN_confirmation_y);
+    y_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_y);
+
+    x_pipeline.addElement((FlightElement*)DNN_confirmation_x);
+    x_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_x);
+    #endif
+    #ifdef OUTTER_ONLY
+    FlightPipeline mrft_pipeline, z_pipeline, roll_pipeline, pitch_pipeline, inner_pipeline, y_pipeline, x_pipeline;
+
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_z);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_roll);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_z);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_roll);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
+    mrft_pipeline.addElement((FlightElement*)update_controller_sm_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_sm_y);
+
+    mrft_pipeline.addElement((FlightElement*)set_height_offset);
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_pipeline.addElement((FlightElement*)set_settings);
+    mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    mrft_pipeline.addElement((FlightElement*)arm_motors);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_x);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_y);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)land_set_settings);   
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    mrft_pipeline.addElement((FlightElement*)land_relative_waypoint);
+    
+    // z_pipeline.addElement((FlightElement*)DNN_confirmation_z);
+    // z_pipeline.addElement((FlightElement*)update_controller_pid_z);
+    // z_pipeline.addElement((FlightElement*)switch_block_mrftpid_to_pid_z);
+
+    // roll_pipeline.addElement((FlightElement*)DNN_confirmation_roll);
+    // roll_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_roll);
+    // roll_pipeline.addElement((FlightElement*)switch_block_sm_to_pid_x);
+
+    // pitch_pipeline.addElement((FlightElement*)DNN_confirmation_pitch);
+    // pitch_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_pitch);
+    // pitch_pipeline.addElement((FlightElement*)switch_block_sm_to_pid_y);
+
+    y_pipeline.addElement((FlightElement*)DNN_confirmation_y);
+    y_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_y);
+
+    x_pipeline.addElement((FlightElement*)DNN_confirmation_x);
+    x_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_x);
+    #endif
+    #ifdef Z_ONLY
+    FlightPipeline mrft_pipeline, z_pipeline, roll_pipeline, pitch_pipeline, inner_pipeline, y_pipeline, x_pipeline;
+
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_mrft_Z_takeoff);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_roll);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
+    mrft_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_z);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_roll);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
+    mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
+    mrft_pipeline.addElement((FlightElement*)update_controller_sm_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_sm_y);
+
+    mrft_pipeline.addElement((FlightElement*)set_height_offset);
+    mrft_pipeline.addElement((FlightElement*)&wait_1s);
+
+    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_x); 
+    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_y);  
+    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrftpid_z);  
+    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_roll); 
+    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_pitch);  
+
+    mrft_pipeline.addElement((FlightElement*)set_settings);
+    mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    mrft_pipeline.addElement((FlightElement*)arm_motors);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
+    // mrft_pipeline.addElement((FlightElement*)flight_command);
+    // mrft_pipeline.addElement((FlightElement*)waypoint_set_settings);   
+    // mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    // mrft_pipeline.addElement((FlightElement*)absolute_origin_1m_height);
+    // mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_1);
+    // mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_2);
+    // mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_3);
+    // mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_4);
+    // mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_5);
+    // mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_6);
+    // mrft_pipeline.addElement((FlightElement*)absolute_waypoint_square_7);
+    mrft_pipeline.addElement((FlightElement*)flight_command);
+    mrft_pipeline.addElement((FlightElement*)land_set_settings);   
+    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    mrft_pipeline.addElement((FlightElement*)land_relative_waypoint);
+    
+    z_pipeline.addElement((FlightElement*)DNN_confirmation_z);
+    z_pipeline.addElement((FlightElement*)update_controller_pid_z);
+    z_pipeline.addElement((FlightElement*)switch_block_mrftpid_to_pid_z);
+
+    roll_pipeline.addElement((FlightElement*)DNN_confirmation_roll);
+    roll_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_roll);
+
+    pitch_pipeline.addElement((FlightElement*)DNN_confirmation_pitch);
+    pitch_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_pitch);
+
+    inner_pipeline.addElement((FlightElement*)DNN_confirmation_roll);
+    inner_pipeline.addElement((FlightElement*)DNN_confirmation_pitch);
+    inner_pipeline.addElement((FlightElement*)DNN_confirmation_z);
+    inner_pipeline.addElement((FlightElement*)dnn_keep_height_to_1_yaw_to_0_waypoint);
+    inner_pipeline.addElement((FlightElement*)switch_block_sm_to_mrft_x);
+    inner_pipeline.addElement((FlightElement*)switch_block_sm_to_mrft_y);
+
+    y_pipeline.addElement((FlightElement*)DNN_confirmation_y);
+    y_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_y);
+
+    x_pipeline.addElement((FlightElement*)DNN_confirmation_x);
+    x_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_x);
+    #endif
     #endif
 
     #ifdef MRFT_OSAMA
@@ -690,15 +1161,15 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)flight_command);
     mrft_pipeline.addElement((FlightElement*)reset_z);
     mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
-    mrft_pipeline.addElement((FlightElement*)flight_command);
-    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_z);   //S1.1
-    mrft_pipeline.addElement((FlightElement*)absolute_zero_Z_relative_waypoint); //S1.2
-    mrft_pipeline.addElement((FlightElement*)set_camera_enabled); //S1.3    
-    mrft_pipeline.addElement((FlightElement*)flight_command);
-    mrft_pipeline.addElement((FlightElement*)set_camera_disabled); //S2.3   
-    mrft_pipeline.addElement((FlightElement*)&wait_100ms);
-    mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint); //S2.2 
-    mrft_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_z); //S2.1 
+    // mrft_pipeline.addElement((FlightElement*)flight_command);
+    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_z);   //S1.1
+    // mrft_pipeline.addElement((FlightElement*)absolute_zero_Z_relative_waypoint); //S1.2
+    // mrft_pipeline.addElement((FlightElement*)set_camera_enabled); //S1.3    
+    // mrft_pipeline.addElement((FlightElement*)flight_command);
+    // mrft_pipeline.addElement((FlightElement*)set_camera_disabled); //S2.3   
+    // mrft_pipeline.addElement((FlightElement*)&wait_100ms);
+    // mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint); //S2.2 
+    // mrft_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_z); //S2.1 
     mrft_pipeline.addElement((FlightElement*)flight_command);
     mrft_pipeline.addElement((FlightElement*)land_relative_waypoint);
 
@@ -724,6 +1195,7 @@ int main(int argc, char** argv) {
     testing_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
     testing_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
     testing_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
+
     testing_pipeline.addElement((FlightElement*)set_height_offset);
     testing_pipeline.addElement((FlightElement*)&wait_1s);
     testing_pipeline.addElement((FlightElement*)set_settings);
@@ -736,19 +1208,21 @@ int main(int argc, char** argv) {
     testing_pipeline.addElement((FlightElement*)reset_z);
     testing_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
     testing_pipeline.addElement((FlightElement*)flight_command);
-    testing_pipeline.addElement((FlightElement*)dnn_keep_height_to_1_yaw_to_0_waypoint);
-    testing_pipeline.addElement((FlightElement*)flight_command);
+    testing_pipeline.addElement((FlightElement*)waypoint_set_settings);   
+    testing_pipeline.addElement((FlightElement*)&wait_100ms);
+    testing_pipeline.addElement((FlightElement*)absolute_origin_1m_height);
+    testing_pipeline.addElement((FlightElement*)absolute_waypoint_square_1);
     testing_pipeline.addElement((FlightElement*)absolute_waypoint_square_2);
-    testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)absolute_waypoint_square_3);
-    testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)absolute_waypoint_square_4);
-    testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)absolute_waypoint_square_5);
-    testing_pipeline.addElement((FlightElement*)flight_command);
     testing_pipeline.addElement((FlightElement*)absolute_waypoint_square_6);
+    testing_pipeline.addElement((FlightElement*)absolute_waypoint_square_7);
     testing_pipeline.addElement((FlightElement*)flight_command);
+    testing_pipeline.addElement((FlightElement*)land_set_settings);   
+    testing_pipeline.addElement((FlightElement*)&wait_100ms);
     testing_pipeline.addElement((FlightElement*)land_relative_waypoint);
+
     #endif
 
     #ifdef MISSION

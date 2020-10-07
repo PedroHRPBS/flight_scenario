@@ -56,6 +56,6 @@ void SetRelativeWaypoint::receiveMsgData(DataMessage* t_msg){
         _current_z = ((PositionMsg*) t_msg)->z;
     }
     else if(t_msg->getType() == msg_type::VECTOR3D){
-        _current_yaw = ((Vector3DMessage*) t_msg)->getData().z;
+        _current_yaw = ((Vector3DMessage*) t_msg)->getData().x;
     }
 }
