@@ -190,10 +190,10 @@ int main(int argc, char** argv) {
     #endif
     #endif
     #ifdef TESTING
-    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.5); //DNN this should be large
+    FlightElement* set_settings = new SetRestNormSettings(true, false, 0.5); 
     #endif
-    FlightElement* land_set_settings = new SetRestNormSettings(true, false, 0.15); //DNN this should be large
-    FlightElement* waypoint_set_settings = new SetRestNormSettings(true, false, 0.40); //DNN this should be large
+    FlightElement* land_set_settings = new SetRestNormSettings(true, false, 0.15);
+    FlightElement* waypoint_set_settings = new SetRestNormSettings(true, false, 0.40); 
 
     FlightElement* set_height_offset = new SetHeightOffset();
     FlightElement* set_camera_enabled = new SetCameraStatus(1);
@@ -201,7 +201,7 @@ int main(int argc, char** argv) {
     FlightElement* initial_pose_waypoint = new SetRelativeWaypoint(0., 0., 0., 0.);
     
     #ifdef MRFT
-    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 1.0, -10); //DNN: this is set to 1m height 
+    FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 1.0, -10);
     #endif
     #ifdef TESTING
     FlightElement* takeoff_relative_waypoint = new SetRelativeWaypoint(0., 0., 1.0, 0.);
@@ -464,7 +464,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.en_pv_derivation = 1;
-    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.id = block_id::PID_Z;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.id = block_id::PID_Z_ID;
 
     ((UpdateController*)update_controller_pid_x)->pid_data.kp = 0.696435; //0.51639 * 0.8;
     ((UpdateController*)update_controller_pid_x)->pid_data.ki = 0.0;
@@ -564,7 +564,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
 
-    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.05; //TODO change for different hexa
+    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.05; 
     ((UpdateController*)update_controller_sm_x)->sm_data.alpha2 = 0.1;
     ((UpdateController*)update_controller_sm_x)->sm_data.h1 = 0.85;
     ((UpdateController*)update_controller_sm_x)->sm_data.h2 = 2.0;

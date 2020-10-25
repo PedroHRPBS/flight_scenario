@@ -1,5 +1,6 @@
 #pragma once
 #include "common_types.hpp"
+#include "common_srv/common_types.hpp"
 #include "common_srv/DataMessage.hpp"
 class MessageToBlock: public DataMessage {
 
