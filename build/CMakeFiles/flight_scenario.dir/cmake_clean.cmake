@@ -38,7 +38,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o"
-  "CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o"
+  "CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/Timer.cpp.o"
   "CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o"

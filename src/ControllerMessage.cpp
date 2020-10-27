@@ -45,7 +45,7 @@ void ControllerMessage::setMRFTParam(MRFT_parameters t_param){
     
 }
 
-void ControllerMessage::setSMParam(SM_parameters t_param){
+void ControllerMessage::setSMParam(BB_parameters t_param){
 
     _sm_param.h1 = t_param.h1;
     _sm_param.h2 = t_param.h2;

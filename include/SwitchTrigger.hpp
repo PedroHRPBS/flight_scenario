@@ -2,16 +2,17 @@
 #include "FlightElement.hpp"
 #include "MessageToBlock.hpp"
 #include "SwitchBlockMsg_FS.hpp"
+#include "common_srv/IntegerMsg.hpp"
 
-class SwitchBlock : public FlightElement{
+class SwitchTrigger : public FlightElement{
 
 public:
 	block_id target_block;
-    SwitchBlockMsg_FS switch_msg;
+    IntegerMsg int_msg;
 
     void perform();
     void receiveMsgData(DataMessage* t_msg);
     
-    SwitchBlock();
-    ~SwitchBlock();
+    SwitchTrigger();
+    ~SwitchTrigger();
 };

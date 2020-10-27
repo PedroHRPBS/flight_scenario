@@ -4,7 +4,7 @@
 #include "ControllerMessage.hpp"
 #include "PID_values.hpp"
 #include "MRFT_values.hpp"
-#include "SM_values.hpp"
+#include "BB_values.hpp"
 
 class UpdateController : public FlightElement{
 private:
@@ -12,7 +12,7 @@ private:
 public:
     MRFT_parameters mrft_data;
 	PID_parameters pid_data;
-    SM_parameters sm_data;
+    BB_parameters bb_data;
 	block_id target_block;
 
     void perform();

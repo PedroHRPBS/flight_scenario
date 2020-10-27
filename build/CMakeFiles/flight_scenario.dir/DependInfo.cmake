@@ -43,7 +43,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SetRestNormSettings.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SimplePlaneCondition.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/StateMonitor.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o"
-  "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlock.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o"
+  "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchTrigger.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlockMsg_FS.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/Timer.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/Timer.cpp.o"
   "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/UpdateController.cpp" "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o"

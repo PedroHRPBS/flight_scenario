@@ -13,7 +13,7 @@
 #include "FlightScenario.hpp"
 #include "UpdateController.hpp"
 #include "ResetController.hpp"
-#include "SwitchBlock.hpp"
+#include "SwitchTrigger.hpp"
 #include "ROSUnit_Arm.hpp"
 #include "ROSUnit_UpdateController.hpp"
 #include "ROSUnit_PositionSubscriber.hpp"
@@ -45,9 +45,9 @@
 #undef BIG_HEXA
 #define SMALL_HEXA
 #undef QUAD
-#define FULL_ID
+#undef FULL_ID
 #undef INNER_ONLY
-#undef Z_ONLY
+#define Z_ONLY
 #undef OUTTER_ONLY
 
 int main(int argc, char** argv) {
@@ -114,6 +114,27 @@ int main(int argc, char** argv) {
     ROSUnit* rosunit_camera_status = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client,
                                                                             ROSUnit_msg_type::ROSUnit_Int,
                                                                             "set_camera_status");
+    ROSUnit* rosunit_ID_switch_x_trigger = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, 
+                                                                ROSUnit_msg_type::ROSUnit_Int,
+                                                                "/switch/ID_switch_x");
+    ROSUnit* rosunit_bounding_box_switch_x_trigger = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, 
+                                                                    ROSUnit_msg_type::ROSUnit_Int,
+                                                                    "/switch/bounding_box_switch_x");
+    ROSUnit* rosunit_ID_switch_roll_trigger = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, 
+                                                                    ROSUnit_msg_type::ROSUnit_Int,
+                                                                    "/switch/ID_switch_roll");
+    ROSUnit* rosunit_ID_switch_y_trigger = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, 
+                                                                    ROSUnit_msg_type::ROSUnit_Int,
+                                                                    "/switch/ID_switch_y");
+    ROSUnit* rosunit_bounding_box_switch_y_trigger = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, 
+                                                                    ROSUnit_msg_type::ROSUnit_Int,
+                                                                    "/switch/bounding_box_switch_y");
+    ROSUnit* rosunit_ID_switch_pitch_trigger = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, 
+                                                                    ROSUnit_msg_type::ROSUnit_Int,
+                                                                    "/switch/ID_switch_pitch");
+    ROSUnit* rosunit_ID_switch_z_trigger = ROSUnit_Factory_main.CreateROSUnit(ROSUnit_tx_rx_type::Client, 
+                                                                    ROSUnit_msg_type::ROSUnit_Int,
+                                                                    "/switch/ID_switch_z");
 
     //*****************Flight Elements*************
 
@@ -134,34 +155,26 @@ int main(int argc, char** argv) {
     FlightElement* update_controller_mrft_yaw = new UpdateController();
     FlightElement* update_controller_mrft_yaw_rate = new UpdateController();
 
-    FlightElement* update_controller_sm_x = new UpdateController();
-    FlightElement* update_controller_sm_y = new UpdateController();
+    FlightElement* update_controller_bb_x = new UpdateController();
+    FlightElement* update_controller_bb_y = new UpdateController();
 
-    FlightElement* switch_block_pid_mrft = new SwitchBlock();
-    FlightElement* switch_block_mrft_pid = new SwitchBlock();
-
-    FlightElement* switch_block_sm_to_pid_x = new SwitchBlock();
-    FlightElement* switch_block_sm_to_pid_y = new SwitchBlock();
-    FlightElement* switch_block_sm_to_mrft_x = new SwitchBlock();
-    FlightElement* switch_block_mrft_to_pid_x = new SwitchBlock();
-    FlightElement* switch_block_sm_to_mrft_y = new SwitchBlock();
-    FlightElement* switch_block_mrft_to_pid_y = new SwitchBlock();
-    FlightElement* switch_block_mrft_to_pid_z = new SwitchBlock();
-    FlightElement* switch_block_mrftpid_to_pid_z = new SwitchBlock();
-    FlightElement* switch_block_pid_to_mrftpid_z = new SwitchBlock();
-    FlightElement* switch_block_mrft_to_pid_roll = new SwitchBlock();
-    FlightElement* switch_block_mrft_to_pid_pitch = new SwitchBlock();
-    FlightElement* switch_block_pid_to_sm_x = new SwitchBlock();
-    FlightElement* switch_block_pid_to_sm_y = new SwitchBlock();
-    FlightElement* switch_block_pid_to_mrft_pitch = new SwitchBlock();
-    FlightElement* switch_block_pid_to_mrft_roll = new SwitchBlock();
-    FlightElement* switch_block_pid_to_mrft_z = new SwitchBlock();
-    FlightElement* switch_block_pid_to_mrft_x = new SwitchBlock();
-    FlightElement* switch_block_pid_to_mrft_y = new SwitchBlock();
-
-
+    FlightElement* ID_switch_x_trigger_ON = new SwitchTrigger();
+    FlightElement* ID_switch_x_trigger_OFF = new SwitchTrigger();
+    FlightElement* bounding_box_switch_x_trigger_ON = new SwitchTrigger();
+    FlightElement* bounding_box_switch_x_trigger_OFF = new SwitchTrigger();
+    FlightElement* ID_switch_roll_trigger_ON = new SwitchTrigger();
+    FlightElement* ID_switch_roll_trigger_OFF = new SwitchTrigger();
+    FlightElement* ID_switch_y_trigger_ON = new SwitchTrigger();
+    FlightElement* ID_switch_y_trigger_OFF = new SwitchTrigger();
+    FlightElement* bounding_box_switch_y_trigger_ON = new SwitchTrigger();
+    FlightElement* bounding_box_switch_y_trigger_OFF = new SwitchTrigger();
+    FlightElement* ID_switch_pitch_trigger_ON = new SwitchTrigger();
+    FlightElement* ID_switch_pitch_trigger_OFF = new SwitchTrigger();
+    FlightElement* ID_switch_z_trigger_ON = new SwitchTrigger();
+    FlightElement* ID_switch_z_trigger_OFF = new SwitchTrigger();
 
     FlightElement* reset_z = new ResetController();
+    FlightElement* reset_z_id = new ResetController();
     FlightElement* reset_x = new ResetController();
     
     FlightElement* arm_motors = new Arm();
@@ -237,8 +250,8 @@ int main(int argc, char** argv) {
     update_controller_mrft_yaw->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::mrft);
     update_controller_mrft_yaw_rate->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::mrft);
 
-    update_controller_sm_x->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::sm);
-    update_controller_sm_y->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::sm);
+    update_controller_bb_x->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::sm);
+    update_controller_bb_y->setEmittingChannel(ROSUnit_UpdateController::receiving_channels::sm);
 
     update_controller_pid_x->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
     update_controller_pid_y->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
@@ -257,8 +270,8 @@ int main(int argc, char** argv) {
     update_controller_mrft_yaw->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
     update_controller_mrft_yaw_rate->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
 
-    update_controller_sm_x->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
-    update_controller_sm_y->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_bb_x->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
+    update_controller_bb_y->addCallbackMsgReceiver((MsgReceiver*) ros_updt_ctr);
 
 
     rosunit_yaw_provider->addCallbackMsgReceiver((MsgReceiver*) initial_pose_waypoint);
@@ -274,30 +287,24 @@ int main(int argc, char** argv) {
 
     ros_pos_sub->addCallbackMsgReceiver((MsgReceiver*) set_height_offset);
 
-    switch_block_pid_mrft->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_mrft_pid->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_sm_to_pid_x->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_sm_to_pid_y->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_sm_to_mrft_x->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_mrft_to_pid_x->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_sm_to_mrft_y->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_mrft_to_pid_y->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_mrft_to_pid_z->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_mrftpid_to_pid_z->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_pid_to_mrftpid_z->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_mrft_to_pid_roll->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_mrft_to_pid_pitch->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_pid_to_sm_x->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_pid_to_sm_y->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_pid_to_mrft_pitch->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_pid_to_mrft_roll->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_pid_to_mrft_z->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_pid_to_mrft_x->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-    switch_block_pid_to_mrft_y->addCallbackMsgReceiver((MsgReceiver*) ros_switch_block);
-
+    ID_switch_x_trigger_ON->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_x_trigger);
+    ID_switch_x_trigger_OFF->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_x_trigger);
+    bounding_box_switch_x_trigger_ON->addCallbackMsgReceiver((MsgReceiver*) rosunit_bounding_box_switch_x_trigger);
+    bounding_box_switch_x_trigger_OFF->addCallbackMsgReceiver((MsgReceiver*) rosunit_bounding_box_switch_x_trigger);
+    ID_switch_roll_trigger_ON->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_roll_trigger);
+    ID_switch_roll_trigger_OFF->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_roll_trigger);
+    ID_switch_y_trigger_ON->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_y_trigger);
+    ID_switch_y_trigger_OFF->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_y_trigger);
+    bounding_box_switch_y_trigger_ON->addCallbackMsgReceiver((MsgReceiver*) rosunit_bounding_box_switch_y_trigger);
+    bounding_box_switch_y_trigger_OFF->addCallbackMsgReceiver((MsgReceiver*) rosunit_bounding_box_switch_y_trigger);
+    ID_switch_pitch_trigger_ON->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_pitch_trigger);
+    ID_switch_pitch_trigger_OFF->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_pitch_trigger);
+    ID_switch_z_trigger_ON->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_z_trigger);
+    ID_switch_z_trigger_OFF->addCallbackMsgReceiver((MsgReceiver*) rosunit_ID_switch_z_trigger);
 
 
     reset_z->addCallbackMsgReceiver((MsgReceiver*) ros_rst_ctr);
+    reset_z_id->addCallbackMsgReceiver((MsgReceiver*) ros_rst_ctr);
     reset_x->addCallbackMsgReceiver((MsgReceiver*) ros_rst_ctr);
 
     arm_motors->addCallbackMsgReceiver((MsgReceiver*) ros_arm_srv);
@@ -316,9 +323,6 @@ int main(int argc, char** argv) {
     set_settings->addCallbackMsgReceiver((MsgReceiver*)ros_restnorm_settings);
     land_set_settings->addCallbackMsgReceiver((MsgReceiver*)ros_restnorm_settings);
     waypoint_set_settings->addCallbackMsgReceiver((MsgReceiver*)ros_restnorm_settings);
-
-    
-
     
     set_camera_enabled->addCallbackMsgReceiver((MsgReceiver*) rosunit_camera_status);
     set_camera_disabled->addCallbackMsgReceiver((MsgReceiver*) rosunit_camera_status);
@@ -445,17 +449,17 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
 
-    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.035*2; //TODO change for different hexa
-    ((UpdateController*)update_controller_sm_x)->sm_data.alpha2 = 0.06*2;
-    ((UpdateController*)update_controller_sm_x)->sm_data.h1 = 1.0;
-    ((UpdateController*)update_controller_sm_x)->sm_data.h2 = 2.5;
-    ((UpdateController*)update_controller_sm_x)->sm_data.id = block_id::SM_X;
+    ((UpdateController*)update_controller_bb_x)->bb_data.alpha1 = 0.035*2; //TODO change for different hexa
+    ((UpdateController*)update_controller_bb_x)->bb_data.alpha2 = 0.06*2;
+    ((UpdateController*)update_controller_bb_x)->bb_data.h1 = 1.0;
+    ((UpdateController*)update_controller_bb_x)->bb_data.h2 = 2.5;
+    ((UpdateController*)update_controller_bb_x)->bb_data.id = block_id::BB_X;
 
-    ((UpdateController*)update_controller_sm_y)->sm_data.alpha1 = 0.035*2;
-    ((UpdateController*)update_controller_sm_y)->sm_data.alpha2 = 0.06*2;
-    ((UpdateController*)update_controller_sm_y)->sm_data.h1 = 1.0;
-    ((UpdateController*)update_controller_sm_y)->sm_data.h2 = 2.5;
-    ((UpdateController*)update_controller_sm_y)->sm_data.id = block_id::SM_Y;
+    ((UpdateController*)update_controller_bb_y)->bb_data.alpha1 = 0.035*2;
+    ((UpdateController*)update_controller_bb_y)->bb_data.alpha2 = 0.06*2;
+    ((UpdateController*)update_controller_bb_y)->bb_data.h1 = 1.0;
+    ((UpdateController*)update_controller_bb_y)->bb_data.h2 = 2.5;
+    ((UpdateController*)update_controller_bb_y)->bb_data.id = block_id::BB_Y;
     #endif
     #ifdef SMALL_HEXA
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kp = 0.0949693434978209;
@@ -464,6 +468,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.dt = 1./120;
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.id = block_id::PID_Z_ID;
 
     ((UpdateController*)update_controller_pid_x)->pid_data.kp = 0.696435; //0.51639 * 0.8;
@@ -472,6 +477,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_x)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_x)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_x)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_x)->pid_data.dt = 1./120;
     ((UpdateController*)update_controller_pid_x)->pid_data.id = block_id::PID_X;
 
     ((UpdateController*)update_controller_pid_y)->pid_data.kp = 0.568331;// 0.51639 * 0.8;
@@ -480,6 +486,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_y)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_y)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_y)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_y)->pid_data.dt = 1./120;
     ((UpdateController*)update_controller_pid_y)->pid_data.id = block_id::PID_Y;
 
     #ifdef MRFT
@@ -495,6 +502,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_z)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_z)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_z)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_z)->pid_data.dt = 1./120;
     ((UpdateController*)update_controller_pid_z)->pid_data.id = block_id::PID_Z;
 
     ((UpdateController*)update_controller_pid_roll)->pid_data.kp = 0.2254;//0.3831; 0.2254; //0.286708; //0.225 * 0.8; 
@@ -503,6 +511,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_roll)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_roll)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_roll)->pid_data.dt = 1./200;
     ((UpdateController*)update_controller_pid_roll)->pid_data.id = block_id::PID_ROLL;
 
     ((UpdateController*)update_controller_pid_pitch)->pid_data.kp = 0.2060;//0.2060;0.3642;//0.185;//0.275252; //0.225 * 0.8; 
@@ -511,6 +520,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_pitch)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_pitch)->pid_data.dt = 1./200;
     ((UpdateController*)update_controller_pid_pitch)->pid_data.id = block_id::PID_PITCH;
 
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kp = 1.6*2;
@@ -519,6 +529,7 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_yaw)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_yaw)->pid_data.dt = 1./120;
     ((UpdateController*)update_controller_pid_yaw)->pid_data.id = block_id::PID_YAW;
 
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kp = 0.16;
@@ -527,54 +538,62 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.kdd = 0.0;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.anti_windup = 0;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.en_pv_derivation = 1;
+    ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.dt = 1./200;
     ((UpdateController*)update_controller_pid_yaw_rate)->pid_data.id = block_id::PID_YAW_RATE;
 
     ((UpdateController*)update_controller_mrft_x)->mrft_data.beta = -0.73;
     ((UpdateController*)update_controller_mrft_x)->mrft_data.relay_amp = 0.1;
     ((UpdateController*)update_controller_mrft_x)->mrft_data.bias = -0.03;
+    ((UpdateController*)update_controller_mrft_x)->mrft_data.dt = 1./120;
     ((UpdateController*)update_controller_mrft_x)->mrft_data.id = block_id::MRFT_X;
 
     ((UpdateController*)update_controller_mrft_y)->mrft_data.beta = -0.73;
     ((UpdateController*)update_controller_mrft_y)->mrft_data.relay_amp = 0.1;
     ((UpdateController*)update_controller_mrft_y)->mrft_data.bias = 0.05;
+    ((UpdateController*)update_controller_mrft_y)->mrft_data.dt = 1./120;
     ((UpdateController*)update_controller_mrft_y)->mrft_data.id = block_id::MRFT_Y;
 
     ((UpdateController*)update_controller_mrft_z)->mrft_data.beta = -0.73;
     ((UpdateController*)update_controller_mrft_z)->mrft_data.relay_amp = 0.107461735722299; //0.1;
     ((UpdateController*)update_controller_mrft_z)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_z)->mrft_data.dt = 1./120;
     ((UpdateController*)update_controller_mrft_z)->mrft_data.id = block_id::MRFT_Z;
     
     ((UpdateController*)update_controller_mrft_roll)->mrft_data.beta = -0.73;
     ((UpdateController*)update_controller_mrft_roll)->mrft_data.relay_amp = 0.04;
     ((UpdateController*)update_controller_mrft_roll)->mrft_data.bias = 0;
+    ((UpdateController*)update_controller_mrft_roll)->mrft_data.dt = 1./200;
     ((UpdateController*)update_controller_mrft_roll)->mrft_data.id = block_id::MRFT_ROLL;
 
     ((UpdateController*)update_controller_mrft_pitch)->mrft_data.beta = -0.73;
     ((UpdateController*)update_controller_mrft_pitch)->mrft_data.relay_amp = 0.04;
     ((UpdateController*)update_controller_mrft_pitch)->mrft_data.bias = 0;
+    ((UpdateController*)update_controller_mrft_pitch)->mrft_data.dt = 1./200;
     ((UpdateController*)update_controller_mrft_pitch)->mrft_data.id = block_id::MRFT_PITCH;
 
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.beta = -0.73;
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.relay_amp = 0.1;
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_yaw)->mrft_data.dt = 1./120;
     ((UpdateController*)update_controller_mrft_yaw)->mrft_data.id = block_id::MRFT_YAW;
 
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.beta = -0.73;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.relay_amp = 0.1;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
+    ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.dt = 1./200;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
 
-    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.05; 
-    ((UpdateController*)update_controller_sm_x)->sm_data.alpha2 = 0.1;
-    ((UpdateController*)update_controller_sm_x)->sm_data.h1 = 0.85;
-    ((UpdateController*)update_controller_sm_x)->sm_data.h2 = 2.0;
-    ((UpdateController*)update_controller_sm_x)->sm_data.id = block_id::SM_X;
+    ((UpdateController*)update_controller_bb_x)->bb_data.alpha1 = 0.05; 
+    ((UpdateController*)update_controller_bb_x)->bb_data.alpha2 = 0.1;
+    ((UpdateController*)update_controller_bb_x)->bb_data.h1 = 0.85;
+    ((UpdateController*)update_controller_bb_x)->bb_data.h2 = 2.0;
+    ((UpdateController*)update_controller_bb_x)->bb_data.id = block_id::BB_X;
 
-    ((UpdateController*)update_controller_sm_y)->sm_data.alpha1 = 0.05;
-    ((UpdateController*)update_controller_sm_y)->sm_data.alpha2 = 0.1;
-    ((UpdateController*)update_controller_sm_y)->sm_data.h1 = 0.85;
-    ((UpdateController*)update_controller_sm_y)->sm_data.h2 = 2.0;
-    ((UpdateController*)update_controller_sm_y)->sm_data.id = block_id::SM_Y;
+    ((UpdateController*)update_controller_bb_y)->bb_data.alpha1 = 0.05;
+    ((UpdateController*)update_controller_bb_y)->bb_data.alpha2 = 0.1;
+    ((UpdateController*)update_controller_bb_y)->bb_data.h1 = 0.85;
+    ((UpdateController*)update_controller_bb_y)->bb_data.h2 = 2.0;
+    ((UpdateController*)update_controller_bb_y)->bb_data.id = block_id::BB_Y;
     #endif
     #ifdef BIG_HEXA
     ((UpdateController*)update_controller_pid_mrft_Z_takeoff)->pid_data.kp = 0.0949693434978209; //0.0471678657335786;
@@ -688,43 +707,36 @@ int main(int argc, char** argv) {
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.bias = 0.0;
     ((UpdateController*)update_controller_mrft_yaw_rate)->mrft_data.id = block_id::MRFT_YAW_RATE;
 
-    ((UpdateController*)update_controller_sm_x)->sm_data.alpha1 = 0.035; //TODO change for different hexa
-    ((UpdateController*)update_controller_sm_x)->sm_data.alpha2 = 0.06;
-    ((UpdateController*)update_controller_sm_x)->sm_data.h1 = 1.0;
-    ((UpdateController*)update_controller_sm_x)->sm_data.h2 = 2.0;
-    ((UpdateController*)update_controller_sm_x)->sm_data.id = block_id::SM_X;
+    ((UpdateController*)update_controller_bb_x)->bb_data.alpha1 = 0.035; //TODO change for different hexa
+    ((UpdateController*)update_controller_bb_x)->bb_data.alpha2 = 0.06;
+    ((UpdateController*)update_controller_bb_x)->bb_data.h1 = 1.0;
+    ((UpdateController*)update_controller_bb_x)->bb_data.h2 = 2.0;
+    ((UpdateController*)update_controller_bb_x)->bb_data.id = block_id::BB_X;
 
-    ((UpdateController*)update_controller_sm_y)->sm_data.alpha1 = 0.035 / 2;
-    ((UpdateController*)update_controller_sm_y)->sm_data.alpha2 = 0.06 / 2;
-    ((UpdateController*)update_controller_sm_y)->sm_data.h1 = 1.0;
-    ((UpdateController*)update_controller_sm_y)->sm_data.h2 = 2.0;
-    ((UpdateController*)update_controller_sm_y)->sm_data.id = block_id::SM_Y;
+    ((UpdateController*)update_controller_bb_y)->bb_data.alpha1 = 0.035 / 2;
+    ((UpdateController*)update_controller_bb_y)->bb_data.alpha2 = 0.06 / 2;
+    ((UpdateController*)update_controller_bb_y)->bb_data.h1 = 1.0;
+    ((UpdateController*)update_controller_bb_y)->bb_data.h2 = 2.0;
+    ((UpdateController*)update_controller_bb_y)->bb_data.id = block_id::BB_Y;
     #endif
     
-    ((SwitchBlock*)switch_block_pid_mrft)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
-    ((SwitchBlock*)switch_block_mrft_pid)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
+    ((SwitchTrigger*)ID_switch_x_trigger_ON)->int_msg.data = 1;
+    ((SwitchTrigger*)ID_switch_x_trigger_OFF)->int_msg.data = 0;
+    ((SwitchTrigger*)bounding_box_switch_x_trigger_ON)->int_msg.data = 1;
+    ((SwitchTrigger*)bounding_box_switch_x_trigger_OFF)->int_msg.data = 0;
+    ((SwitchTrigger*)ID_switch_roll_trigger_ON)->int_msg.data = 1;
+    ((SwitchTrigger*)ID_switch_roll_trigger_OFF)->int_msg.data = 0;
+    ((SwitchTrigger*)ID_switch_y_trigger_ON)->int_msg.data = 1;
+    ((SwitchTrigger*)ID_switch_y_trigger_OFF)->int_msg.data = 0;
+    ((SwitchTrigger*)bounding_box_switch_y_trigger_ON)->int_msg.data = 1;
+    ((SwitchTrigger*)bounding_box_switch_y_trigger_OFF)->int_msg.data = 0;
+    ((SwitchTrigger*)ID_switch_pitch_trigger_ON)->int_msg.data = 1;
+    ((SwitchTrigger*)ID_switch_pitch_trigger_OFF)->int_msg.data = 0;
+    ((SwitchTrigger*)ID_switch_z_trigger_ON)->int_msg.data = 1;
+    ((SwitchTrigger*)ID_switch_z_trigger_OFF)->int_msg.data = 0;
 
-    ((SwitchBlock*)switch_block_sm_to_mrft_x)->switch_msg.setSwitchBlockMsg_FS(block_id::SM_X, block_id::MRFT_X);
-    ((SwitchBlock*)switch_block_sm_to_pid_x)->switch_msg.setSwitchBlockMsg_FS(block_id::SM_X, block_id::PID_X);
-    ((SwitchBlock*)switch_block_sm_to_pid_y)->switch_msg.setSwitchBlockMsg_FS(block_id::SM_Y, block_id::PID_Y);
-    ((SwitchBlock*)switch_block_mrft_to_pid_x)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_X, block_id::PID_X);
-    ((SwitchBlock*)switch_block_sm_to_mrft_y)->switch_msg.setSwitchBlockMsg_FS(block_id::SM_Y, block_id::MRFT_Y);
-    ((SwitchBlock*)switch_block_mrft_to_pid_y)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_Y, block_id::PID_Y);
-    ((SwitchBlock*)switch_block_mrft_to_pid_z)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_Z, block_id::PID_Z);
-    ((SwitchBlock*)switch_block_mrftpid_to_pid_z)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_MRFT_Z, block_id::PID_Z);
-    ((SwitchBlock*)switch_block_pid_to_mrftpid_z)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::PID_MRFT_Z);
-    ((SwitchBlock*)switch_block_mrft_to_pid_roll)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_ROLL, block_id::PID_ROLL);
-    ((SwitchBlock*)switch_block_mrft_to_pid_pitch)->switch_msg.setSwitchBlockMsg_FS(block_id::MRFT_PITCH, block_id::PID_PITCH);
-    ((SwitchBlock*)switch_block_pid_to_sm_x)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_X, block_id::SM_X);
-    ((SwitchBlock*)switch_block_pid_to_sm_y)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Y, block_id::SM_Y);
-    ((SwitchBlock*)switch_block_pid_to_mrft_pitch)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_PITCH, block_id::MRFT_PITCH);
-    ((SwitchBlock*)switch_block_pid_to_mrft_roll)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_ROLL, block_id::MRFT_ROLL);
-    ((SwitchBlock*)switch_block_pid_to_mrft_x)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_X, block_id::MRFT_X);
-    ((SwitchBlock*)switch_block_pid_to_mrft_y)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Y, block_id::MRFT_Y);
-    ((SwitchBlock*)switch_block_pid_to_mrft_z)->switch_msg.setSwitchBlockMsg_FS(block_id::PID_Z, block_id::MRFT_Z);
-    
-    
     ((ResetController*)reset_z)->target_block = block_id::PID_Z;
+    ((ResetController*)reset_z_id)->target_block = block_id::PID_Z_ID;
     ((ResetController*)reset_x)->target_block = block_id::PID_X;
 
     Wait wait_1s;
@@ -789,8 +801,8 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_x);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_y);
 
     mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_x); 
     mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_y);  
@@ -872,8 +884,8 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_x);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_y);
  
     mrft_pipeline.addElement((FlightElement*)set_height_offset);
     mrft_pipeline.addElement((FlightElement*)&wait_1s);
@@ -950,8 +962,8 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_x);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_y);
 
     mrft_pipeline.addElement((FlightElement*)set_height_offset);
     mrft_pipeline.addElement((FlightElement*)&wait_1s);
@@ -1011,8 +1023,8 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_x);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_y);
 
     mrft_pipeline.addElement((FlightElement*)set_height_offset);
     mrft_pipeline.addElement((FlightElement*)&wait_1s);
@@ -1070,26 +1082,26 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_pitch);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw);
     mrft_pipeline.addElement((FlightElement*)update_controller_mrft_yaw_rate);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_x);
-    mrft_pipeline.addElement((FlightElement*)update_controller_sm_y);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_x);
+    mrft_pipeline.addElement((FlightElement*)update_controller_bb_y);
 
     mrft_pipeline.addElement((FlightElement*)set_height_offset);
     mrft_pipeline.addElement((FlightElement*)&wait_1s);
 
-    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_x); 
-    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_sm_y);  
-    mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrftpid_z);  
-    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_roll); 
-    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_to_mrft_pitch);  
+    // mrft_pipeline.addElement((FlightElement*)bounding_box_switch_x_trigger_OFF); 
+    // mrft_pipeline.addElement((FlightElement*)bounding_box_switch_y_trigger_OFF);  
+    mrft_pipeline.addElement((FlightElement*)ID_switch_z_trigger_OFF);  
+    // mrft_pipeline.addElement((FlightElement*)ID_switch_roll_trigger_OFF); 
+    // mrft_pipeline.addElement((FlightElement*)ID_switch_pitch_trigger_OFF);  
 
     mrft_pipeline.addElement((FlightElement*)set_settings);
     mrft_pipeline.addElement((FlightElement*)initial_pose_waypoint);
     mrft_pipeline.addElement((FlightElement*)flight_command);
-    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)reset_z_id);
     mrft_pipeline.addElement((FlightElement*)&wait_100ms);
     mrft_pipeline.addElement((FlightElement*)arm_motors);
     mrft_pipeline.addElement((FlightElement*)flight_command);
-    mrft_pipeline.addElement((FlightElement*)reset_z);
+    mrft_pipeline.addElement((FlightElement*)reset_z_id);
     mrft_pipeline.addElement((FlightElement*)takeoff_relative_waypoint);
     // mrft_pipeline.addElement((FlightElement*)flight_command);
     // mrft_pipeline.addElement((FlightElement*)waypoint_set_settings);   
@@ -1109,26 +1121,26 @@ int main(int argc, char** argv) {
     
     z_pipeline.addElement((FlightElement*)DNN_confirmation_z);
     z_pipeline.addElement((FlightElement*)update_controller_pid_z);
-    z_pipeline.addElement((FlightElement*)switch_block_mrftpid_to_pid_z);
+    z_pipeline.addElement((FlightElement*)ID_switch_x_trigger_ON);
 
     roll_pipeline.addElement((FlightElement*)DNN_confirmation_roll);
-    roll_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_roll);
+    roll_pipeline.addElement((FlightElement*)ID_switch_roll_trigger_ON);
 
     pitch_pipeline.addElement((FlightElement*)DNN_confirmation_pitch);
-    pitch_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_pitch);
+    pitch_pipeline.addElement((FlightElement*)ID_switch_pitch_trigger_ON);
 
     inner_pipeline.addElement((FlightElement*)DNN_confirmation_roll);
     inner_pipeline.addElement((FlightElement*)DNN_confirmation_pitch);
     inner_pipeline.addElement((FlightElement*)DNN_confirmation_z);
     inner_pipeline.addElement((FlightElement*)dnn_keep_height_to_1_yaw_to_0_waypoint);
-    inner_pipeline.addElement((FlightElement*)switch_block_sm_to_mrft_x);
-    inner_pipeline.addElement((FlightElement*)switch_block_sm_to_mrft_y);
+    inner_pipeline.addElement((FlightElement*)bounding_box_switch_x_trigger_ON);
+    inner_pipeline.addElement((FlightElement*)bounding_box_switch_y_trigger_ON);
 
     y_pipeline.addElement((FlightElement*)DNN_confirmation_y);
-    y_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_y);
+    y_pipeline.addElement((FlightElement*)ID_switch_y_trigger_ON);
 
     x_pipeline.addElement((FlightElement*)DNN_confirmation_x);
-    x_pipeline.addElement((FlightElement*)switch_block_mrft_to_pid_x);
+    x_pipeline.addElement((FlightElement*)ID_switch_x_trigger_ON);
     #endif
     #endif
 
@@ -1174,7 +1186,7 @@ int main(int argc, char** argv) {
     mrft_pipeline.addElement((FlightElement*)land_relative_waypoint);
 
     // mrft_pipeline.addElement((FlightElement*)flight_command);
-    // mrft_pipeline.addElement((FlightElement*)switch_block_pid_mrft);
+    // mrft_pipeline.addElement((FlightElement*)ID_switch_x_trigger_ON);
     // mrft_pipeline.addElement((FlightElement*)update_controller_pid_mrft_Z_takeoff);
     // mrft_pipeline.addElement((FlightElement*)flight_command);
     // mrft_pipeline.addElement((FlightElement*)switch_block_mrft_pid);
@@ -1268,8 +1280,8 @@ int main(int argc, char** argv) {
     FlightPipeline mrft_takeoff_dnn_pipeline, x_pipeline, y_pipeline, z_pipeline, roll_pipeline, pitch_pipeline;
 
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)&wait_1s);
-    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_sm_x);
-    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_sm_y);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_bb_x);
+    mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_bb_y);
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_pid_z); //Both need to be updated, because together they become one
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_mrft_z);
     mrft_takeoff_dnn_pipeline.addElement((FlightElement*)update_controller_mrft_roll);

@@ -1831,32 +1831,32 @@ src/StateMonitor.cpp.s:
 	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.s
 .PHONY : src/StateMonitor.cpp.s
 
-src/SwitchBlock.o: src/SwitchBlock.cpp.o
+src/SwitchTrigger.o: src/SwitchTrigger.cpp.o
 
-.PHONY : src/SwitchBlock.o
+.PHONY : src/SwitchTrigger.o
 
 # target to build an object file
-src/SwitchBlock.cpp.o:
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o
-.PHONY : src/SwitchBlock.cpp.o
+src/SwitchTrigger.cpp.o:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o
+.PHONY : src/SwitchTrigger.cpp.o
 
-src/SwitchBlock.i: src/SwitchBlock.cpp.i
+src/SwitchTrigger.i: src/SwitchTrigger.cpp.i
 
-.PHONY : src/SwitchBlock.i
+.PHONY : src/SwitchTrigger.i
 
 # target to preprocess a source file
-src/SwitchBlock.cpp.i:
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.i
-.PHONY : src/SwitchBlock.cpp.i
+src/SwitchTrigger.cpp.i:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.i
+.PHONY : src/SwitchTrigger.cpp.i
 
-src/SwitchBlock.s: src/SwitchBlock.cpp.s
+src/SwitchTrigger.s: src/SwitchTrigger.cpp.s
 
-.PHONY : src/SwitchBlock.s
+.PHONY : src/SwitchTrigger.s
 
 # target to generate assembly for a file
-src/SwitchBlock.cpp.s:
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.s
-.PHONY : src/SwitchBlock.cpp.s
+src/SwitchTrigger.cpp.s:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.s
+.PHONY : src/SwitchTrigger.cpp.s
 
 src/SwitchBlockMsg_FS.o: src/SwitchBlockMsg_FS.cpp.o
 
@@ -2251,9 +2251,9 @@ help:
 	@echo "... src/StateMonitor.o"
 	@echo "... src/StateMonitor.i"
 	@echo "... src/StateMonitor.s"
-	@echo "... src/SwitchBlock.o"
-	@echo "... src/SwitchBlock.i"
-	@echo "... src/SwitchBlock.s"
+	@echo "... src/SwitchTrigger.o"
+	@echo "... src/SwitchTrigger.i"
+	@echo "... src/SwitchTrigger.s"
 	@echo "... src/SwitchBlockMsg_FS.o"
 	@echo "... src/SwitchBlockMsg_FS.i"
 	@echo "... src/SwitchBlockMsg_FS.s"

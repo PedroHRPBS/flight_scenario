@@ -993,28 +993,28 @@ CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o.provides: CMakeFiles/fligh
 CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o.provides.build: CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o
 
 
-CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
-CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o: ../src/SwitchBlock.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o"
-	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlock.cpp
+CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
+CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o: ../src/SwitchTrigger.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o"
+	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchTrigger.cpp
 
-CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.i"
-	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlock.cpp > CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.i
+CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.i"
+	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchTrigger.cpp > CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.i
 
-CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.s"
-	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlock.cpp -o CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.s
+CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.s"
+	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchTrigger.cpp -o CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.s
 
-CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o.requires:
+CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o.requires:
 
-.PHONY : CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o.requires
+.PHONY : CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o.requires
 
-CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o.provides: CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o.requires
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o.provides.build
-.PHONY : CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o.provides
+CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o.provides: CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o.requires
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o.provides.build
+.PHONY : CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o.provides
 
-CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o.provides.build: CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o
+CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o.provides.build: CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o
 
 
 CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o: CMakeFiles/flight_scenario.dir/flags.make
@@ -1250,7 +1250,7 @@ flight_scenario_OBJECTS = \
 "CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o" \
-"CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o" \
+"CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/Timer.cpp.o" \
 "CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o" \
@@ -1302,7 +1302,7 @@ devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/Se
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o
-devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o
+devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/Timer.cpp.o
 devel/lib/flight_scenario/flight_scenario: CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o
@@ -1379,7 +1379,7 @@ CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SetR
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SetRestNormSettings.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SimplePlaneCondition.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.o.requires
-CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SwitchBlock.cpp.o.requires
+CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/Timer.cpp.o.requires
 CMakeFiles/flight_scenario.dir/requires: CMakeFiles/flight_scenario.dir/src/UpdateController.cpp.o.requires
