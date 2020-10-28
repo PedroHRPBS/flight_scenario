@@ -1,13 +1,13 @@
-#pragma once
-#include <chrono>
+// #pragma once
+// #include <chrono>
 
-class Timer{
+// class Timer{
     
-    private:
-    std::chrono::time_point<std::chrono::system_clock> start;
+//     private:
+//     std::chrono::time_point<std::chrono::system_clock> start;
 
-    public:
-    void tick();
-    int tockMicroSeconds();
-    int tockMilliSeconds();
-};
+//     public:
+//     void tick();
+//     int tockMicroSeconds();
+//     int tockMilliSeconds();
+// };

@@ -22,7 +22,8 @@ bool ROSUnit_FlightCommand::callbackFlightCommand(flight_scenario::Flight_Comman
     data = req.flight_command_id;
 
     _command_msg.setFlightCommand(data);
-    _instance_ptr->emitMsgUnicastDefault((DataMessage*) &_command_msg);
+    //TODO fix
+    // _instance_ptr->emitMsgUnicastDefault((DataMessage*) &_command_msg);
     
     return true;
 }
