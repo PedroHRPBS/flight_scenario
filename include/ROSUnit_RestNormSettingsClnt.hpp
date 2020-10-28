@@ -6,10 +6,13 @@
 class ROSUnit_RestNormSettingsClnt :  public ROSUnit{
 
     private:
+        Port* _input_port_0;
         ros::ServiceClient _clnt_rest_norm_settings;
         
     public:
-        void receiveMsgData(DataMessage* t_msg);  
+        enum ports_id {IP_0};
+        void process(DataMessage* t_msg, Port* t_port);
+
         ROSUnit_RestNormSettingsClnt(ros::NodeHandle&);
         ~ROSUnit_RestNormSettingsClnt();
 };

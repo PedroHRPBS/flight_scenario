@@ -7,7 +7,8 @@
 // }
 
 Arm::Arm() {
-
+    _output_port_0 = new OutputPort(ports_id::OP_0, this);
+    _ports = {_output_port_0};
 }
 
 Arm::~Arm() {
@@ -18,9 +19,5 @@ void Arm::perform()
 {
     ArmDataMessage _arm_message;
     _arm_message.isArmed = true;
-    this->emitMsgUnicastDefault((DataMessage*)&_arm_message);
-}
-
-void Arm::receiveMsgData(DataMessage* t_msg){
-
+    this->_output_port_0->receiveMsgData((DataMessage*)&_arm_message);
 }

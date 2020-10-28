@@ -3,22 +3,25 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/opt/ros/kinetic/include/**",
+                "/home/captcrunch/catkin_ws/devel/include/*",
+                "/home/captcrunch/catkin_ws/src/common_srv/include/**",
+                "/home/captcrunch/catkin_ws/src/common_srv/src/**",
+                "/home/captcrunch/catkin_ws/src/flight_controller_temp/src/**",
+                "/home/captcrunch/catkin_ws/src/flight_controller_temp/include/**",
+                "/home/captcrunch/catkin_ws/src/flight_scenario/src/**",
+                "/home/captcrunch/catkin_ws/src/flight_scenario/include/**"
             ],
-            "compilerPath": "/usr/bin/clang",
+            "compilerPath": "/usr/bin/gcc",
             "cStandard": "c11",
-            "intelliSenseMode": "clang-x64",
-            "defines": [],
-            "compilerArgs": [],
             "cppStandard": "c++17",
-            "configurationProvider": "ms-vscode.cmake-tools",
             "browse": {
                 "path": [
                     "${workspaceFolder}/**"
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            }
+                ]
         }
+    }
     ],
     "version": 4
 }
