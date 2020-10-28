@@ -18,7 +18,6 @@
 #include "ROSUnit_UpdateController.hpp"
 #include "ROSUnit_PositionSubscriber.hpp"
 #include "ROSUnit_ResetController.hpp"
-#include "ROSUnit_SwitchBlock.hpp"
 #include "ROSUnit_OrientationSubscriber.hpp"
 #include "ROSUnit_FlightCommand.hpp"
 #include "FlightCommand.hpp"
@@ -1381,4 +1380,5 @@ int main(int argc, char** argv) {
     while(ros::ok){
         ros::spinOnce();
     }
+    return 0;
 }

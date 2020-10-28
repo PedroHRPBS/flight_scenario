@@ -1,6 +1,8 @@
 #include "ROSUnit_RestNormSettingsClnt.hpp"
 
 ROSUnit_RestNormSettingsClnt::ROSUnit_RestNormSettingsClnt(ros::NodeHandle& t_main_handler) : ROSUnit(t_main_handler) {
+    _input_port_0 = new InputPort(ports_id::IP_0, this);
+    _ports = {_input_port_0};
     _clnt_rest_norm_settings = t_main_handler.serviceClient<flight_controller::Restricted_Norm_Settings>("restricted_norm_settings");
 }   
 
@@ -8,10 +10,10 @@ ROSUnit_RestNormSettingsClnt::~ROSUnit_RestNormSettingsClnt() {
 
 }
 
-void ROSUnit_RestNormSettingsClnt::receiveMsgData(DataMessage* t_msg){
+void ROSUnit_RestNormSettingsClnt::process(DataMessage* t_msg, Port* t_port) {
     
-    if(t_msg->getType() == msg_type::RESTNORMREF_SETTINGS){
-
+    if(t_port->getID() == ports_id::IP_0)
+    {
         RestrictedNormRefSettingsMsg* _settings_msg = (RestrictedNormRefSettingsMsg*)t_msg;
         
         flight_controller::Restricted_Norm_Settings srv;
@@ -31,5 +33,4 @@ void ROSUnit_RestNormSettingsClnt::receiveMsgData(DataMessage* t_msg){
             ROS_ERROR("Failed to call service /switch_block");
         }
     }
-    
 }

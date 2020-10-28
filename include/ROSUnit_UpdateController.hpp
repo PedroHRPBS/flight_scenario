@@ -11,15 +11,18 @@
 class ROSUnit_UpdateController : public ROSUnit {
 
 private:
+    Port* _input_port_0;
+    Port* _input_port_1;
+    Port* _input_port_2;
     ros::ServiceClient _update_controller_pid_client;
     ros::ServiceClient _update_controller_mrft_client;
     ros::ServiceClient _update_controller_sm_client;
 
 
 public:
+    enum ports_id {IP_0_PID, IP_1_MRFT, IP_2_SM};
     enum receiving_channels {pid, mrft, sm};
-    void receiveMsgData(DataMessage* t_msg);
-    void receiveMsgData(DataMessage* t_msg, int t_channel);
+    void process(DataMessage* t_msg, Port* t_port); 
 
     ROSUnit_UpdateController(ros::NodeHandle&);
     ~ROSUnit_UpdateController();

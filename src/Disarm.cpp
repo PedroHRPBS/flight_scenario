@@ -7,7 +7,8 @@
 
 // }
 Disarm::Disarm(){
-    
+    _output_port_0 = new OutputPort(ports_id::OP_0, this);
+    _ports = {_output_port_0};
 }
 
 Disarm::~Disarm(){
@@ -18,11 +19,5 @@ void Disarm::perform(){
     
     ArmDataMessage _arm_message;
     _arm_message.isArmed = false;
-    this->emitMsgUnicastDefault((DataMessage*)&_arm_message);
-
+    this->_output_port_0->receiveMsgData((DataMessage*)&_arm_message);
 }
-void Disarm::receiveMsgData(DataMessage* t_msg){
-
-}
-
-

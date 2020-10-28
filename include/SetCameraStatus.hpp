@@ -10,8 +10,6 @@ private:
 public:
 
     void perform();
-
-    void receiveMsgData(DataMessage* t_msg);
     
     SetCameraStatus(int);
     ~SetCameraStatus();

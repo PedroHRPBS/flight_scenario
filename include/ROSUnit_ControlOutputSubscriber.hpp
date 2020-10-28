@@ -6,12 +6,15 @@
 class ROSUnit_ControlOutputSubscriber : public ROSUnit{
 
 private:
+
+    static Port* _output_port_0;
     ros::Subscriber _sub_controloutput;
     static ROSUnit_ControlOutputSubscriber* _instance_ptr;
     static void callbackControlOutput(const std_msgs::Float64MultiArray& msg);
 
 public:
-    void receiveMsgData(DataMessage*);
+    enum ports_id {OP_0};
+    void process(DataMessage* t_msg, Port* t_port) {};
     ROSUnit_ControlOutputSubscriber(ros::NodeHandle&);
     ~ROSUnit_ControlOutputSubscriber();
 

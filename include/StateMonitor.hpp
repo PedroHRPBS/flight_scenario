@@ -21,7 +21,7 @@ private:
 public:
 
     void perform();
-    void receiveMsgData(DataMessage*);
+    //void receiveMsgData(DataMessage*);
 
     StateMonitor();
     ~StateMonitor();

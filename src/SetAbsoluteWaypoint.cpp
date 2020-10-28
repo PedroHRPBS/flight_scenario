@@ -5,6 +5,8 @@ SetAbsoluteWaypoint::SetAbsoluteWaypoint(float t_x, float t_y, float t_z, float 
     _waypoint_y = t_y;
     _waypoint_z = t_z;
     _waypoint_yaw = t_yaw;
+    _output_port_0 = new OutputPort(ports_id::OP_0, this);
+    _ports = {_output_port_0};
 }
 
 SetAbsoluteWaypoint::~SetAbsoluteWaypoint() {
@@ -25,9 +27,5 @@ void SetAbsoluteWaypoint::perform(){
     
     waypoint_msg.p.poses.push_back(waypoint);
 
-    this->emitMsgUnicastDefault((DataMessage*)&waypoint_msg);
-}
-
-void SetAbsoluteWaypoint::receiveMsgData(DataMessage* t_msg){
-
+    this->_output_port_0->receiveMsgData((DataMessage*)&waypoint_msg);
 }

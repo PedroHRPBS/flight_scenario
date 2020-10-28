@@ -28,7 +28,8 @@ void StateMonitor::perform() {
 
         if(MainMissionStateManager.getMissionState() != old_state){
             int_msg.data = (int)(MainMissionStateManager.getMissionState());
-            this->emitMsgUnicastDefault((DataMessage*) &int_msg);
+            // TODO: fiix
+            //this->emitMsgUnicastDefault((DataMessage*) &int_msg);
             old_state = MainMissionStateManager.getMissionState();
         }
         
@@ -37,25 +38,25 @@ void StateMonitor::perform() {
     }
 }
 
-void StateMonitor::receiveMsgData(DataMessage* t_msg){
+// void StateMonitor::receiveMsgData(DataMessage* t_msg){
+//     TODO: fix
+//     if(t_msg->getType() == msg_type::INFO){
+//         InfoMsg* info_msg = (InfoMsg*)t_msg;
 
-    if(t_msg->getType() == msg_type::INFO){
-        InfoMsg* info_msg = (InfoMsg*)t_msg;
+//         _number_of_waypoints = info_msg->number_of_waypoints;
+//         _armed = info_msg->armed;
 
-        _number_of_waypoints = info_msg->number_of_waypoints;
-        _armed = info_msg->armed;
+//     }else if(t_msg->getType() == msg_type::POSITION){
+//         PositionMsg* pos_msg = (PositionMsg*)t_msg;
 
-    }else if(t_msg->getType() == msg_type::POSITION){
-        PositionMsg* pos_msg = (PositionMsg*)t_msg;
+//         _altitude = pos_msg->z;
 
-        _altitude = pos_msg->z;
+//     }else if(t_msg->getType() == msg_type::ERROR){
+//         ErrorMsg* error_msg = (ErrorMsg*)t_msg;
 
-    }else if(t_msg->getType() == msg_type::ERROR){
-        ErrorMsg* error_msg = (ErrorMsg*)t_msg;
+//         if(error_msg->error){
+//             _error++;
+//         }
 
-        if(error_msg->error){
-            _error++;
-        }
-
-    }
-}
+//     }
+// }

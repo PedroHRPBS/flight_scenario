@@ -9,7 +9,7 @@ public:
 	int wait_time_ms;
     void perform();
 
-    void receiveMsgData(DataMessage* t_msg);
+    void process(DataMessage* t_msg, Port* t_port) {};
     
     Wait();
     ~Wait();
