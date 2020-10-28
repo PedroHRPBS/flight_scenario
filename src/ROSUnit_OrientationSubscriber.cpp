@@ -21,8 +21,8 @@ void ROSUnit_OrientationSubscriber::callbackOrientation(const geometry_msgs::Poi
     tmp.z = msg.z;
 
     orientation_msg.setVector3DMessage(tmp);
-
-    _instance_ptr->emitMsgUnicastDefault((DataMessage*) &orientation_msg); 
+    //TODO fix
+    // _instance_ptr->emitMsgUnicastDefault((DataMessage*) &orientation_msg); 
 
 }
 

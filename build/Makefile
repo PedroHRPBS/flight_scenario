@@ -1480,33 +1480,6 @@ src/ROSUnit_RestNormSettingsClnt.cpp.s:
 	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/ROSUnit_RestNormSettingsClnt.cpp.s
 .PHONY : src/ROSUnit_RestNormSettingsClnt.cpp.s
 
-src/ROSUnit_SwitchBlock.o: src/ROSUnit_SwitchBlock.cpp.o
-
-.PHONY : src/ROSUnit_SwitchBlock.o
-
-# target to build an object file
-src/ROSUnit_SwitchBlock.cpp.o:
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/ROSUnit_SwitchBlock.cpp.o
-.PHONY : src/ROSUnit_SwitchBlock.cpp.o
-
-src/ROSUnit_SwitchBlock.i: src/ROSUnit_SwitchBlock.cpp.i
-
-.PHONY : src/ROSUnit_SwitchBlock.i
-
-# target to preprocess a source file
-src/ROSUnit_SwitchBlock.cpp.i:
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/ROSUnit_SwitchBlock.cpp.i
-.PHONY : src/ROSUnit_SwitchBlock.cpp.i
-
-src/ROSUnit_SwitchBlock.s: src/ROSUnit_SwitchBlock.cpp.s
-
-.PHONY : src/ROSUnit_SwitchBlock.s
-
-# target to generate assembly for a file
-src/ROSUnit_SwitchBlock.cpp.s:
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/ROSUnit_SwitchBlock.cpp.s
-.PHONY : src/ROSUnit_SwitchBlock.cpp.s
-
 src/ROSUnit_UpdateController.o: src/ROSUnit_UpdateController.cpp.o
 
 .PHONY : src/ROSUnit_UpdateController.o
@@ -1831,33 +1804,6 @@ src/StateMonitor.cpp.s:
 	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/StateMonitor.cpp.s
 .PHONY : src/StateMonitor.cpp.s
 
-src/SwitchTrigger.o: src/SwitchTrigger.cpp.o
-
-.PHONY : src/SwitchTrigger.o
-
-# target to build an object file
-src/SwitchTrigger.cpp.o:
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o
-.PHONY : src/SwitchTrigger.cpp.o
-
-src/SwitchTrigger.i: src/SwitchTrigger.cpp.i
-
-.PHONY : src/SwitchTrigger.i
-
-# target to preprocess a source file
-src/SwitchTrigger.cpp.i:
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.i
-.PHONY : src/SwitchTrigger.cpp.i
-
-src/SwitchTrigger.s: src/SwitchTrigger.cpp.s
-
-.PHONY : src/SwitchTrigger.s
-
-# target to generate assembly for a file
-src/SwitchTrigger.cpp.s:
-	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.s
-.PHONY : src/SwitchTrigger.cpp.s
-
 src/SwitchBlockMsg_FS.o: src/SwitchBlockMsg_FS.cpp.o
 
 .PHONY : src/SwitchBlockMsg_FS.o
@@ -1884,6 +1830,33 @@ src/SwitchBlockMsg_FS.s: src/SwitchBlockMsg_FS.cpp.s
 src/SwitchBlockMsg_FS.cpp.s:
 	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.s
 .PHONY : src/SwitchBlockMsg_FS.cpp.s
+
+src/SwitchTrigger.o: src/SwitchTrigger.cpp.o
+
+.PHONY : src/SwitchTrigger.o
+
+# target to build an object file
+src/SwitchTrigger.cpp.o:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o
+.PHONY : src/SwitchTrigger.cpp.o
+
+src/SwitchTrigger.i: src/SwitchTrigger.cpp.i
+
+.PHONY : src/SwitchTrigger.i
+
+# target to preprocess a source file
+src/SwitchTrigger.cpp.i:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.i
+.PHONY : src/SwitchTrigger.cpp.i
+
+src/SwitchTrigger.s: src/SwitchTrigger.cpp.s
+
+.PHONY : src/SwitchTrigger.s
+
+# target to generate assembly for a file
+src/SwitchTrigger.cpp.s:
+	$(MAKE) -f CMakeFiles/flight_scenario.dir/build.make CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.s
+.PHONY : src/SwitchTrigger.cpp.s
 
 src/Timer.o: src/Timer.cpp.o
 
@@ -2212,9 +2185,6 @@ help:
 	@echo "... src/ROSUnit_RestNormSettingsClnt.o"
 	@echo "... src/ROSUnit_RestNormSettingsClnt.i"
 	@echo "... src/ROSUnit_RestNormSettingsClnt.s"
-	@echo "... src/ROSUnit_SwitchBlock.o"
-	@echo "... src/ROSUnit_SwitchBlock.i"
-	@echo "... src/ROSUnit_SwitchBlock.s"
 	@echo "... src/ROSUnit_UpdateController.o"
 	@echo "... src/ROSUnit_UpdateController.i"
 	@echo "... src/ROSUnit_UpdateController.s"
@@ -2251,12 +2221,12 @@ help:
 	@echo "... src/StateMonitor.o"
 	@echo "... src/StateMonitor.i"
 	@echo "... src/StateMonitor.s"
-	@echo "... src/SwitchTrigger.o"
-	@echo "... src/SwitchTrigger.i"
-	@echo "... src/SwitchTrigger.s"
 	@echo "... src/SwitchBlockMsg_FS.o"
 	@echo "... src/SwitchBlockMsg_FS.i"
 	@echo "... src/SwitchBlockMsg_FS.s"
+	@echo "... src/SwitchTrigger.o"
+	@echo "... src/SwitchTrigger.i"
+	@echo "... src/SwitchTrigger.s"
 	@echo "... src/Timer.o"
 	@echo "... src/Timer.i"
 	@echo "... src/Timer.s"

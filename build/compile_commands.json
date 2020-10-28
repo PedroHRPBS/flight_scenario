@@ -131,11 +131,6 @@
 },
 {
   "directory": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build",
-  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"flight_scenario\\\" -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/include -I/home/pedrohrpbs/catkin_ws_NAVIO/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_controller/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/common_srv/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/flight_scenario.dir/src/ROSUnit_SwitchBlock.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/ROSUnit_SwitchBlock.cpp",
-  "file": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/ROSUnit_SwitchBlock.cpp"
-},
-{
-  "directory": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build",
   "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"flight_scenario\\\" -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/include -I/home/pedrohrpbs/catkin_ws_NAVIO/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_controller/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/common_srv/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/flight_scenario.dir/src/ROSUnit_UpdateController.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/ROSUnit_UpdateController.cpp",
   "file": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/ROSUnit_UpdateController.cpp"
 },
@@ -196,13 +191,13 @@
 },
 {
   "directory": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build",
-  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"flight_scenario\\\" -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/include -I/home/pedrohrpbs/catkin_ws_NAVIO/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_controller/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/common_srv/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchTrigger.cpp",
-  "file": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchTrigger.cpp"
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"flight_scenario\\\" -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/include -I/home/pedrohrpbs/catkin_ws_NAVIO/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_controller/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/common_srv/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlockMsg_FS.cpp",
+  "file": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlockMsg_FS.cpp"
 },
 {
   "directory": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build",
-  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"flight_scenario\\\" -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/include -I/home/pedrohrpbs/catkin_ws_NAVIO/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_controller/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/common_srv/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/flight_scenario.dir/src/SwitchBlockMsg_FS.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlockMsg_FS.cpp",
-  "file": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchBlockMsg_FS.cpp"
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"flight_scenario\\\" -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/include -I/home/pedrohrpbs/catkin_ws_NAVIO/devel/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_controller/include -I/home/pedrohrpbs/catkin_ws_NAVIO/src/common_srv/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -std=c++11 -o CMakeFiles/flight_scenario.dir/src/SwitchTrigger.cpp.o -c /home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchTrigger.cpp",
+  "file": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/src/SwitchTrigger.cpp"
 },
 {
   "directory": "/home/pedrohrpbs/catkin_ws_NAVIO/src/flight_scenario/build",

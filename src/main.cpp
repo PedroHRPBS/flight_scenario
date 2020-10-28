@@ -36,7 +36,7 @@
 #include "DNNConfirmationCondition.hpp"
 #include "SetCameraStatus.hpp"
 
-#undef TESTING
+#define TESTING
 #undef MISSION
 #undef MRFT_TEST
 #define MRFT
@@ -47,7 +47,7 @@
 #undef QUAD
 #undef FULL_ID
 #undef INNER_ONLY
-#define Z_ONLY
+#undef Z_ONLY
 #undef OUTTER_ONLY
 
 int main(int argc, char** argv) {
@@ -62,7 +62,6 @@ int main(int argc, char** argv) {
     ROSUnit* ros_pos_sub = new ROSUnit_PositionSubscriber(nh);
     ROSUnit* ros_ori_sub = new ROSUnit_OrientationSubscriber(nh);
     ROSUnit* ros_rst_ctr = new ROSUnit_ResetController(nh);
-    ROSUnit* ros_switch_block = new ROSUnit_SwitchBlock(nh);
     ROSUnit* ros_flight_command = new ROSUnit_FlightCommand(nh);
     ROSUnit* ros_info_sub = new ROSUnit_InfoSubscriber(nh);
     ROSUnit* ros_restnorm_settings = new ROSUnit_RestNormSettingsClnt(nh);
@@ -1207,6 +1206,12 @@ int main(int argc, char** argv) {
     testing_pipeline.addElement((FlightElement*)update_controller_pid_pitch);
     testing_pipeline.addElement((FlightElement*)update_controller_pid_yaw);
     testing_pipeline.addElement((FlightElement*)update_controller_pid_yaw_rate);
+
+    testing_pipeline.addElement((FlightElement*)ID_switch_x_trigger_ON);
+    testing_pipeline.addElement((FlightElement*)ID_switch_y_trigger_ON);
+    testing_pipeline.addElement((FlightElement*)ID_switch_z_trigger_ON);
+    testing_pipeline.addElement((FlightElement*)ID_switch_roll_trigger_ON);
+    testing_pipeline.addElement((FlightElement*)ID_switch_pitch_trigger_ON);
 
     testing_pipeline.addElement((FlightElement*)set_height_offset);
     testing_pipeline.addElement((FlightElement*)&wait_1s);
